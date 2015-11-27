@@ -1,0 +1,80 @@
+
+<f:layout name="Default" />
+
+This template displays a NEW form for the current domain object.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Templates:
+        New.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="content">
+  <h1><f:translate key="labels.expp" /></h1>
+
+  <style>
+    span{
+      width:100px;
+      float: left;
+      font-weight: 600;
+    }
+    .err{
+      color:red;
+    }
+  </style>
+
+  <f:form action="export"  name="newPerson" enctype="multipart/form-data">
+    <div class="err"><f:format.html>{error}</f:format.html></div>
+    <br />
+    <label>
+      <f:translate key="labels.format" />
+    </label><br />
+    <select name="expformat">
+      <option value="csv">CSV</option>
+      <option value="excel">Excel</option>
+    </select>
+    <br />
+    <br />
+    <label>
+      <f:translate key="tx_personmanager_domain_model_person.active" />
+    </label><br />
+    <select name="active">
+      <option value="*"><f:translate key="labels.all" /></option>
+      <option value="1"><f:translate key="labels.yes" /></option>
+      <option value="0"><f:translate key="labels.format" />no</option>
+    </select>
+    <br />
+    <label>
+      <f:translate key="tx_personmanager_domain_model_person.confirmed" />
+    </label><br />
+    <select name="confirmed">
+      <option value="*"><f:translate key="labels.all" /></option>
+      <option value="1"><f:translate key="labels.yes" /></option>
+      <option value="0"><f:translate key="labels.no" /></option>
+    </select>
+    <br />
+    <label>
+      <f:translate key="tx_personmanager_domain_model_person.unsubscribed" />
+    </label><br />
+    <select name="unsubscribed">
+      <option value="*"><f:translate key="labels.all" /></option>
+      <option value="1"><f:translate key="labels.yes" /></option>
+      <option value="0"><f:translate key="labels.no" /></option>
+    </select>
+    <br />
+    <label>
+      <f:translate key="labels.sep" />
+    </label><br />
+    <f:form.textfield name="trenn" value=";" size="2" /><br />
+
+    <br /><br />
+    <f:form.submit value="{f:translate(key:'labels.export')}" />
+  </f:form>
+  <br/><br/>
+  <p>{countPers} <f:translate key="labels.pindb" /></p>
+
+
+</f:section>

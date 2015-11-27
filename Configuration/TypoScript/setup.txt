@@ -1,0 +1,119 @@
+
+plugin.tx_personmanager {
+	view {
+		templateRootPath = {$plugin.tx_personmanager.view.templateRootPath}
+		partialRootPath = {$plugin.tx_personmanager.view.partialRootPath}
+		layoutRootPath = {$plugin.tx_personmanager.view.layoutRootPath}
+		templateRootPaths.0 = {$plugin.tx_personmanager.view.templateRootPath}
+		partialRootPaths.0 = {$plugin.tx_personmanager.view.partialRootPath}
+		layoutRootPaths.0 = {$plugin.tx_personmanager.view.layoutRootPath}
+	}
+	persistence {
+		storagePid = {$plugin.tx_personmanager.persistence.storagePid}
+	}
+	options{
+		doubleOptIn = {$plugin.tx_personmanager.options.doubleOptIn}
+		doubleOptOut = {$plugin.tx_personmanager.options.doubleOptOut}
+		path = {$plugin.tx_personmanager.options.path}
+		pathout = {$plugin.tx_personmanager.options.pathout}
+		site = {$plugin.tx_personmanager.options.site}
+		mail = {$plugin.tx_personmanager.options.mail}
+	}
+	variables{
+		salutation = {$plugin.tx_personmanager.variables.salutation}
+		titel = {$plugin.tx_personmanager.variables.titel}
+		nachgtitel = {$plugin.tx_personmanager.variables.nachgtitel}
+		geb = {$plugin.tx_personmanager.variables.geb}
+		tel = {$plugin.tx_personmanager.variables.tel}
+		company = {$plugin.tx_personmanager.variables.company}
+		frtxt0 = {$plugin.tx_personmanager.variables.frtxt0}
+		frtxt1 = {$plugin.tx_personmanager.variables.frtxt1}
+		frtxt2 = {$plugin.tx_personmanager.variables.frtxt2}
+		frtxt3 = {$plugin.tx_personmanager.variables.frtxt3}
+		frtxt4 = {$plugin.tx_personmanager.variables.frtxt4}
+		frtxt5 = {$plugin.tx_personmanager.variables.frtxt5}
+		frtxt6 = {$plugin.tx_personmanager.variables.frtxt6}
+		frtxt7 = {$plugin.tx_personmanager.variables.frtxt7}
+		frtxt8 = {$plugin.tx_personmanager.variables.frtxt8}
+		frtxt9 = {$plugin.tx_personmanager.variables.frtxt9}
+		category = {$plugin.tx_personmanager.variables.category}
+	}
+	features {
+		# uncomment the following line to enable the new Property Mapper.
+		# rewrittenPropertyMapper = 1
+	}
+}
+
+plugin.tx_personmanager._CSS_DEFAULT_STYLE (
+	textarea.f3-form-error {
+		background-color:#FF9F9F;
+		border: 1px #FF0000 solid;
+	}
+
+	input.f3-form-error {
+		background-color:#FF9F9F;
+		border: 1px #FF0000 solid;
+	}
+
+	.tx-person-manager table {
+		border-collapse:separate;
+		border-spacing:10px;
+	}
+
+	.tx-person-manager table th {
+		font-weight:bold;
+	}
+
+	.tx-person-manager table td {
+		vertical-align:top;
+	}
+
+	.typo3-messages .message-error {
+		color:red;
+	}
+
+	.typo3-messages .message-ok {
+		color:green;
+	}
+
+)
+
+ # Module configuration
+module.tx_personmanager {
+	view {
+		templateRootPath = {$module.tx_personmanager.view.templateRootPath}
+		partialRootPath = {$module.tx_personmanager.view.partialRootPath}
+		layoutRootPath = {$module.tx_personmanager.view.layoutRootPath}
+		templateRootPaths.0 = {$module.tx_personmanager.view.templateRootPath}
+		partialRootPaths.0 = {$module.tx_personmanager.view.partialRootPath}
+		layoutRootPaths.0 = {$module.tx_personmanager.view.layoutRootPath}
+	}
+	persistence {
+		storagePid = {$plugin.tx_personmanager.persistence.storagePid}
+	}
+	settings {
+		doubleOptIn = {$plugin.tx_personmanager.options.doubleOptIn}
+		doubleOptOut = {$plugin.tx_personmanager.options.doubleOptOut}
+		path = {$plugin.tx_personmanager.options.path}
+		pathout = {$plugin.tx_personmanager.options.pathout}
+		site = {$plugin.tx_personmanager.options.site}
+		mail = {$plugin.tx_personmanager.options.mail}
+		salutation = {$plugin.tx_personmanager.variables.salutation}
+		titel = {$plugin.tx_personmanager.variables.titel}
+		nachgtitel = {$plugin.tx_personmanager.variables.nachgtitel}
+		geb = {$plugin.tx_personmanager.variables.geb}
+		tel = {$plugin.tx_personmanager.variables.tel}
+		company = {$plugin.tx_personmanager.variables.company}
+		frtxt0 = {$plugin.tx_personmanager.variables.frtxt0}
+		frtxt1 = {$plugin.tx_personmanager.variables.frtxt1}
+		frtxt2 = {$plugin.tx_personmanager.variables.frtxt2}
+		frtxt3 = {$plugin.tx_personmanager.variables.frtxt3}
+		frtxt4 = {$plugin.tx_personmanager.variables.frtxt4}
+		frtxt5 = {$plugin.tx_personmanager.variables.frtxt5}
+		frtxt6 = {$plugin.tx_personmanager.variables.frtxt6}
+		frtxt7 = {$plugin.tx_personmanager.variables.frtxt7}
+		frtxt8 = {$plugin.tx_personmanager.variables.frtxt8}
+		frtxt9 = {$plugin.tx_personmanager.variables.frtxt9}
+		category = {$plugin.tx_personmanager.variables.category}
+	}
+}

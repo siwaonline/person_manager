@@ -1,0 +1,23 @@
+
+<f:layout name="Default" />
+
+This template displays a NEW form for the current domain object.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Templates:
+        New.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="main">
+
+  <div class="err"><f:format.html>{error}</f:format.html></div>
+
+<f:form action="create"  name="newPerson" object="{newPerson}">
+<f:render partial="Person/FormFields" arguments="{vars : vars, kats : kats, anr:newPerson.salutation}"/>
+	<f:form.submit value="{f:translate(key:'labels.send')}" />
+</f:form>
+</f:section>

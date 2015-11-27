@@ -1,0 +1,39 @@
+
+<f:be.container>
+	<div class="typo3-fullDoc">
+		<div id="typo3-docheader">
+			<div class="typo3-docheader-functions">
+				<div class="left">
+					<f:be.buttons.csh />
+					<f:be.menus.actionMenu>
+						<f:be.menus.actionMenuItem label="{f:translate(key:'labels.list')}" controller="Person" action="list" />
+						<f:be.menus.actionMenuItem label="Import" controller="Person" action="newImport" />
+						<f:be.menus.actionMenuItem label="Export" controller="Person" action="newExport" />
+						<f:be.menus.actionMenuItem label="Log" controller="Person" action="loglist" />
+						<f:be.menus.actionMenuItem label="Blacklist" controller="Person" action="blNewImport" />
+					</f:be.menus.actionMenu>
+				</div>
+				<div class="right">
+					<f:be.pagePath />
+					<f:be.pageInfo />
+				</div>
+			</div>
+			<div class="typo3-docheader-buttons">
+				<div class="left">
+
+				</div>
+				<div class="right">
+					<f:be.buttons.shortcut />
+				</div>
+			</div>
+
+		</div>
+		<div id="typo3-docbody">
+			<div id="typo3-inner-docbody">
+				<f:flashMessages renderMode="div" />
+				<script src="http://code.jquery.com/jquery-latest.min.js"></script>
+				<f:render section="content" />
+			</div>
+		</div>
+	</div>
+</f:be.container>

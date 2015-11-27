@@ -1,0 +1,77 @@
+
+plugin.tx_personmanager {
+	view {
+		# cat=plugin.tx_personmanager/file; type=string; label=Path to template root (FE)
+		templateRootPath = EXT:person_manager/Resources/Private/Templates/
+		# cat=plugin.tx_personmanager/file; type=string; label=Path to template partials (FE)
+		partialRootPath = EXT:person_manager/Resources/Private/Partials/
+		# cat=plugin.tx_personmanager/file; type=string; label=Path to template layouts (FE)
+		layoutRootPath = EXT:person_manager/Resources/Private/Layouts/
+	}
+	persistence {
+		# cat=plugin.tx_personmanager//a; type=string; label=Default storage PID
+		storagePid =
+	}
+	options{
+		# cat=plugin.tx_personmanager//b; type=boolean; label=Double-Opt In
+		doubleOptIn = 1
+		# cat=plugin.tx_personmanager//b; type=boolean; label=Double-Opt Out
+		doubleOptOut = 1
+		# cat=plugin.tx_personmanager//d; type=string; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:const.anurl
+        path =
+        # cat=plugin.tx_personmanager//e; type=string; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:const.aburl
+        pathout =
+		# cat=plugin.tx_personmanager//f; type=string; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:const.name
+		site =
+		# cat=plugin.tx_personmanager//g; type=string; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:const.email
+		mail =
+	}
+	variables{
+		# cat=plugin.tx_personmanager/enable/a; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.salutation
+		salutation = 1
+		# cat=plugin.tx_personmanager/enable/b; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.titel
+		titel = 1
+		# cat=plugin.tx_personmanager/enable/c; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.nachgtitel
+		nachgtitel = 1
+		# cat=plugin.tx_personmanager/enable/d; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.geb
+		geb = 1
+		# cat=plugin.tx_personmanager/enable/e; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.tel
+		tel = 1
+		# cat=plugin.tx_personmanager/enable/f; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.company
+		company = 1
+		# cat=plugin.tx_personmanager/enable/g; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.frtxt0
+		frtxt0 = 0
+		# cat=plugin.tx_personmanager/enable/h; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.frtxt1
+		frtxt1 = 0
+		# cat=plugin.tx_personmanager/enable/i; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.frtxt2
+		frtxt2 = 0
+		# cat=plugin.tx_personmanager/enable/j; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.frtxt3
+		frtxt3 = 0
+		# cat=plugin.tx_personmanager/enable/k; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.frtxt4
+		frtxt4 = 0
+		# cat=plugin.tx_personmanager/enable/l; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.frtxt5
+		frtxt5 = 0
+		# cat=plugin.tx_personmanager/enable/m; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.frtxt6
+		frtxt6 = 0
+		# cat=plugin.tx_personmanager/enable/n; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.frtxt7
+		frtxt7 = 0
+		# cat=plugin.tx_personmanager/enable/o; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.frtxt8
+		frtxt8 = 0
+		# cat=plugin.tx_personmanager/enable/p; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.frtxt9
+        frtxt9 = 0
+        # cat=plugin.tx_personmanager/enable/q; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.category
+        category = 0
+	}
+}
+
+module.tx_personmanager {
+	view {
+    		# cat=module.tx_personmanager/file; type=string; label=Path to template root (BE)
+    		templateRootPath = EXT:person_manager/Resources/Private/Backend/Templates/
+    		# cat=module.tx_personmanager/file; type=string; label=Path to template partials (BE)
+    		partialRootPath = EXT:person_manager/Resources/Private/Backend/Partials/
+    		# cat=module.tx_personmanager/file; type=string; label=Path to template layouts (BE)
+    		layoutRootPath = EXT:person_manager/Resources/Private/Backend/Layouts/
+    }
+
+}

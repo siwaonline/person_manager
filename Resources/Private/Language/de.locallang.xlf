@@ -1,0 +1,369 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2015-02-09T07:22:46Z" product-name="person_manager">
+		<header/>
+		<body>
+			<!-- ### Model ### -->
+			<trans-unit id="tx_personmanager_domain_model_person">
+				<target>Person</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.firstname">
+				<target>Vorname</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.lastname">
+				<target>Nachname</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.email">
+				<target>Email</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.salutation">
+				<target>Anrede</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.titel">
+				<target>Titel</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.nachgtitel">
+				<target>Nachgestellter Titel</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.geb">
+				<target>Geburtsdatum</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.tel">
+				<target>Telefon</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.company">
+				<target>Firma</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.active">
+				<target>Ist aktiv?</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.confirmed">
+				<target>Hat bestätigt?</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.unsubscribed">
+				<target>Hat sich abgemeldet?</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.token">
+				<target>Token</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt0">
+				<target>Freitext0</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt1">
+				<target>Freitext1</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt2">
+				<target>Freitext2</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt3">
+				<target>Freitext3</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt4">
+				<target>Freitext4</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt5">
+				<target>Freitext5</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt6">
+				<target>Freitext6</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt7">
+				<target>Freitext7</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt8">
+				<target>Freitext8</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt9">
+				<target>Freitext9</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.category">
+				<target>Kategorie</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.crdate">
+				<target>Anmeldedatum</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_category">
+				<target>Kategorie</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_category.name">
+				<target>Name</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log">
+				<target>Log</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log.action">
+				<target>Action</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log.detail">
+				<target>Detail</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log.email">
+				<target>Email</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log.fehler">
+				<target>Fehler</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log.person">
+				<target>Person UID</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log.success">
+				<target>Erfolgreich?</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_blacklist">
+				<target>Blacklist</target>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_blacklist.email">
+				<target>E-Mail</target>
+			</trans-unit>
+			<!-- ### Labels ### -->
+			<trans-unit id="labels.yes">
+				<target>Ja</target>
+			</trans-unit>
+			<trans-unit id="labels.no">
+				<target>Nein</target>
+			</trans-unit>
+			<trans-unit id="labels.pindb">
+				<target>Personen in der Datenbank!</target>
+			</trans-unit>
+			<trans-unit id="labels.p1indb">
+				<target>Person in der Datenbank!</target>
+			</trans-unit>
+			<trans-unit id="labels.plist">
+				<target>Personenliste</target>
+			</trans-unit>
+			<trans-unit id="labels.list">
+				<target>Liste</target>
+			</trans-unit>
+			<trans-unit id="labels.pedit">
+				<target>Person bearbeiten</target>
+			</trans-unit>
+			<trans-unit id="labels.detail">
+				<target>Detail</target>
+			</trans-unit>
+			<trans-unit id="labels.mr">
+				<target>Herr</target>
+			</trans-unit>
+			<trans-unit id="labels.mrs">
+				<target>Frau</target>
+			</trans-unit>
+			<trans-unit id="labels.mrmrs">
+				<target>Herr/Frau</target>
+			</trans-unit>
+			<trans-unit id="labels.detailview">
+				<target>Detailansicht</target>
+			</trans-unit>
+			<trans-unit id="labels.backtolist">
+				<target>Zurück zur Listenansicht</target>
+			</trans-unit>
+			<trans-unit id="labels.edit">
+				<target>Bearbeiten</target>
+			</trans-unit>
+			<trans-unit id="labels.delete">
+				<target>Löschen</target>
+			</trans-unit>
+			<trans-unit id="labels.save">
+				<target>Speichern</target>
+			</trans-unit>
+			<trans-unit id="labels.cancel">
+				<target>Abbrechen</target>
+			</trans-unit>
+			<trans-unit id="labels.import">
+				<target>Import</target>
+			</trans-unit>
+			<trans-unit id="labels.export">
+				<target>Export</target>
+			</trans-unit>
+			<trans-unit id="labels.sure">
+				<target>Sind Sie sicher?</target>
+			</trans-unit>
+			<trans-unit id="labels.search">
+				<target>Suche</target>
+			</trans-unit>
+			<trans-unit id="labels.clearsearch">
+				<target>Suche löschen</target>
+			</trans-unit>
+			<trans-unit id="labels.choose">
+				<target>bitte wählen</target>
+			</trans-unit>
+			<trans-unit id="labels.foundmails">
+				<target> gefundene Adresse</target>
+			</trans-unit>
+			<trans-unit id="labels.checklist">
+				<target>Bitte überprüfen Sie die Liste.</target>
+			</trans-unit>
+			<trans-unit id="labels.importbl">
+				<target>E-Mails in die Blacklist importieren</target>
+			</trans-unit>
+			<trans-unit id="labels.emaila">
+				<target>E-Mail Adresse in Spalte A</target>
+			</trans-unit>
+			<trans-unit id="labels.firstrow">
+				<target>Erste Zeile importieren?</target>
+			</trans-unit>
+			<trans-unit id="labels.data">
+				<target>Datei <span class="required">(required)</span></target>
+			</trans-unit>
+			<trans-unit id="labels.addressesbl">
+				<target>Adressen in der Blacklist!</target>
+			</trans-unit>
+			<trans-unit id="labels.clearbl">
+				<target>Blacklist leeren</target>
+			</trans-unit>
+			<trans-unit id="labels.format">
+				<target>Format</target>
+			</trans-unit>
+			<trans-unit id="labels.importp">
+				<target>Personen importieren</target>
+			</trans-unit>
+			<trans-unit id="labels.avail">
+				<target>Verfügbare Spalten</target>
+			</trans-unit>
+			<trans-unit id="labels.rows">
+				<target>Spalten</target>
+			</trans-unit>
+			<trans-unit id="labels.sep">
+				<target>Trennzeichen</target>
+			</trans-unit>
+			<trans-unit id="labels.clearp">
+				<target>Personen in der Datenbank leeren</target>
+			</trans-unit>
+			<trans-unit id="labels.thx">
+				<target>Vielen Dank</target>
+			</trans-unit>
+			<trans-unit id="labels.exsucc">
+				<target>Ihr Export war erfolgreich.</target>
+			</trans-unit>
+			<trans-unit id="labels.foundp">
+				<target>gefundene Personen</target>
+			</trans-unit>
+			<trans-unit id="labels.imsucc">
+				<target>Ihr Import war erfolgreich.</target>
+			</trans-unit>
+			<trans-unit id="labels.reload">
+				<target>Neu laden</target>
+			</trans-unit>
+			<trans-unit id="labels.create">
+				<target>Erstellen</target>
+			</trans-unit>
+			<trans-unit id="labels.newp">
+				<target>Neue Person</target>
+			</trans-unit>
+			<trans-unit id="labels.expp">
+				<target>Personen exportieren</target>
+			</trans-unit>
+			<trans-unit id="labels.all">
+				<target>Alle</target>
+			</trans-unit>
+			<trans-unit id="labels.wanttoderegister">
+				<target>Sie möchten sich vom Newsletter abmelden?</target>
+			</trans-unit>
+			<trans-unit id="labels.insertmail">
+				<target>Dann tragen Sie hier Ihre E-Mail Adresse ein.</target>
+			</trans-unit>
+			<trans-unit id="labels.deregister">
+				<target>Abmelden</target>
+			</trans-unit>
+			<trans-unit id="labels.send">
+				<target>Absenden</target>
+			</trans-unit>
+			<!-- ### Format ### -->
+			<trans-unit id="dateFormat">
+				<target>%d.%m.%Y</target>
+			</trans-unit>
+			<!-- ### Error ### -->
+			<trans-unit id="error.spam">
+				<target>Sie sind ein Spam-Bot!</target>
+			</trans-unit>
+			<trans-unit id="error.name">
+				<target>Bitte geben Sie Ihren vollständigen Namen ein!</target>
+			</trans-unit>
+			<trans-unit id="error.email">
+				<target>Bitte geben Sie eine korrekte E-Mail Adresse ein!</target>
+			</trans-unit>
+			<trans-unit id="error.emailagain">
+				<target>Diese E-Mail Adresse ist bereits eingetragen!</target>
+			</trans-unit>
+			<trans-unit id="error.nocol">
+				<target>Die Spalte %s existiert nicht!</target>
+			</trans-unit>
+			<trans-unit id="error.nofile">
+				<target>Die Datei %s gibt es nicht!</target>
+			</trans-unit>
+			<!-- ### Log ### -->
+			<trans-unit id="log.create">
+				<target>Person wird hinzugefügt</target>
+			</trans-unit>
+			<trans-unit id="log.createmail">
+				<target>Bestätigungsemail für Anmeldung wird gesendet</target>
+			</trans-unit>
+			<trans-unit id="log.createsuccess">
+				<target>Person wird bestätigt</target>
+			</trans-unit>
+			<trans-unit id="log.createfail">
+				<target>Person wird nicht hinzugefügt</target>
+			</trans-unit>
+			<trans-unit id="log.activate">
+				<target>Person wird bestätigt</target>
+			</trans-unit>
+			<trans-unit id="log.activatefail">
+				<target>Person existiert nicht</target>
+			</trans-unit>
+			<trans-unit id="log.leavemail">
+				<target>Abmeldung Bestätigungsmail wird versendet</target>
+			</trans-unit>
+			<trans-unit id="log.leavesuccess">
+				<target>Person wird abgemeldet</target>
+			</trans-unit>
+			<trans-unit id="log.leavewant">
+				<target>Person möchte sich abmelden</target>
+			</trans-unit>
+			<trans-unit id="log.leavealready">
+				<target>Person ist bereits abgemeldet</target>
+			</trans-unit>
+			<trans-unit id="log.leavenot">
+				<target>Person existiert nicht</target>
+			</trans-unit>
+			<trans-unit id="log.unsubscribe">
+				<target>Person wird abgemeldet</target>
+			</trans-unit>
+			<!-- ### Mail ### -->
+			<trans-unit id="mail.confirmdata">
+				<target>Daten bestätigen</target>
+			</trans-unit>
+			<trans-unit id="mail.confirmthx">
+				<target>Vielen Dank für Ihre Anmeldung bei</target>
+			</trans-unit>
+			<trans-unit id="mail.confirmlink">
+				<target>Bitte bestätigen Sie Ihre Daten durch klick auf den folgenden Link:</target>
+			</trans-unit>
+			<trans-unit id="mail.confirmreg">
+				<target>Anmeldung bestätigen</target>
+			</trans-unit>
+			<trans-unit id="mail.ifnot">
+				<target>Sollten Sie diese Aktion nicht gestellt haben, können Sie dieses E-Mail ignorieren.</target>
+			</trans-unit>
+			<trans-unit id="mail.leavethx">
+				<target>Sie haben sich bei %s abgemeldet.</target>
+			</trans-unit>
+			<trans-unit id="mail.confirmleave">
+				<target>Abmeldung bestätigen</target>
+			</trans-unit>
+			<trans-unit id="mail.deregister">
+				<target>Abmelden</target>
+			</trans-unit>
+			<!-- ### Constants ### -->
+			<trans-unit id="const.anurl">
+				<target>URL der Anmeldung (endet auf ? oder &amp;)</target>
+			</trans-unit>
+			<trans-unit id="const.aburl">
+				<target>URL der Abmeldung (endet auf ? oder &amp;)</target>
+			</trans-unit>
+			<trans-unit id="const.name">
+				<target>Name der Seite</target>
+			</trans-unit>
+			<trans-unit id="const.email">
+				<target>E-Mail Adresse der Seite</target>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>

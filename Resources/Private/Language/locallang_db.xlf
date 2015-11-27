@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" datatype="plaintext" original="messages" date="2015-02-09T07:22:46Z" product-name="person_manager">
+		<header/>
+		<body>
+			<!-- ### Model ### -->
+			<trans-unit id="tx_personmanager_domain_model_person">
+				<source>Person</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.firstname">
+				<source>Firstname</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.lastname">
+				<source>Lastname</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.email">
+				<source>Email</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.salutation">
+				<source>Salutation</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.titel">
+				<source>Title</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.nachgtitel">
+				<source>Title after</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.geb">
+				<source>Birthdate</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.tel">
+				<source>Phone</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.company">
+				<source>Company</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.active">
+				<source>Is active?</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.confirmed">
+				<source>Has confirmed?</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.unsubscribed">
+				<source>Has unsubscribedt?</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.token">
+				<source>Token</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt0">
+				<source>Freetext0</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt1">
+				<source>Freetext1</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt2">
+				<source>Freetext2</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt3">
+				<source>Freetext3</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt4">
+				<source>Freetext4</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt5">
+				<source>Freetext5</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt6">
+				<source>Freetext6</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt7">
+				<source>Freetext7</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt8">
+				<source>Freetext8</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.frtxt9">
+				<source>Freetext9</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.category">
+				<source>Category</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_category">
+				<source>Category</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_category.name">
+				<source>Name</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log">
+				<source>Log</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log.action">
+				<source>Action</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log.detail">
+				<source>Detail</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log.email">
+				<source>Email</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log.fehler">
+				<source>Error</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log.person">
+				<source>Person UID</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log.success">
+				<source>Successful?</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_blacklist">
+				<source>Blacklist</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_blacklist.email">
+				<source>E-Mail</source>
+			</trans-unit>
+			<!-- ### Flexform ### -->
+			<trans-unit id="flex.sitename">
+				<source>Sender/Website Name</source>
+			</trans-unit>
+			<trans-unit id="flex.signature">
+				<source>Signature</source>
+			</trans-unit>
+			<trans-unit id="flex.settings">
+				<source>Settings</source>
+			</trans-unit>
+			<trans-unit id="flex.msgs">
+				<source>Messages</source>
+			</trans-unit>
+			<trans-unit id="flex.ancheckmail">
+				<source>Subscribe Check Mailbox</source>
+			</trans-unit>
+			<trans-unit id="flex.anconfirm">
+				<source>Confirmation after Subscription</source>
+			</trans-unit>
+			<trans-unit id="flex.anerror">
+				<source>Error during Subscription</source>
+			</trans-unit>
+			<trans-unit id="flex.abcheckmail">
+				<source>Deregistration Check Mailbox</source>
+			</trans-unit>
+			<trans-unit id="flex.abalready">
+				<source>E-Mail is already unsubscribed</source>
+			</trans-unit>
+			<trans-unit id="flex.abnomail">
+				<source>E-Mail doesn't exist</source>
+			</trans-unit>
+			<trans-unit id="flex.abconfirm">
+				<source>Confirmation after Deregistration</source>
+			</trans-unit>
+		</body>
+	</file>
+</xliff>
