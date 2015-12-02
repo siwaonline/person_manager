@@ -289,6 +289,9 @@
 			<trans-unit id="error.nofile">
 				<source>The file %s doesn't exist!</source>
 			</trans-unit>
+			<trans-unit id="error.notext">
+				<source>(no text specified for this action)</source>
+			</trans-unit>
 			<!-- ### Log ### -->
 			<trans-unit id="log.create">
 				<source>Person is added</source>

@@ -80,17 +80,26 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	public $newIcons = 0;
 
 	public function initializeAction(){
+		$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.notext','person_manager');
+
 		$this->signature = $this->settings['flexsignature'];
 		$this->sitename = $this->settings['flexsitename'];
 
 		$this->flexcheckmail = $this->settings['flexcheckmail'];
+		if($this->flexcheckmail == NULL || $this->flexcheckmail == "")$this->flexcheckmail = $langhelp;
 		$this->flexconfirm = $this->settings['flexconfirm'];
+		if($this->flexconfirm == NULL || $this->flexconfirm == "")$this->flexconfirm = $langhelp;
 		$this->flexerr = $this->settings['flexerr'];
+		if($this->flexerr == NULL || $this->flexerr == "")$this->flexerr = $langhelp;
 
 		$this->flexcheckmailleave = $this->settings['flexcheckmailleave'];
+		if($this->flexcheckmailleave == NULL || $this->flexcheckmailleave == "")$this->flexcheckmailleave = $langhelp;
 		$this->flexisunsubscribed = $this->settings['flexisunsubscribed'];
+		if($this->flexisunsubscribed == NULL || $this->flexisunsubscribed == "")$this->flexisunsubscribed = $langhelp;
 		$this->flexleave = $this->settings['flexleave'];
+		if($this->flexleave == NULL || $this->flexleave == "")$this->flexleave = $langhelp;
 		$this->flexunsubscribe = $this->settings['flexunsubscribe'];
+		if($this->flexunsubscribe == NULL || $this->flexunsubscribe == "")$this->flexunsubscribe = $langhelp;
 		if(\TYPO3\CMS\Core\Utility\GeneralUtility::compat_version('7.0')) {
 			$this->newIcons = 1;
 		}

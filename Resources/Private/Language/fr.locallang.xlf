@@ -1,0 +1,470 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes" ?>
+<xliff version="1.0">
+	<file source-language="en" target-language="fr" datatype="plaintext" original="messages" date="2015-12-01T16:19:11Z">
+		<header>
+			<generator>LFEditor</generator>
+		</header>
+		<body>
+		<trans-unit id="const.aburl" approved="yes">
+			<source>URL of the Deregistration (ends with ? or &amp;)</source>
+			<target>URL de la page de désinscription (doit finir par ? ou &amp;)</target>
+		</trans-unit>
+		<trans-unit id="const.anurl" approved="yes">
+			<source>URL of the Registration (ends with ? or &amp;)</source>
+			<target>URL de la page d'inscription (doit finir par ? ou &amp;)</target>
+		</trans-unit>
+		<trans-unit id="const.email" approved="yes">
+			<source>Email-Address of your website</source>
+			<target>Courriel (pour l'envoi des mails de notification)</target>
+		</trans-unit>
+		<trans-unit id="const.name" approved="yes">
+			<source>Name of your website</source>
+			<target>Nom (pour l'envoi des mails de notification)</target>
+		</trans-unit>
+		<trans-unit id="dateFormat" approved="yes">
+			<source>%Y-%m-%d</source>
+			<target>%d-%m-%Y</target>
+		</trans-unit>
+		<trans-unit id="error.email" approved="yes">
+			<source>Please insert a correct Email-Address!</source>
+			<target>Merci d'indiquer un courriel valide !</target>
+		</trans-unit>
+		<trans-unit id="error.emailagain" approved="yes">
+			<source>This Email-Address is already registered!</source>
+			<target>Ce courriel existe déjà !</target>
+		</trans-unit>
+		<trans-unit id="error.name" approved="yes">
+			<source>Please insert your full name!</source>
+			<target>Merci d'indiquer votre nom</target>
+		</trans-unit>
+		<trans-unit id="error.nocol" approved="yes">
+			<source>The column %s doesn't exist!</source>
+			<target>La colonne %s n'existe pas !</target>
+		</trans-unit>
+		<trans-unit id="error.nofile" approved="yes">
+			<source>The file %s doesn't exist!</source>
+			<target>Le fichier %s n'existe pas !</target>
+		</trans-unit>
+		<trans-unit id="error.spam" approved="yes">
+			<source>You're a spam-bot!</source>
+			<target>Vous êtes un robot !</target>
+		</trans-unit>
+		<trans-unit id="labels.addressesbl" approved="yes">
+			<source>Addresses in the Blacklist!</source>
+			<target>Adresses blacklistées</target>
+		</trans-unit>
+		<trans-unit id="labels.all" approved="yes">
+			<source>All</source>
+			<target>Tout</target>
+		</trans-unit>
+		<trans-unit id="labels.avail" approved="yes">
+			<source>Available Columns</source>
+			<target>Colonne disponible</target>
+		</trans-unit>
+		<trans-unit id="labels.backtolist" approved="yes">
+			<source>Back to the Listview</source>
+			<target>Retour à la liste</target>
+		</trans-unit>
+		<trans-unit id="labels.cancel" approved="yes">
+			<source>Cancel</source>
+			<target>Annuler</target>
+		</trans-unit>
+		<trans-unit id="labels.checklist" approved="yes">
+			<source>Please check the list.</source>
+			<target>Merci de vérifier la liste</target>
+		</trans-unit>
+		<trans-unit id="labels.clearbl" approved="yes">
+			<source>clear Blacklist</source>
+			<target>Vider la blacklist</target>
+		</trans-unit>
+		<trans-unit id="labels.clearp" approved="yes">
+			<source>clear Persons from the database</source>
+			<target>Supprimer les enregistrements de la base de données</target>
+		</trans-unit>
+		<trans-unit id="labels.create" approved="yes">
+			<source>Create</source>
+			<target>Créer</target>
+		</trans-unit>
+		<trans-unit id="labels.data" approved="yes">
+			<source>File </source>
+			<target>Fichier</target>
+		</trans-unit>
+		<trans-unit id="labels.delete" approved="yes">
+			<source>Delete</source>
+			<target>Supprimer</target>
+		</trans-unit>
+		<trans-unit id="labels.detail" approved="yes">
+			<source>Detail</source>
+			<target>Détail</target>
+		</trans-unit>
+		<trans-unit id="labels.detailview" approved="yes">
+			<source>Detailview</source>
+			<target>Vue détail</target>
+		</trans-unit>
+		<trans-unit id="labels.edit" approved="yes">
+			<source>Edit</source>
+			<target>Editer</target>
+		</trans-unit>
+		<trans-unit id="labels.emaila" approved="yes">
+			<source>E-Mail Addresses in Column A</source>
+			<target>Les adresses mail doivent être dans la colonne A</target>
+		</trans-unit>
+		<trans-unit id="labels.export" approved="yes">
+			<source>Export</source>
+			<target>Exporter</target>
+		</trans-unit>
+		<trans-unit id="labels.expp" approved="yes">
+			<source>export Personen</source>
+			<target>Export</target>
+		</trans-unit>
+		<trans-unit id="labels.exsucc" approved="yes">
+			<source>Your Export was successful.</source>
+			<target>Export réussi</target>
+		</trans-unit>
+		<trans-unit id="labels.firstrow" approved="yes">
+			<source>import first row?</source>
+			<target>Importer la première ligne ?</target>
+		</trans-unit>
+		<trans-unit id="labels.format" approved="yes">
+			<source>Format</source>
+			<target>Format</target>
+		</trans-unit>
+		<trans-unit id="labels.foundmails" approved="yes">
+			<source> found Addresses</source>
+			<target> adresses trouvées</target>
+		</trans-unit>
+		<trans-unit id="labels.foundp" approved="yes">
+			<source>found Persons</source>
+			<target>personnes trouvées</target>
+		</trans-unit>
+		<trans-unit id="labels.import" approved="yes">
+			<source>Import</source>
+			<target>Importer</target>
+		</trans-unit>
+		<trans-unit id="labels.importbl" approved="yes">
+			<source>import E-Mails into the Blacklist</source>
+			<target>Importer des courriels dans la blacklist</target>
+		</trans-unit>
+		<trans-unit id="labels.importp" approved="yes">
+			<source>import Persons</source>
+			<target>impoter des personnes</target>
+		</trans-unit>
+		<trans-unit id="labels.imsucc" approved="yes">
+			<source>Your Import was successful.</source>
+			<target>Import réussi</target>
+		</trans-unit>
+		<trans-unit id="labels.insertmail" approved="yes">
+			<source>Just enter your Email-Address.</source>
+			<target>Adresse mail</target>
+		</trans-unit>
+		<trans-unit id="labels.list" approved="yes">
+			<source>List</source>
+			<target>Liste</target>
+		</trans-unit>
+		<trans-unit id="labels.mr" approved="yes">
+			<source>Mr</source>
+			<target>M</target>
+		</trans-unit>
+		<trans-unit id="labels.mrmrs" approved="yes">
+			<source>Mr/Mrs</source>
+			<target>M/Mme</target>
+		</trans-unit>
+		<trans-unit id="labels.mrs" approved="yes">
+			<source>Mrs</source>
+			<target>Mme</target>
+		</trans-unit>
+		<trans-unit id="labels.newp" approved="yes">
+			<source>New Person</source>
+			<target>Nouveau contact</target>
+		</trans-unit>
+		<trans-unit id="labels.no" approved="yes">
+			<source>No</source>
+			<target>No</target>
+		</trans-unit>
+		<trans-unit id="labels.p1indb" approved="yes">
+			<source>person in the database!</source>
+			<target>contact dans la base de données !</target>
+		</trans-unit>
+		<trans-unit id="labels.pedit" approved="yes">
+			<source>Edit Person</source>
+			<target>Editer le contact</target>
+		</trans-unit>
+		<trans-unit id="labels.pindb" approved="yes">
+			<source>persons in the database!</source>
+			<target>contacts dans la base de données !</target>
+		</trans-unit>
+		<trans-unit id="labels.plist" approved="yes">
+			<source>List of Persons</source>
+			<target>Liste des contacts</target>
+		</trans-unit>
+		<trans-unit id="labels.reload" approved="yes">
+			<source>Reload</source>
+			<target>Recharger</target>
+		</trans-unit>
+		<trans-unit id="labels.rows" approved="yes">
+			<source>Columns</source>
+			<target>Colonnes</target>
+		</trans-unit>
+		<trans-unit id="labels.save" approved="yes">
+			<source>Save</source>
+			<target>Sauvegarder</target>
+		</trans-unit>
+		<trans-unit id="labels.search" approved="yes">
+			<source>Search</source>
+			<target>Rechercher</target>
+		</trans-unit>
+		<trans-unit id="labels.send" approved="yes">
+			<source>Send</source>
+			<target>Envoyer</target>
+		</trans-unit>
+		<trans-unit id="labels.sep" approved="yes">
+			<source>Seperator</source>
+			<target>Séparateur</target>
+		</trans-unit>
+		<trans-unit id="labels.sure" approved="yes">
+			<source>Are you sure?</source>
+			<target>Etes-vous sur ?</target>
+		</trans-unit>
+		<trans-unit id="labels.thx" approved="yes">
+			<source>Thank You</source>
+			<target>Merci</target>
+		</trans-unit>
+		<trans-unit id="labels.wanttoderegister" approved="yes">
+			<source>Do you want to unsubscribe?</source>
+			<target>Voulez vous vous désinscrire ?</target>
+		</trans-unit>
+		<trans-unit id="labels.yes" approved="yes">
+			<source>Yes</source>
+			<target>Oui</target>
+		</trans-unit>
+		<trans-unit id="log.activate" approved="yes">
+			<source>Person is confirmed</source>
+			<target>Contact confirmé</target>
+		</trans-unit>
+		<trans-unit id="log.activatefail" approved="yes">
+			<source>Person doesn't exist</source>
+			<target>Ce contact n'existe pas</target>
+		</trans-unit>
+		<trans-unit id="log.create" approved="yes">
+			<source>Person is added</source>
+			<target>Contact ajouté</target>
+		</trans-unit>
+		<trans-unit id="log.createfail" approved="yes">
+			<source>Person is not added</source>
+			<target>Contact non ajouté</target>
+		</trans-unit>
+		<trans-unit id="log.createmail" approved="yes">
+			<source>Confirmation-Mail is sent</source>
+			<target>Mail de confirmation envoyé</target>
+		</trans-unit>
+		<trans-unit id="log.createsuccess" approved="yes">
+			<source>Person is confirmed</source>
+			<target>Contact confirmé</target>
+		</trans-unit>
+		<trans-unit id="log.leavealready" approved="yes">
+			<source>Person is already unsubscribed</source>
+			<target>Ce contact est déjà désinscrit</target>
+		</trans-unit>
+		<trans-unit id="log.leavemail" approved="yes">
+			<source>Deregistration-Mail is sent</source>
+			<target>Mail de désinscription envoyé</target>
+		</trans-unit>
+		<trans-unit id="log.leavenot" approved="yes">
+			<source>Person doesn't exist</source>
+			<target>Ce contact n'existe pas</target>
+		</trans-unit>
+		<trans-unit id="log.leavesuccess" approved="yes">
+			<source>Person is unsubscribed</source>
+			<target>Contact désinscrit</target>
+		</trans-unit>
+		<trans-unit id="log.leavewant" approved="yes">
+			<source>Person wants to unsubscribe</source>
+			<target>Ces contacts veulent se désinscrire</target>
+		</trans-unit>
+		<trans-unit id="log.unsubscribe" approved="yes">
+			<source>Person is unsubscribed</source>
+			<target>Contact désinscrit</target>
+		</trans-unit>
+		<trans-unit id="mail.confirmdata" approved="yes">
+			<source>confirm Data</source>
+			<target>Confirmer votre inscription</target>
+		</trans-unit>
+		<trans-unit id="mail.confirmleave" approved="yes">
+			<source>confirm deregistration</source>
+			<target>Confirmer votre désinscription</target>
+		</trans-unit>
+		<trans-unit id="mail.confirmlink" approved="yes">
+			<source>Please confirm your data, by clicking the following link:</source>
+			<target>Merci de confirmer votre inscription en cliquant sur le lien ci-dessous</target>
+		</trans-unit>
+		<trans-unit id="mail.confirmreg" approved="yes">
+			<source>confirm registration</source>
+			<target>confirmer l'inscription</target>
+		</trans-unit>
+		<trans-unit id="mail.confirmthx" approved="yes">
+			<source>Thank you for your subscription at</source>
+			<target>Merci pour votre inscription à</target>
+		</trans-unit>
+		<trans-unit id="mail.deregister" approved="yes">
+			<source>unsubscribe</source>
+			<target>désinscription</target>
+		</trans-unit>
+		<trans-unit id="mail.ifnot" approved="yes">
+			<source>If you haven't initiated this action, please ignore this mail.</source>
+			<target>Si vous n'avez pas demander à vous inscrire, merci d'ignorer ce mail.</target>
+		</trans-unit>
+		<trans-unit id="mail.leavethx" approved="yes">
+			<source>You have unsubscribed from %s.</source>
+			<target>Vous êtes désinscrit de %s.</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_blacklist" approved="yes">
+			<source>Blacklist</source>
+			<target>Blacklist</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_blacklist.email" approved="yes">
+			<source>E-Mail</source>
+			<target>Courriel</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_category" approved="yes">
+			<source>Category</source>
+			<target>Catégorie</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_category.name" approved="yes">
+			<source>Name</source>
+			<target>Nom</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_log" approved="yes">
+			<source>Log</source>
+			<target>Log</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_log.action" approved="yes">
+			<source>Action</source>
+			<target>Action</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_log.detail" approved="yes">
+			<source>Detail</source>
+			<target>Détail</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_log.email" approved="yes">
+			<source>Email</source>
+			<target>Courriel</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_log.fehler" approved="yes">
+			<source>Error</source>
+			<target>Erreur</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_log.person" approved="yes">
+			<source>Person UID</source>
+			<target>Contact UID</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_log.success" approved="yes">
+			<source>Successful?</source>
+			<target>Succès ?</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person" approved="yes">
+			<source>Person</source>
+			<target>Contact</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.active" approved="yes">
+			<source>Is active?</source>
+			<target>Active ?</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.category" approved="yes">
+			<source>Category</source>
+			<target>Catégorie</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.company" approved="yes">
+			<source>Company</source>
+			<target>Entreprise</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.confirmed" approved="yes">
+			<source>Has confirmed?</source>
+			<target>Confirmée ?</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.crdate" approved="yes">
+			<source>Registration-Date</source>
+			<target>Date de l'inscription</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.email" approved="yes">
+			<source>Email</source>
+			<target>Courriel</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.firstname" approved="yes">
+			<source>Firstname</source>
+			<target>Prénom</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.frtxt0" approved="yes">
+			<source>Freetext0</source>
+			<target>ChampLibre0</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.frtxt1" approved="yes">
+			<source>Freetext1</source>
+			<target>ChampLibre1</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.frtxt2" approved="yes">
+			<source>Freetext2</source>
+			<target>ChampLibre2</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.frtxt3" approved="yes">
+			<source>Freetext3</source>
+			<target>ChampLibre3</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.frtxt4" approved="yes">
+			<source>Freetext4</source>
+			<target>ChampLibre4</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.frtxt5" approved="yes">
+			<source>Freetext5</source>
+			<target>ChampLibre5</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.frtxt6" approved="yes">
+			<source>Freetext6</source>
+			<target>ChampLibre6</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.frtxt7" approved="yes">
+			<source>Freetext7</source>
+			<target>ChampLibre7</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.frtxt8" approved="yes">
+			<source>Freetext8</source>
+			<target>ChampLibre8</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.frtxt9" approved="yes">
+			<source>Freetext9</source>
+			<target>ChampLibre9</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.geb" approved="yes">
+			<source>Birthdate</source>
+			<target>Date de naissance</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.lastname" approved="yes">
+			<source>Lastname</source>
+			<target>Nom</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.nachgtitel" approved="yes">
+			<source>Title after</source>
+			<target>Titre après</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.salutation" approved="yes">
+			<source>Salutation</source>
+			<target>Civilité</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.tel" approved="yes">
+			<source>Phone</source>
+			<target>Téléphone</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.titel" approved="yes">
+			<source>Title</source>
+			<target>Titre</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.token" approved="yes">
+			<source>Token</source>
+			<target>Token</target>
+		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.unsubscribed" approved="yes">
+			<source>Has unsubscribed?</source>
+			<target>Désinscrit ?</target>
+		</trans-unit>
+		</body>
+	</file>
+</xliff>
