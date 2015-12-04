@@ -155,7 +155,7 @@ To get the persons into a Recipient List just add a new one and choose the type 
 
 Then past following SQL-Statement (or edit it):
 
-``SELECT CASE anrede WHEN 1 THEN 'Dear Mr.' WHEN 2 THEN 'Dear Mrs.' ELSE 'Dear Mr./Mrs.' END AS salutation, firstname, lastname, email``
+``SELECT CASE salutation WHEN 1 THEN 'Dear Mr.' WHEN 2 THEN 'Dear Mrs.' ELSE 'Dear Mr./Mrs.' END AS salutation, firstname, lastname, email``
 
 ``FROM tx_personmanager_domain_model_person``
 
