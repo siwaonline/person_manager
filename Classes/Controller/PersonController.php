@@ -216,6 +216,14 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		if($failed == 0) {
 			$opt = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["doubleOptIn"];
 			$path = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["path"];
+			$checkpath = substr($path, -1);
+			if($checkpath != "?" && $checkpath != "&"){
+				if (strpos($path,'?') !== false) {
+					$path .= "&";
+				}else{
+					$path .= "?";
+				}
+			}
 			//$site = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["site"];
 			$site = $this->sitename;
 
@@ -436,6 +444,15 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		$path = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["pathout"];
 		$site = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["site"];
 		//$site = $this->sitename;
+		$checkpath = substr($path, -1);
+		if($checkpath != "?" && $checkpath != "&"){
+			if (strpos($path,'?') !== false) {
+				$path .= "&";
+			}else{
+				$path .= "?";
+			}
+		}
+
 		if($mail == ""){
 			$mail = trim($_POST["tx_personmanager_personmanagerunsub"]["tx_personmanager_personmanagerunsub"]["mail"]);
 		}
