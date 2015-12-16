@@ -791,8 +791,8 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 								$newPerson->setCategory($newKat);
 							} else {
 								if ($value == "salutation") {
-									if (strtolower(trim($cell->getValue())) == 'herr' || strtolower(trim($cell->getValue())) == 'mr') $cell->setValue(1);
-									if (strtolower(trim($cell->getValue())) == 'frau' || strtolower(trim($cell->getValue())) == 'mrs') $cell->setValue(2);
+									if (strtolower(trim($cell->getValue())) == 'herr' || strtolower(trim($cell->getValue())) == 'herrn' || strtolower(trim($cell->getValue())) == 'sir' || strtolower(trim($cell->getValue())) == 'mr') $cell->setValue(1);
+									if (strtolower(trim($cell->getValue())) == 'frau' || strtolower(trim($cell->getValue())) == 'madame' ||  strtolower(trim($cell->getValue())) == 'mrs') $cell->setValue(2);
 									if ($cell->getValue() != 1 && $cell->getValue() != 2) $cell->setValue(0);
 								}
 								if ($value == "active" || $value == "confirmed" || $value == "unsubscribed") {
@@ -851,8 +851,8 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 									$newPerson->setCategory($newKat);
 								} else {
 									if ($value == "salutation" || $value == "salutation") {
-										if (strtolower(trim($cell)) == 'herr' || strtolower(trim($cell)) == 'mr') $cell=1;
-										if (strtolower(trim($cell)) == 'frau' || strtolower(trim($cell)) == 'mrs') $cell=2;
+										if (strtolower(trim($cell)) == 'herr' || strtolower(trim($cell)) == 'herrn' || strtolower(trim($cell)) == 'sir' ||  strtolower(trim($cell)) == 'mr') $cell=1;
+										if (strtolower(trim($cell)) == 'frau' || strtolower(trim($cell)) == 'madame' || strtolower(trim($cell)) == 'mrs') $cell=2;
 										if ($cell != 1 && $cell != 2) $cell = 0;
 									}
 									if ($value == "active" || $value == "confirmed" || $value == "unsubscribed") {
