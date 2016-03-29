@@ -1043,7 +1043,8 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	 * @return void
 	 */
 	public function clearAction() {
-		$GLOBALS["TYPO3_DB"]->exec_DELETEquery("tx_personmanager_domain_model_person","1");
+		//$GLOBALS["TYPO3_DB"]->exec_DELETEquery("tx_personmanager_domain_model_person","1");
+		$GLOBALS["TYPO3_DB"]->exec_UPDATEquery("tx_personmanager_domain_model_person","1",array("deleted"=>1));
 		$this->redirect('list');
 	}
 
