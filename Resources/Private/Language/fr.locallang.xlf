@@ -6,12 +6,12 @@
 		</header>
 		<body>
 		<trans-unit id="const.aburl" approved="yes">
-			<source>URL of the Deregistration (ends with ? or &amp;)</source>
-			<target>URL de la page de désinscription (doit finir par ? ou &amp;)</target>
+			<source>ID of the Deregistration Page</source>
+			<target>ID de la page de désinscription</target>
 		</trans-unit>
 		<trans-unit id="const.anurl" approved="yes">
-			<source>URL of the Registration (ends with ? or &amp;)</source>
-			<target>URL de la page d'inscription (doit finir par ? ou &amp;)</target>
+			<source>ID of the Registration Page</source>
+			<target>ID de la page d'inscription</target>
 		</trans-unit>
 		<trans-unit id="const.email" approved="yes">
 			<source>Email-Address of your website</source>

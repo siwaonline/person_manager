@@ -356,10 +356,10 @@
 			</trans-unit>
 			<!-- ### Constants ### -->
 			<trans-unit id="const.anurl">
-				<source>URL of the Registration (ends with ? or &amp;)</source>
+				<source>ID of the Registration Page</source>
 			</trans-unit>
 			<trans-unit id="const.aburl">
-				<source>URL of the Deregistration (ends with ? or &amp;)</source>
+				<source>ID of the Deregistration Page</source>
 			</trans-unit>
 			<trans-unit id="const.name">
 				<source>Name of your website</source>

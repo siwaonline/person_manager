@@ -44,15 +44,11 @@ should the deregistration be confirmed by mail?
 **Double-Opt In**
 should the registration be confirmed by mail?
 
-**URL of the Registration (required)**
-URL of the Page, where the frontend plugin ``Person Manager Registration`` is used
-eg. http://www.test.com/index.php?id=3&
-make sure this URL ends with ? or &
+**ID of the Registration (required)**
+ID of the Page, where the frontend plugin ``Person Manager Registration`` is used
 
-**URL of the Deregistration (required)**
-URL of the Page, where the frontend plugin ``Person Manager Deregistration`` is used
-eg. http://www.test.com/index.php?id=3&
-make sure this URL ends with ? or &
+**ID of the Deregistration (required)**
+ID of the Page, where the frontend plugin ``Person Manager Deregistration`` is used
 
 **Name of your webiste (required)**
 used for automatic emails
@@ -68,7 +64,7 @@ Frontend Plugins
 =============================================================================
 
 
-Just create a new ``Person Manager Registration`` or ``Person Manager Deregistration`` Plugin on the page where the user should subscribe.
+Just create a new ``Person Manager Registration`` or ``Person Manager Deregistration`` or ``Person Manager Short Registration`` Plugin on the page where the user should subscribe.
 
 Insert your Sender/Website Name and add a Signature if you want.
 
@@ -176,3 +172,61 @@ Just replace the Domain and the Page ID.
 
 
 .. _newsletter: https://github.com/Ecodev/newsletter/
+
+-----------------------------------------------------------------------------
+
+
+
+Real Url
+=============================================================================
+
+You can use following code parts for the Real Url config:
+
+**encode**
+
+``$params['URL'] = str_replace('person-an/new/Person', 'person-new', $params['URL']);``
+``$params['URL'] = str_replace('person-an/create/Person', 'person-register', $params['URL']);``
+``$params['URL'] = str_replace('person-akt/activate/Person', 'person-activate', $params['URL']);``
+``$params['URL'] = str_replace('person-ab/leave/Person', 'person-deregister', $params['URL']);``
+``$params['URL'] = str_replace('person-ab/unsubscribe/Person', 'person-deactivate', $params['URL']);``
+
+**decode**
+
+``$params['URL'] = str_replace('person-new', 'person-an/new/Person', $params['URL']);``
+``$params['URL'] = str_replace('person-register', 'person-an/create/Person', $params['URL']);``
+``$params['URL'] = str_replace('person-activate', 'person-akt/activate/Person', $params['URL']);``
+``$params['URL'] = str_replace('person-deregister', 'person-ab/leave/Person', $params['URL']);``
+``$params['URL'] = str_replace('person-deactivate', 'person-ab/unsubscribe/Person', $params['URL']);``
+
+**postVarSets**
+
+'person-akt' => array(
+    array(
+        'GETvar' => 'tx_personmanager_personmanagerfront[action]',
+    ),
+    array(
+        'GETvar' => 'tx_personmanager_personmanagerfront[controller]',
+    ),
+    array(
+        'GETvar' => 'tx_personmanager_personmanagerfront[token]',
+    ),
+),
+'person-an' => array(
+    array(
+        'GETvar' => 'tx_personmanager_personmanagerfront[action]',
+    ),
+    array(
+        'GETvar' => 'tx_personmanager_personmanagerfront[controller]',
+    ),
+),
+'person-ab' => array(
+    array(
+        'GETvar' => 'tx_personmanager_personmanagerunsub[action]',
+    ),
+    array(
+        'GETvar' => 'tx_personmanager_personmanagerunsub[controller]',
+    ),
+    array(
+        'GETvar' => 'tx_personmanager_personmanagerunsub[token]',
+    ),
+),

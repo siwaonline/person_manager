@@ -356,10 +356,10 @@
 			</trans-unit>
 			<!-- ### Constants ### -->
 			<trans-unit id="const.anurl">
-				<target>URL der Anmeldung (endet auf ? oder &amp;)</target>
+				<target>ID der Anmeldungsseite</target>
 			</trans-unit>
 			<trans-unit id="const.aburl">
-				<target>URL der Abmeldung (endet auf ? oder &amp;)</target>
+				<target>ID der Abmeldungsseite</target>
 			</trans-unit>
 			<trans-unit id="const.name">
 				<target>Name der Seite</target>

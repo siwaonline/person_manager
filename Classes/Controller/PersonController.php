@@ -82,7 +82,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	public function initializeAction(){
 		$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.notext','person_manager');
 
-		$this->signature = $this->settings['flexsignature'];
+		$this->signature = $this->configurationManager->getContentObject()->parseFunc($this->settings['flexsignature'], array(), '< lib.parseFunc_RTE');
 		$this->sitename = $this->settings['flexsitename'];
 
 		$this->flexcheckmail = $this->settings['flexcheckmail'];
@@ -146,6 +146,15 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		$this->view->assign('newIcons', $this->newIcons);
 	}
 
+	/**
+	 * action newShort
+	 *
+	 * @return void
+	 */
+	public function newShortAction() {
+		$this->view->assign('showpage', $this->settings["flexshowpage"]);
+	}
+	
 	/**
 	 * action new
 	 *
@@ -212,18 +221,10 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				$renew=1;
 			}
 		}
-
+		
 		if($failed == 0) {
 			$opt = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["doubleOptIn"];
-			$path = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["path"];
-			$checkpath = substr($path, -1);
-			if($checkpath != "?" && $checkpath != "&"){
-				if (strpos($path,'?') !== false) {
-					$path .= "&";
-				}else{
-					$path .= "?";
-				}
-			}
+			$path = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["path"];		
 			//$site = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["site"];
 			$site = $this->sitename;
 
@@ -252,14 +253,40 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				$mailcontent .= "$langhelp<br/><br/>";
 				//$mailcontent .= "" . $path . "tx_personmanager_personmanagerfront" . urlencode("[action]") . "=activate&tx_personmanager_personmanagerfront" . urlencode("[controller]") . "=Person&tx_personmanager_personmanagerfront" . urlencode("[token]") . "=" . $newPerson->getToken() . "&no_cache=1<br/>";
 				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.confirmreg','person_manager');
-				$mailcontent .= "<a href='" . $path . "tx_personmanager_personmanagerfront" . urlencode("[action]") . "=activate&tx_personmanager_personmanagerfront" . urlencode("[controller]") . "=Person&tx_personmanager_personmanagerfront" . urlencode("[token]") . "=" . $newPerson->getToken() . "&no_cache=1'>$langhelp</a><br/>";
+				if(is_numeric($path)){
+					$this->uriBuilder->reset();
+					$this->uriBuilder->setArguments(array(
+						'tx_personmanager_personmanagerfront' => array(
+							'action' => 'activate',
+							'controller' => 'Person',
+							'token' => $newPerson->getToken()
+						),
+						'id' => $path
+					));
+					$this->uriBuilder->setCreateAbsoluteUri(1);
+					if ($_SERVER['HTTPS'] == "on") {
+						$path = "https://" . $_SERVER['HTTP_HOST'] . $this->uriBuilder->buildFrontendUri();
+					}else{
+						$path = "http://" . $_SERVER['HTTP_HOST'] . $this->uriBuilder->buildFrontendUri();
+					}
+					$mailcontent .= "<a href='" . $path . "'>$langhelp</a><br/>";
+				}else{
+					$checkpath = substr($path, -1);
+					if($checkpath != "?" && $checkpath != "&"){
+						if (strpos($path,'?') !== false) {
+							$path .= "&";
+						}else{
+							$path .= "?";
+						}
+					}
+					$mailcontent .= "<a href='" . $path . "tx_personmanager_personmanagerfront" . urlencode("[action]") . "=activate&tx_personmanager_personmanagerfront" . urlencode("[controller]") . "=Person&tx_personmanager_personmanagerfront" . urlencode("[token]") . "=" . $newPerson->getToken() . "&no_cache=1'>$langhelp</a><br/>";
+				}		
 				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.ifnot','person_manager');
 				$mailcontent .= "<br/>$langhelp";
 				$mailcontent .= "<br/><br/>".$this->signature;
 				$empfaenger = $newPerson->getEmail();
-
 				$this->sendMail($empfaenger, $mailcontent, $subject);
-
+				
 				//$this->redirect('checkMail');
 				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.createmail','person_manager');
 				$this->insertLog($newPerson->getUid(),$newPerson->getEmail(),"create","$langhelp","",1);
@@ -444,15 +471,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		$path = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["pathout"];
 		$site = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["site"];
 		//$site = $this->sitename;
-		$checkpath = substr($path, -1);
-		if($checkpath != "?" && $checkpath != "&"){
-			if (strpos($path,'?') !== false) {
-				$path .= "&";
-			}else{
-				$path .= "?";
-			}
-		}
-
+		
 		if($mail == ""){
 			$mail = trim($_POST["tx_personmanager_personmanagerunsub"]["tx_personmanager_personmanagerunsub"]["mail"]);
 		}
@@ -461,7 +480,6 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		}
 
 		$pers = $this->personRepository->findOneByEmail($mail);
-
 
 		if($pers != NULL){
 			if($pers->isUnsubscribed() == 0) {
@@ -474,7 +492,34 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 					$mailcontent .= "$langhelp<br/><br/>";
 					//$mailcontent .= "" . $path . "tx_personmanager_personmanagerunsub" . urlencode("[action]") . "=unsubscribe&tx_personmanager_personmanagerunsub" . urlencode("[controller]") . "=Person&tx_personmanager_personmanagerunsub" . urlencode("[token]") . "=" . $pers->getToken() . "&no_cache=1<br/>";
 					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.confirmleave','person_manager');
-					$mailcontent .= "<a href='" . $path . "tx_personmanager_personmanagerunsub" . urlencode("[action]") . "=unsubscribe&tx_personmanager_personmanagerunsub" . urlencode("[controller]") . "=Person&tx_personmanager_personmanagerunsub" . urlencode("[token]") . "=" . $pers->getToken() . "&no_cache=1'>$langhelp</a><br/>";
+					if(is_numeric($path)){
+						$this->uriBuilder->reset();
+						$this->uriBuilder->setArguments(array(
+							'tx_personmanager_personmanagerunsub' => array(
+								'action' => 'unsubscribe',
+								'controller' => 'Person',
+								'token' => $pers->getToken()
+							),
+							'id' => $path
+						));
+						$this->uriBuilder->setCreateAbsoluteUri(1);
+						if ($_SERVER['HTTPS'] == "on") {
+							$path = "https://" . $_SERVER['HTTP_HOST'] . $this->uriBuilder->buildFrontendUri();
+						}else{
+							$path = "http://" . $_SERVER['HTTP_HOST'] . $this->uriBuilder->buildFrontendUri();
+						}
+						$mailcontent .= "<a href='" . $path . "'>$langhelp</a><br/>";
+					}else{
+						$checkpath = substr($path, -1);
+						if($checkpath != "?" && $checkpath != "&"){
+							if (strpos($path,'?') !== false) {
+								$path .= "&";
+							}else{
+								$path .= "?";
+							}
+						}
+						$mailcontent .= "<a href='" . $path . "tx_personmanager_personmanagerunsub" . urlencode("[action]") . "=unsubscribe&tx_personmanager_personmanagerunsub" . urlencode("[controller]") . "=Person&tx_personmanager_personmanagerunsub" . urlencode("[token]") . "=" . $pers->getToken() . "&no_cache=1'>$langhelp</a><br/>";
+					}					
 					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.ifnot','person_manager');
 					$mailcontent .= "<br/>$langhelp.";
 					$mailcontent .= "<br/><br/>" . $this->signature;

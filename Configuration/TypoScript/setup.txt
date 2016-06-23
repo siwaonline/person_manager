@@ -1,9 +1,6 @@
 
 plugin.tx_personmanager {
 	view {
-		templateRootPath = {$plugin.tx_personmanager.view.templateRootPath}
-		partialRootPath = {$plugin.tx_personmanager.view.partialRootPath}
-		layoutRootPath = {$plugin.tx_personmanager.view.layoutRootPath}
 		templateRootPaths.0 = {$plugin.tx_personmanager.view.templateRootPath}
 		partialRootPaths.0 = {$plugin.tx_personmanager.view.partialRootPath}
 		layoutRootPaths.0 = {$plugin.tx_personmanager.view.layoutRootPath}
@@ -81,9 +78,6 @@ plugin.tx_personmanager._CSS_DEFAULT_STYLE (
  # Module configuration
 module.tx_personmanager {
 	view {
-		templateRootPath = {$module.tx_personmanager.view.templateRootPath}
-		partialRootPath = {$module.tx_personmanager.view.partialRootPath}
-		layoutRootPath = {$module.tx_personmanager.view.layoutRootPath}
 		templateRootPaths.0 = {$module.tx_personmanager.view.templateRootPath}
 		partialRootPaths.0 = {$module.tx_personmanager.view.partialRootPath}
 		layoutRootPaths.0 = {$module.tx_personmanager.view.layoutRootPath}

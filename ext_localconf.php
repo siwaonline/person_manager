@@ -12,7 +12,7 @@ if (!defined('TYPO3_MODE')) {
 	),
 	// non-cacheable actions
 	array(
-		'Person' => 'create, activate, unsubscribe,isunsubscribed,text',
+		'Person' => 'new, create, activate, unsubscribe,isunsubscribed,text',
 
 	)
 );
@@ -27,6 +27,20 @@ if (!defined('TYPO3_MODE')) {
 	// non-cacheable actions
 	array(
 		'Person' => 'newLeave, leave, unsubscribe, text',
+
+	)
+);
+
+\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+	'Personmanager.' . $_EXTKEY,
+	'Personmanagershort',
+	array(
+		'Person' => 'newShort',
+
+	),
+	// non-cacheable actions
+	array(
+		'Person' => 'newShort',
 
 	)
 );
