@@ -148,9 +148,9 @@ return array(
 			'config' => array(
 				'type' => 'select',
 				'items' => array(
-					array('Herr/Frau', 0),
-					array('Herr', 1),
-					array('Frau', 2),
+					array('LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:labels.mrmrs', 0),
+					array('LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:labels.mr', 1),
+					array('LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:labels.mrs', 2),
 				),
 				'size' => 1,
 				'maxitems' => 1,

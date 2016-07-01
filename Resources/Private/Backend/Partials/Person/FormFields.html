@@ -2,7 +2,7 @@
 	<label for="salutation">
 		<f:translate key="tx_personmanager_domain_model_person.salutation" />
 	</label><br />
-		<f:form.select property="salutation" options="{anrarr}"/><br />
+		<f:form.select property="salutation" options="{anrarr}" /><br />
 </f:if>
 
 <f:if condition="{vars.titel} == '1'">
@@ -22,23 +22,23 @@
 </label><br />
 	<f:form.textfield property="lastname" /><br />
 
+<f:if condition="{vars.nachgtitel} == '1'">
+	<label for="nachgtitel">
+		<f:translate key="tx_personmanager_domain_model_person.nachgtitel" />
+	</label><br />
+	<f:form.textfield property="nachgtitel" /><br />
+</f:if>
+
 <label for="email">
 	<f:translate key="tx_personmanager_domain_model_person.email" />
 </label><br />
-	<f:form.textfield property="email" /><br />
+<f:form.textfield property="email" /><br />
 
 <f:if condition="{vars.geb} == '1'">
 	<label for="geb">
 		<f:translate key="tx_personmanager_domain_model_person.geb" />
 	</label><br />
 	<f:form.textfield property="geb" /><br />
-</f:if>
-
-<f:if condition="{vars.nachgtitel} == '1'">
-	<label for="nachgtitel">
-		<f:translate key="tx_personmanager_domain_model_person.nachgtitel" />
-	</label><br />
-		<f:form.textfield property="nachgtitel" /><br />
 </f:if>
 
 <f:if condition="{vars.tel} == '1'">
