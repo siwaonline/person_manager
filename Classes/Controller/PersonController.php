@@ -224,7 +224,9 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		
 		if($failed == 0) {
 			$opt = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["doubleOptIn"];
-			$path = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["path"];		
+			$path = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["path"];
+			$sendInMail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["sendInMail"];
+			$mail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["mail"];
 			//$site = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["site"];
 			$site = $this->sitename;
 
@@ -298,6 +300,15 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				$this->personRepository->update($newPerson);
 				$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 				$persistenceManager->persistAll();
+				
+				if($sendInMail = 1){
+					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.registration','person_manager');
+					$subject = $langhelp ." ".$newPerson->getEmail();
+					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.notifyRegistration','person_manager');
+					$user = $newPerson->getFirstname()." ".$newPerson->getLastname()." (".$newPerson->getEmail().")";
+					$mailcontent = str_replace("%s",$user,$langhelp);
+					$this->sendMail($mail, $mailcontent, $subject);
+				}
 
 				//$this->redirect('confirm');
 				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.createsuccess','person_manager');
@@ -428,6 +439,8 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	 * @return void
 	 */
 	public function activateAction() {
+		$sendInMail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["sendInMail"];
+		$mail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["mail"];
 		$vars = $this->request->getArguments();
 		$pers = $this->personRepository->findOneByToken($vars['token']);
 		if($pers != NULL){
@@ -436,6 +449,16 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$this->personRepository->update($pers);
 			$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 			$persistenceManager->persistAll();
+
+			if($sendInMail = 1){
+				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.registration','person_manager');
+				$subject = $langhelp ." ".$pers->getEmail();
+				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.notifyRegistration','person_manager');
+				$user = $pers->getFirstname()." ".$pers->getLastname()." (".$pers->getEmail().")";
+				$mailcontent = str_replace("%s",$user,$langhelp);
+				$this->sendMail($mail, $mailcontent, $subject);
+			}
+			
 			//$this->redirect('confirm');
 			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.activate','person_manager');
 			$this->insertLog($pers->getUid(),$pers->getEmail(),"activate","$langhelp","",1);
@@ -470,6 +493,8 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		$opt = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["doubleOptOut"];
 		$path = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["pathout"];
 		$site = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["site"];
+		$sendOutMail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["sendOutMail"];
+		$mail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["mail"];
 		//$site = $this->sitename;
 		
 		if($mail == ""){
@@ -535,6 +560,16 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 					$this->personRepository->update($pers);
 					$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 					$persistenceManager->persistAll();
+
+					if($sendOutMail = 1){
+						$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.deregistration','person_manager');
+						$subject = $langhelp ." ".$pers->getEmail();
+						$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.notifyDeregistration','person_manager');
+						$user = $pers->getFirstname()." ".$pers->getLastname()." (".$pers->getEmail().")";
+						$mailcontent = str_replace("%s",$user,$langhelp);
+						$this->sendMail($mail, $mailcontent, $subject);
+					}
+					
 					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.leavesuccess','person_manager');
 					$this->insertLog($pers->getUid(),$pers->getEmail(),"leave","$langhelp","",1);
 					$this->forward('text', null, null, array('text' => $this->flexunsubscribe));
@@ -559,6 +594,8 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	 * @return void
 	 */
 	public function unsubscribeAction() {
+		$sendOutMail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["sendOutMail"];
+		$mail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["mail"];
 		$vars = $this->request->getArguments();
 		$pers = $this->personRepository->findOneByToken($vars['token']);
 		if($pers != NULL) {
@@ -566,6 +603,16 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$this->personRepository->update($pers);
 			$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 			$persistenceManager->persistAll();
+
+			if($sendOutMail = 1){
+				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.deregistration','person_manager');
+				$subject = $langhelp ." ".$pers->getEmail();
+				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.notifyDeregistration','person_manager');
+				$user = $pers->getFirstname()." ".$pers->getLastname()." (".$pers->getEmail().")";
+				$mailcontent = str_replace("%s",$user,$langhelp);
+				$this->sendMail($mail, $mailcontent, $subject);
+			}
+			
 			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.unsubscribe','person_manager');
 			$this->insertLog($pers->getUid(),$pers->getEmail(),"unsubscribe","$langhelp","",1);
 			$this->forward('text', null, null, array('text' => $this->flexunsubscribe));

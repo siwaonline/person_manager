@@ -354,6 +354,18 @@
 			<trans-unit id="mail.deregister">
 				<source>unsubscribe</source>
 			</trans-unit>
+			<trans-unit id="mail.registration">
+                <source>Registration</source>
+            </trans-unit>
+            <trans-unit id="mail.deregistration">
+                <source>Deregistration</source>
+            </trans-unit>
+            <trans-unit id="mail.notifyRegistration">
+                <source>User %s registered now.</source>
+            </trans-unit>
+            <trans-unit id="mail.notifyDeregistration">
+                <source>User %s deregistered now.</source>
+            </trans-unit>
 			<!-- ### Constants ### -->
 			<trans-unit id="const.anurl">
 				<source>ID of the Registration Page</source>
@@ -367,6 +379,12 @@
 			<trans-unit id="const.email">
 				<source>Email-Address of your website</source>
 			</trans-unit>
+			<trans-unit id="const.sendInMail">
+                <source>Send email notification to owner, when user registers</source>
+            </trans-unit>
+            <trans-unit id="const.sendOutMail">
+                <source>Send email notification to owner, when user deregisters</source>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

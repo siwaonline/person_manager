@@ -15,6 +15,8 @@ plugin.tx_personmanager {
 		pathout = {$plugin.tx_personmanager.options.pathout}
 		site = {$plugin.tx_personmanager.options.site}
 		mail = {$plugin.tx_personmanager.options.mail}
+		sendInMail = {$plugin.tx_personmanager.options.sendInMail}
+		sendOutMail = {$plugin.tx_personmanager.options.sendOutMail}
 	}
 	variables{
 		salutation = {$plugin.tx_personmanager.variables.salutation}
@@ -92,6 +94,8 @@ module.tx_personmanager {
 		pathout = {$plugin.tx_personmanager.options.pathout}
 		site = {$plugin.tx_personmanager.options.site}
 		mail = {$plugin.tx_personmanager.options.mail}
+		sendInMail = {$plugin.tx_personmanager.options.sendInMail}
+		sendOutMail = {$plugin.tx_personmanager.options.sendOutMail}
 		salutation = {$plugin.tx_personmanager.variables.salutation}
 		titel = {$plugin.tx_personmanager.variables.titel}
 		nachgtitel = {$plugin.tx_personmanager.variables.nachgtitel}

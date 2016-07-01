@@ -354,6 +354,18 @@
 			<trans-unit id="mail.deregister">
 				<target>Abmelden</target>
 			</trans-unit>
+			<trans-unit id="mail.registration">
+                <target>Anmeldung</target>
+            </trans-unit>
+            <trans-unit id="mail.deregistration">
+                <target>Abmeldung</target>
+            </trans-unit>
+            <trans-unit id="mail.notifyRegistration">
+                <target>Benutzer %s hat sich gerade angemeldet.</target>
+            </trans-unit>
+            <trans-unit id="mail.notifyDeregistration">
+                <target>Benutzer %s hat sich gerade abgemeldet.</target>
+            </trans-unit>
 			<!-- ### Constants ### -->
 			<trans-unit id="const.anurl">
 				<target>ID der Anmeldungsseite</target>
@@ -367,6 +379,12 @@
 			<trans-unit id="const.email">
 				<target>E-Mail Adresse der Seite</target>
 			</trans-unit>
+			<trans-unit id="const.sendInMail">
+                <target>Sende E-Mail an Admin, wenn sich User anmeldet</target>
+            </trans-unit>
+            <trans-unit id="const.sendOutMail">
+                <target>Sende E-Mail an Admin, wenn sich User abmeldet</target>
+            </trans-unit>
 		</body>
 	</file>
 </xliff>

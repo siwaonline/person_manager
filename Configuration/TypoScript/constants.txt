@@ -25,6 +25,10 @@ plugin.tx_personmanager {
 		site =
 		# cat=plugin.tx_personmanager//g; type=string; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:const.email
 		mail =
+		# cat=plugin.tx_personmanager//h; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:const.sendInMail
+		sendInMail = 0
+		# cat=plugin.tx_personmanager//i; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:const.sendOutMail
+		sendOutMail = 0
 	}
 	variables{
 		# cat=plugin.tx_personmanager/enable/a; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.salutation
