@@ -285,7 +285,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				}		
 				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.ifnot','person_manager');
 				$mailcontent .= "<br/>$langhelp";
-				$mailcontent .= "<br/><br/>".$this->signature;
+				$mailcontent .= "<br/><br/>".$this->getSignature();
 				$empfaenger = $newPerson->getEmail();
 				$this->sendMail($empfaenger, $mailcontent, $subject);
 				
@@ -547,7 +547,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 					}					
 					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.ifnot','person_manager');
 					$mailcontent .= "<br/>$langhelp.";
-					$mailcontent .= "<br/><br/>" . $this->signature;
+					$mailcontent .= "<br/><br/>" . $this->getSignature();
 					$empfaenger = $pers->getEmail();
 					$this->sendMail($empfaenger, $mailcontent, $subject);
 
@@ -1325,6 +1325,15 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	public function blClearAction() {
 		$GLOBALS["TYPO3_DB"]->exec_DELETEquery("tx_personmanager_domain_model_blacklist","1");
 		$this->redirect('list');
+	}
+
+	public function getSignature(){
+		if ($_SERVER['HTTPS'] == "on") {
+			$base = "https://" . $_SERVER['HTTP_HOST'];
+		}else{
+			$base = "http://" . $_SERVER['HTTP_HOST'];
+		}
+		return str_replace('img src="','img src="'.$base."/",$this->signature);
 	}
 
 }
