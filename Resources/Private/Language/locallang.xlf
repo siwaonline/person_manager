@@ -100,6 +100,12 @@
 			<trans-unit id="tx_personmanager_domain_model_log.email">
 				<source>Email</source>
 			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log.firstname">
+                <source>Firstname</source>
+            </trans-unit>
+            <trans-unit id="tx_personmanager_domain_model_log.lastname">
+                <source>Lastname</source>
+            </trans-unit>
 			<trans-unit id="tx_personmanager_domain_model_log.fehler">
 				<source>Error</source>
 			</trans-unit>

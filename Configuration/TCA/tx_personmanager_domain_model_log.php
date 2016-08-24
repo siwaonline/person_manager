@@ -24,7 +24,7 @@ return array(
 		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath("person_manager") . 'Resources/Public/Icons/tx_personmanager_domain_model_log.gif'
 	),
 	'interface' => array(
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, action, detail, email, fehler, person, success',
+		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, action, detail, email, firstname, lastname, fehler, person, success',
 	),
 	'types' => array(
 		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, action, detail, email, fehler, person, success, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'),
@@ -142,6 +142,24 @@ return array(
 		'email' => array(
 			'exclude' => 1,
 			'label' => 'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager_domain_model_log.email',
+			'config' => array(
+				'type' => 'input',
+				'size' => 30,
+				'eval' => 'trim'
+			),
+		),
+		'firstname' => array(
+			'exclude' => 1,
+			'label' => 'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager_domain_model_log.firstname',
+			'config' => array(
+				'type' => 'input',
+				'size' => 30,
+				'eval' => 'trim'
+			),
+		),
+		'lastname' => array(
+			'exclude' => 1,
+			'label' => 'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager_domain_model_log.lastname',
 			'config' => array(
 				'type' => 'input',
 				'size' => 30,

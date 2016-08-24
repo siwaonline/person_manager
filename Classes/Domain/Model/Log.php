@@ -45,6 +45,20 @@ class Log extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @var string
 	 */
 	protected $email = '';
+	
+	/**
+	 * firstname
+	 *
+	 * @var string
+	 */
+	protected $firstname = '';
+	
+	/**
+	 * lastname
+	 *
+	 * @var string
+	 */
+	protected $lastname = '';
 
 	/**
 	 * action
@@ -131,6 +145,38 @@ class Log extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		$this->email = $email;
 	}
 
+	/**
+	 * @return string
+	 */
+	public function getFirstname()
+	{
+		return $this->firstname;
+	}
+
+	/**
+	 * @param string $firstname
+	 */
+	public function setFirstname($firstname)
+	{
+		$this->firstname = $firstname;
+	}
+
+	/**
+	 * @return string
+	 */
+	public function getLastname()
+	{
+		return $this->lastname;
+	}
+
+	/**
+	 * @param string $lastname
+	 */
+	public function setLastname($lastname)
+	{
+		$this->lastname = $lastname;
+	}
+	
 	/**
 	 * Returns the person
 	 *

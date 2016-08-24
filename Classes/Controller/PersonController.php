@@ -243,7 +243,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 			$persistenceManager->persistAll();
 			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.create','person_manager');
-			$this->insertLog($newPerson->getUid(),$newPerson->getEmail(),"create","$langhelp","",1);
+			$this->insertLog($newPerson->getUid(),$newPerson->getEmail(),$newPerson->getFirstname(),$newPerson->getLastname(),"create","$langhelp","",1);
 
 
 			if ($opt == 1) {
@@ -291,7 +291,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				
 				//$this->redirect('checkMail');
 				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.createmail','person_manager');
-				$this->insertLog($newPerson->getUid(),$newPerson->getEmail(),"create","$langhelp","",1);
+				$this->insertLog($newPerson->getUid(),$newPerson->getEmail(),$newPerson->getFirstname(),$newPerson->getLastname(),"create","$langhelp","",1);
 
 				$this->forward('text', null, null, array('text' => $this->flexcheckmail));
 			} else {
@@ -312,14 +312,14 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
 				//$this->redirect('confirm');
 				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.createsuccess','person_manager');
-				$this->insertLog($newPerson->getUid(),$newPerson->getEmail(),"create","$langhelp","",1);
+				$this->insertLog($newPerson->getUid(),$newPerson->getEmail(),$newPerson->getFirstname(),$newPerson->getLastname(),"create","$langhelp","",1);
 				$this->forward('text', null, null, array('text' => $this->flexconfirm));
 			}
 		}else{
 			$this->view->assign('error', $error);
 			$this->view->assign('newPerson', $newPerson);
 			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.createfail','person_manager');
-			$this->insertLog(0,$newPerson->getEmail(),"create","$langhelp",$error,0);
+			$this->insertLog(0,$newPerson->getEmail(),$newPerson->getFirstname(),$newPerson->getLastname(),"create","$langhelp",$error,0);
 			$this->forward('new', null, null, array('error' => $error, 'newPerson' => $newPerson));
 		}
 	}
@@ -461,12 +461,12 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			
 			//$this->redirect('confirm');
 			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.activate','person_manager');
-			$this->insertLog($pers->getUid(),$pers->getEmail(),"activate","$langhelp","",1);
+			$this->insertLog($pers->getUid(),$pers->getEmail(),$pers->getFirstname(),$pers->getLastname(),"activate","$langhelp","",1);
 			$this->forward('text', null, null, array('text' => $this->flexconfirm));
 		}else{
 			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.activate','person_manager');
 			$langhelp2 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.activatefail','person_manager');
-			$this->insertLog(0,"-","activate","$langhelp","$langhelp2",0);
+			$this->insertLog(0,"-","-","-","activate","$langhelp","$langhelp2",0);
 			$this->forward('text', null, null, array('text' => $this->flexerr));
 		}
 	}
@@ -553,7 +553,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
 					//$this->redirect('checkMailLeave');
 					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.leavemail','person_manager');
-					$this->insertLog($pers->getUid(),$pers->getEmail(),"leave","$langhelp","",1);
+					$this->insertLog($pers->getUid(),$pers->getEmail(),$pers->getFirstname(),$pers->getLastname(),"leave","$langhelp","",1);
 					$this->forward('text', null, null, array('text' => $this->flexcheckmailleave));
 				}else{
 					$pers->setUnsubscribed(TRUE);
@@ -571,20 +571,20 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 					}
 					
 					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.leavesuccess','person_manager');
-					$this->insertLog($pers->getUid(),$pers->getEmail(),"leave","$langhelp","",1);
+					$this->insertLog($pers->getUid(),$pers->getEmail(),$pers->getFirstname(),$pers->getLastname(),"leave","$langhelp","",1);
 					$this->forward('text', null, null, array('text' => $this->flexunsubscribe));
 				}
 			}else{
 				//$this->redirect('isunsubscribed');
 				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.leavewant','person_manager');
 				$langhelp2 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.leavealready','person_manager');
-				$this->insertLog($pers->getUid(),$pers->getEmail(),"leave","$langhelp","$langhelp2",0);
+				$this->insertLog($pers->getUid(),$pers->getEmail(),$pers->getFirstname(),$pers->getLastname(),"leave","$langhelp","$langhelp2",0);
 				$this->forward('text', null, null, array('text' => $this->flexisunsubscribed));
 			}
 		}
 		$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.leavewant','person_manager');
 		$langhelp2 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.leavenot','person_manager');
-		$this->insertLog(0,$mail,"leave","$langhelp","$langhelp2",0);
+		$this->insertLog(0,$mail,"-","-","leave","$langhelp","$langhelp2",0);
 		$this->forward('text', null, null, array('text' => $this->flexleave));
 	}
 
@@ -614,7 +614,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			}
 			
 			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.unsubscribe','person_manager');
-			$this->insertLog($pers->getUid(),$pers->getEmail(),"unsubscribe","$langhelp","",1);
+			$this->insertLog($pers->getUid(),$pers->getEmail(),$pers->getFirstname(),$pers->getLastname(),"unsubscribe","$langhelp","",1);
 			$this->forward('text', null, null, array('text' => $this->flexunsubscribe));
 		}else {
 			$this->forward('leave', null, null, array('mail' => ""));
@@ -1140,11 +1140,13 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		$this->redirect('list');
 	}
 
-	public function insertLog($person = 0, $email = "", $action = "", $detail = "", $fehler = "", $success= 0) {
+	public function insertLog($person = 0, $email = "", $fname = "", $lname = "", $action = "", $detail = "", $fehler = "", $success= 0) {
 		$newLog = new \Personmanager\PersonManager\Domain\Model\Log();
 
 		$newLog->setPerson($person);
 		$newLog->setEmail($email);
+		$newLog->setFirstname($fname);
+		$newLog->setLastname($lname);
 		$newLog->setAction($action);
 		$newLog->setDetail($detail);
 		$newLog->setFehler($fehler);

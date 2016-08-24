@@ -100,6 +100,12 @@
 			<trans-unit id="tx_personmanager_domain_model_log.email">
 				<target>Email</target>
 			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_log.firstname">
+                <target>Vorname</target>
+            </trans-unit>
+            <trans-unit id="tx_personmanager_domain_model_log.lastname">
+                <target>Nachname</target>
+            </trans-unit>
 			<trans-unit id="tx_personmanager_domain_model_log.fehler">
 				<target>Fehler</target>
 			</trans-unit>

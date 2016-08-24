@@ -111,6 +111,8 @@ CREATE TABLE tx_personmanager_domain_model_log (
 	action varchar(255) DEFAULT '' NOT NULL,
 	detail varchar(255) DEFAULT '' NOT NULL,
 	email varchar(255) DEFAULT '' NOT NULL,
+	firstname varchar(255) DEFAULT '' NOT NULL,
+	lastname varchar(255) DEFAULT '' NOT NULL,
 	person int(11) DEFAULT '0' NOT NULL,
 	fehler varchar(255) DEFAULT '' NOT NULL,
 	success tinyint(1) unsigned DEFAULT '0' NOT NULL,

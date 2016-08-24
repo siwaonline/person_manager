@@ -349,6 +349,14 @@
 			<source>Email</source>
 			<target>Courriel</target>
 		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_log.firstname" approved="yes">
+            <source>Firstname</source>
+            <target>Prénom</target>
+        </trans-unit>
+        <trans-unit id="tx_personmanager_domain_model_log.lastname" approved="yes">
+            <source>Lastname</source>
+            <target>Nom</target>
+        </trans-unit>
 		<trans-unit id="tx_personmanager_domain_model_log.fehler" approved="yes">
 			<source>Error</source>
 			<target>Erreur</target>
