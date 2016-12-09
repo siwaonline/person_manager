@@ -171,7 +171,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 			<td><f:link.action action="show" arguments="{person : person, vars:vars}">{person.email}</f:link.action></td>
 			<f:if condition="{vars.geb} == '1'"><td><f:link.action action="show" arguments="{person : person, vars:vars}">{person.geb}</f:link.action></td></f:if>
 			<f:if condition="{vars.tel} == '1'"><td><f:link.action action="show" arguments="{person : person, vars:vars}">{person.tel}</f:link.action></td></f:if>
-			<f:if condition="{vars.salutation} == '1'"><td><f:link.action action="show" arguments="{person : person, vars:vars}">{person.company}</f:link.action></td></f:if>
+			<f:if condition="{vars.company} == '1'"><td><f:link.action action="show" arguments="{person : person, vars:vars}">{person.company}</f:link.action></td></f:if>
 			<td><f:link.action action="show" arguments="{person : person, vars:vars}"><f:format.date format="{f:translate(key:'dateFormat')}">{person.crdate}</f:format.date></f:link.action></td>
 			<f:if condition="{person.active} == 0"><td><f:link.action action="show" arguments="{person : person, vars:vars}"><f:translate key="labels.no" /></f:link.action></td></f:if>
 			<f:if condition="{person.active} == 1"><td><f:link.action action="show" arguments="{person : person, vars:vars}"><f:translate key="labels.yes" /></f:link.action></td></f:if>
