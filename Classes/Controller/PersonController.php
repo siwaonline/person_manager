@@ -301,7 +301,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 				$persistenceManager->persistAll();
 				
-				if($sendInMail = 1){
+				if($sendInMail == 1){
 					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.registration','person_manager');
 					$subject = $langhelp ." ".$newPerson->getEmail();
 					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.notifyRegistration','person_manager');
@@ -450,7 +450,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 			$persistenceManager->persistAll();
 
-			if($sendInMail = 1){
+			if($sendInMail == 1){
 				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.registration','person_manager');
 				$subject = $langhelp ." ".$pers->getEmail();
 				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.notifyRegistration','person_manager');
@@ -561,7 +561,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 					$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 					$persistenceManager->persistAll();
 
-					if($sendOutMail = 1){
+					if($sendOutMail == 1){
 						$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.deregistration','person_manager');
 						$subject = $langhelp ." ".$pers->getEmail();
 						$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.notifyDeregistration','person_manager');
@@ -604,7 +604,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 			$persistenceManager->persistAll();
 
-			if($sendOutMail = 1){
+			if($sendOutMail == 1){
 				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.deregistration','person_manager');
 				$subject = $langhelp ." ".$pers->getEmail();
 				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.notifyDeregistration','person_manager');
