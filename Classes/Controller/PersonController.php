@@ -267,9 +267,9 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 					));
 					$this->uriBuilder->setCreateAbsoluteUri(1);
 					if ($_SERVER['HTTPS'] == "on") {
-						$path = "https://" . $_SERVER['HTTP_HOST'] . $this->uriBuilder->buildFrontendUri();
+						$path = "https://" . $_SERVER['HTTP_HOST'] . "/" . $this->uriBuilder->buildFrontendUri();
 					}else{
-						$path = "http://" . $_SERVER['HTTP_HOST'] . $this->uriBuilder->buildFrontendUri();
+						$path = "http://" . $_SERVER['HTTP_HOST'] . "/" . $this->uriBuilder->buildFrontendUri();
 					}
 					$mailcontent .= "<a href='" . $path . "'>$langhelp</a><br/>";
 				}else{
@@ -529,9 +529,9 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 						));
 						$this->uriBuilder->setCreateAbsoluteUri(1);
 						if ($_SERVER['HTTPS'] == "on") {
-							$path = "https://" . $_SERVER['HTTP_HOST'] . $this->uriBuilder->buildFrontendUri();
+							$path = "https://" . $_SERVER['HTTP_HOST'] . "/" . $this->uriBuilder->buildFrontendUri();
 						}else{
-							$path = "http://" . $_SERVER['HTTP_HOST'] . $this->uriBuilder->buildFrontendUri();
+							$path = "http://" . $_SERVER['HTTP_HOST'] . "/" . $this->uriBuilder->buildFrontendUri();
 						}
 						$mailcontent .= "<a href='" . $path . "'>$langhelp</a><br/>";
 					}else{
