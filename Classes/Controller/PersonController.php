@@ -939,6 +939,8 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 										$newKat = new \Personmanager\PersonManager\Domain\Model\Category();
 										$newKat->setName($cell);
 										$this->categoryRepository->add($newKat);
+										$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+										$persistenceManager->persistAll();
 									}
 									$newPerson->setCategory($newKat);
 								} else {
