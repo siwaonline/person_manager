@@ -934,7 +934,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 							foreach ($arr as $key => $value) {
 								$cell = $felder[$key];
 								if ($value == "category") {
-									$newKat = $this->categoryRepository->findOneByName($cell());
+									$newKat = $this->categoryRepository->findOneByName($cell);
 									if ($newKat == NULL) {
 										$newKat = new \Personmanager\PersonManager\Domain\Model\Category();
 										$newKat->setName($cell);
