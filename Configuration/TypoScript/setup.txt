@@ -88,6 +88,7 @@ module.tx_personmanager {
 		storagePid = {$plugin.tx_personmanager.persistence.storagePid}
 	}
 	settings {
+		storagePid = {$plugin.tx_personmanager.persistence.storagePid}
 		doubleOptIn = {$plugin.tx_personmanager.options.doubleOptIn}
 		doubleOptOut = {$plugin.tx_personmanager.options.doubleOptOut}
 		path = {$plugin.tx_personmanager.options.path}
