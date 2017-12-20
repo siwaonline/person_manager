@@ -874,11 +874,13 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 						foreach ($arr as $key => $value) {
 							$cell = $worksheet->getCellByColumnAndRow($key, $row);
 							if ($value == "category") {
-								$newKat = $this->categoryRepository->findOneByName($cell->getValue());
-								if ($newKat == NULL) {
+							    $newKat = $this->categoryRepository->findOneByName($cell->getValue());
+                                if ($newKat == NULL) {
 									$newKat = new \Personmanager\PersonManager\Domain\Model\Category();
 									$newKat->setName($cell->getValue());
 									$this->categoryRepository->add($newKat);
+                                    $persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+                                    $persistenceManager->persistAll();
 								}
 								$newPerson->setCategory($newKat);
 							} else {
