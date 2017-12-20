@@ -894,7 +894,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 									if (strtolower(trim($cell->getValue())) == 'ja' || strtolower(trim($cell->getValue())) == 'yes') $cell->setValue(1);
 								}
 								if ($value == "email"){
-									$cell->setValue(trim($cell->getValue()));
+									$cell->setValue($this->extractEmail($cell->getValue()));
 								}
 								$newPerson->setProperty($value, $cell->getValue());
 							}
@@ -956,7 +956,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 										if (strtolower(trim($cell)) == 'ja' || strtolower(trim($cell)) == 'yes') $cell=1;
 									}
 									if ($value == "email"){
-										$cell=trim($cell);
+										$cell=$this->extractEmail($cell);
 									}
 									$newPerson->setProperty($value, $cell);
 								}
@@ -1342,5 +1342,17 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		}
 		return str_replace('img src="','img src="'.$base."/",$this->signature);
 	}
+	public function extractEmail($email){
+        $pattern = '/[a-z0-9_\-\+\.]+@[a-z0-9_\-\+\.]+/i';
+        preg_match_all($pattern, $email, $matches);
+        if(is_array($matches[0])){
+            if (filter_var($matches[0][0], FILTER_VALIDATE_EMAIL)) {
+                return $matches[0][0];
+            }
+        }else if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            return $email;
+        }
+        return "";
+    }
 
 }
