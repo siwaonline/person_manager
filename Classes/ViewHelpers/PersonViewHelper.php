@@ -3,8 +3,8 @@ namespace Personmanager\PersonManager\ViewHelpers;
 
 class PersonViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractViewHelper {
     /**
-     * @param $obj  object Object
-     * @param $prop string Property
+     * @param object $obj
+     * @param string $prop
      */
     public function render($obj,$prop) {
         if(is_object($obj)) {
