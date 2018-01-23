@@ -868,9 +868,16 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
 
 					for ($row = $startindex; $row <= $highestRow; ++$row) {
-						$newPerson = new \Personmanager\PersonManager\Domain\Model\Person();
-						$newPerson->setActive(1);
-						$newPerson->setConfirmed(1);
+                        $emailKey = array_search('email', $arr);
+                        if($emailKey){
+                            $cell = $worksheet->getCellByColumnAndRow($emailKey, $row);
+                            $newPerson = $this->personRepository->findOneByEmail($this->extractEmail($cell->getValue()));
+                        }
+                        if(!$newPerson){
+                            $newPerson = new \Personmanager\PersonManager\Domain\Model\Person();
+                            $newPerson->setActive(1);
+                            $newPerson->setConfirmed(1);
+                        }
 						foreach ($arr as $key => $value) {
 							$cell = $worksheet->getCellByColumnAndRow($key, $row);
 							if ($value == "category") {
@@ -930,10 +937,16 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 						if($zeile !== null && $zeile !== ""  && $key > ($startindex-2)){
 							$felder = explode($feler_trenner,$zeile);
 
-							$newPerson = new \Personmanager\PersonManager\Domain\Model\Person();
-							$newPerson->setActive(1);
-							$newPerson->setConfirmed(1);
-							foreach ($arr as $key => $value) {
+                            $emailKey = array_search('email', $arr);
+                            if($emailKey){
+                                $newPerson = $this->personRepository->findOneByEmail($this->extractEmail($felder[$emailKey]));
+                            }
+                            if(!$newPerson){
+                                $newPerson = new \Personmanager\PersonManager\Domain\Model\Person();
+                                $newPerson->setActive(1);
+                                $newPerson->setConfirmed(1);
+                            }
+                            foreach ($arr as $key => $value) {
 								$cell = $felder[$key];
 								if ($value == "category") {
 									$newKat = $this->categoryRepository->findOneByName($cell);

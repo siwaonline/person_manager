@@ -690,8 +690,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param \Personmanager\PersonManager\Domain\Model\Category $category
 	 * @return void
 	 */
-	public function setCategory(\Personmanager\PersonManager\Domain\Model\Category $category) {
-		$this->category = $category;
+	public function setCategory(\Personmanager\PersonManager\Domain\Model\Category $category = null) {
+	    if($category)$this->category = $category;
 	}
 
 	/**
