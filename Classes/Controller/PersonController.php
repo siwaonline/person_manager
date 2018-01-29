@@ -869,7 +869,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
 					for ($row = $startindex; $row <= $highestRow; ++$row) {
                         $emailKey = array_search('email', $arr);
-                        if($emailKey){
+                        if($emailKey !== false){
                             $cell = $worksheet->getCellByColumnAndRow($emailKey, $row);
                             $newPerson = $this->personRepository->findOneByEmail($this->extractEmail($cell->getValue()));
                         }
@@ -938,7 +938,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 							$felder = explode($feler_trenner,$zeile);
 
                             $emailKey = array_search('email', $arr);
-                            if($emailKey){
+                            if($emailKey !== false){
                                 $newPerson = $this->personRepository->findOneByEmail($this->extractEmail($felder[$emailKey]));
                             }
                             if(!$newPerson){
