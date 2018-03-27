@@ -23,8 +23,8 @@
 								<cols>24</cols>
 								<rows>10</rows>
 								<eval>trim</eval>
+								<enableRichtext>1</enableRichtext>
 							</config>
-							<defaultExtras>richtext[*]:rte_transform[mode=ts_css]</defaultExtras>
 						</TCEforms>
 					</settings.flexsignature>
 				</el>
@@ -45,9 +45,9 @@
 								<cols>24</cols>
 								<rows>10</rows>
 								<eval>trim</eval>
+								<enableRichtext>1</enableRichtext>
 								<default>&lt;h1&gt;Thank you&lt;/h1&gt;&lt;h3&gt;Please check your email-account and confirm your deregistration.&lt;/h3&gt;</default>
 							</config>
-							<defaultExtras>richtext[*]:rte_transform[mode=ts_css]</defaultExtras>
 						</TCEforms>
 					</settings.flexcheckmailleave>
 					<settings.flexisunsubscribed>
@@ -58,9 +58,9 @@
 								<cols>24</cols>
 								<rows>10</rows>
 								<eval>trim</eval>
+								<enableRichtext>1</enableRichtext>
 								<default>&lt;h1&gt;Error&lt;/h1&gt;&lt;h3&gt;This email-address is already unsubscribed.&lt;/h3&gt;</default>
 							</config>
-							<defaultExtras>richtext[*]:rte_transform[mode=ts_css]</defaultExtras>
 						</TCEforms>
 					</settings.flexisunsubscribed>
 					<settings.flexleave>
@@ -71,9 +71,9 @@
 								<cols>24</cols>
 								<rows>10</rows>
 								<eval>trim</eval>
+								<enableRichtext>1</enableRichtext>
 								<default>&lt;h1&gt;Error&lt;/h1&gt;&lt;h3&gt;This email-address is not registered in our system.&lt;/h3&gt;</default>
 							</config>
-							<defaultExtras>richtext[*]:rte_transform[mode=ts_css]</defaultExtras>
 						</TCEforms>
 					</settings.flexleave>
 					<settings.flexunsubscribe>
@@ -84,9 +84,9 @@
 								<cols>24</cols>
 								<rows>10</rows>
 								<eval>trim</eval>
+								<enableRichtext>1</enableRichtext>
 								<default>&lt;h1&gt;Thank you&lt;/h1&gt;&lt;h3&gt;You have been successfully removed from our system.&lt;/h3&gt;</default>
 							</config>
-							<defaultExtras>richtext[*]:rte_transform[mode=ts_css]</defaultExtras>
 						</TCEforms>
 					</settings.flexunsubscribe>
 				</el>
