@@ -123,7 +123,7 @@
 				<target>Einstellungen</target>
 			</trans-unit>
 			<trans-unit id="flex.msgs">
-				<target>Texte</target>
+				<target>Text Überschreibungen</target>
 			</trans-unit>
 			<trans-unit id="flex.ancheckmail">
 				<target>Anmeldung Posteingang prüfen</target>

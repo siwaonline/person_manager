@@ -27,6 +27,8 @@ namespace Personmanager\PersonManager\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use \TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+
 /**
  * PersonController
  */
@@ -77,32 +79,46 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	public $flexcheckmailleave = "";
 	public $flexunsubscribe = "";
 
-	public $newIcons = 0;
+	public $newIcons = 1;
 
 	public function initializeAction(){
-		$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.notext','person_manager');
+		$langhelp = LocalizationUtility::translate('error.notext','person_manager');
 
 		$this->signature = $this->configurationManager->getContentObject()->parseFunc($this->settings['flexsignature'], array(), '< lib.parseFunc_RTE');
 		$this->sitename = $this->settings['flexsitename'];
+        if($this->sitename == NULL || $this->sitename == ""){
+            $this->sitename = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["site"];
+        }
 
 		$this->flexcheckmail = $this->settings['flexcheckmail'];
-		if($this->flexcheckmail == NULL || $this->flexcheckmail == "")$this->flexcheckmail = $langhelp;
+		if($this->flexcheckmail == NULL || $this->flexcheckmail == ""){
+		    $this->flexcheckmail = "<h1>".LocalizationUtility::translate('msg.thx','person_manager')."</h1><h3>".LocalizationUtility::translate('msg.ancheckmail','person_manager')."</h3>";
+        }
 		$this->flexconfirm = $this->settings['flexconfirm'];
-		if($this->flexconfirm == NULL || $this->flexconfirm == "")$this->flexconfirm = $langhelp;
+		if($this->flexconfirm == NULL || $this->flexconfirm == ""){
+            $this->flexconfirm = "<h1>".LocalizationUtility::translate('msg.thx','person_manager')."</h1><h3>".LocalizationUtility::translate('msg.anconfirm','person_manager')."</h3>";
+        }
 		$this->flexerr = $this->settings['flexerr'];
-		if($this->flexerr == NULL || $this->flexerr == "")$this->flexerr = $langhelp;
+		if($this->flexerr == NULL || $this->flexerr == ""){
+            $this->flexerr = "<h1>".LocalizationUtility::translate('msg.error','person_manager')."</h1><h3>".LocalizationUtility::translate('msg.anerror','person_manager')."</h3>";
+        }
 
 		$this->flexcheckmailleave = $this->settings['flexcheckmailleave'];
-		if($this->flexcheckmailleave == NULL || $this->flexcheckmailleave == "")$this->flexcheckmailleave = $langhelp;
+		if($this->flexcheckmailleave == NULL || $this->flexcheckmailleave == ""){
+            $this->flexcheckmailleave = "<h1>".LocalizationUtility::translate('msg.thx','person_manager')."</h1><h3>".LocalizationUtility::translate('msg.abcheckmail','person_manager')."</h3>";
+        }
 		$this->flexisunsubscribed = $this->settings['flexisunsubscribed'];
-		if($this->flexisunsubscribed == NULL || $this->flexisunsubscribed == "")$this->flexisunsubscribed = $langhelp;
+		if($this->flexisunsubscribed == NULL || $this->flexisunsubscribed == ""){
+            $this->flexisunsubscribed = "<h1>".LocalizationUtility::translate('msg.error','person_manager')."</h1><h3>".LocalizationUtility::translate('msg.abalready','person_manager')."</h3>";
+        }
 		$this->flexleave = $this->settings['flexleave'];
-		if($this->flexleave == NULL || $this->flexleave == "")$this->flexleave = $langhelp;
+		if($this->flexleave == NULL || $this->flexleave == ""){
+            $this->flexleave = "<h1>".LocalizationUtility::translate('msg.error','person_manager')."</h1><h3>".LocalizationUtility::translate('msg.abnomail','person_manager')."</h3>";
+        }
 		$this->flexunsubscribe = $this->settings['flexunsubscribe'];
-		if($this->flexunsubscribe == NULL || $this->flexunsubscribe == "")$this->flexunsubscribe = $langhelp;
-		if(\TYPO3\CMS\Core\Utility\GeneralUtility::compat_version('7.0')) {
-			$this->newIcons = 1;
-		}
+		if($this->flexunsubscribe == NULL || $this->flexunsubscribe == ""){
+            $this->flexunsubscribe = "<h1>".LocalizationUtility::translate('msg.thx','person_manager')."</h1><h3>".LocalizationUtility::translate('msg.abconfirm','person_manager')."</h3>";
+        }
 	}
 	public function initializeUpdateAction(){
 		$propertyMappingConfiguration = $this->arguments['person']->getPropertyMappingConfiguration();
@@ -164,9 +180,9 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	 * @return void
 	 */
 	public function newAction(\Personmanager\PersonManager\Domain\Model\Person $newPerson = NULL, $error = "") {
-		$langhelp1 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mrmrs','person_manager');
-		$langhelp2 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mr','person_manager');
-		$langhelp3 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mrs','person_manager');
+		$langhelp1 = LocalizationUtility::translate('labels.mrmrs','person_manager');
+		$langhelp2 = LocalizationUtility::translate('labels.mr','person_manager');
+		$langhelp3 = LocalizationUtility::translate('labels.mrs','person_manager');
 		$arr = array(0=>$langhelp1,1=>$langhelp2,2=>$langhelp3);
 		$this->view->assign('anrarr', $arr);
 
@@ -191,30 +207,40 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	public function createAction(\Personmanager\PersonManager\Domain\Model\Person $newPerson) {
 		$failed = 0;
 		$honey = $_POST["tx_personmanager_personmanagerfront"]["tx_personmanager_personmanagerfront"]["honeypot"];
-		$anr = $_POST["tx_personmanager_personmanagerfront"]["anr"];
-		$newPerson->setSalutation($anr);
+        $anr = $_POST["tx_personmanager_personmanagerfront"]["anr"];
+        $terms = $_POST["tx_personmanager_personmanagerfront"]["terms"];
+        $termVar = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["variables."]["terms"];
+
+        $newPerson->setSalutation($anr);
 		$error = "";
 		$newPerson->setEmail(trim($newPerson->getEmail()));
 
-		if($honey != "" && $honey != NULL){
-			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.spam','person_manager');
-			$error.= "<p>$langhelp</p>";
-			$failed = 1;
-		}
+        if($honey != "" && $honey != NULL){
+            $langhelp = LocalizationUtility::translate('error.spam','person_manager');
+            $error.= "<p>$langhelp</p>";
+            $failed = 1;
+        }
+        if($termVar) {
+            if ($terms != "1" || $terms != 1) {
+                $langhelp = LocalizationUtility::translate('error.terms', 'person_manager');
+                $error .= "<p>$langhelp</p>";
+                $failed = 1;
+            }
+        }
 		if($newPerson->getLastname() == "" || $newPerson->getLastname() == NULL || $newPerson->getFirstname() == "" || $newPerson->getFirstname() == NULL){
-			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.name','person_manager');
+			$langhelp = LocalizationUtility::translate('error.name','person_manager');
 			$error .= "<p>$langhelp</p>";
 			$failed = 1;
 		}
 		if (!filter_var($newPerson->getEmail(), FILTER_VALIDATE_EMAIL)) {
-			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.email','person_manager');
+			$langhelp = LocalizationUtility::translate('error.email','person_manager');
 			$error .= "<p>$langhelp</p>";
 			$failed = 1;
 		}
 		$oldMail = $this->personRepository->findOneByEmail($newPerson->getEmail());
 		if($oldMail != NULL){
 			if($oldMail->isUnsubscribed() == 0) {
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.emailagain','person_manager');
+				$langhelp = LocalizationUtility::translate('error.emailagain','person_manager');
 				$error .= "<p>$langhelp</p>";
 				$failed = 1;
 			}else{
@@ -242,19 +268,19 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$this->personRepository->add($newPerson);
 			$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 			$persistenceManager->persistAll();
-			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.create','person_manager');
+			$langhelp = LocalizationUtility::translate('log.create','person_manager');
 			$this->insertLog($newPerson->getUid(),$newPerson->getEmail(),$newPerson->getFirstname(),$newPerson->getLastname(),"create","$langhelp","",1);
 
 
 			if ($opt == 1) {
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.confirmdata','person_manager');
+				$langhelp = LocalizationUtility::translate('mail.confirmdata','person_manager');
 				$subject = $site . ": $langhelp";
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.confirmthx','person_manager');
+				$langhelp = LocalizationUtility::translate('mail.confirmthx','person_manager');
 				$mailcontent = "$langhelp " . $site . ".<br/><br/>";
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.confirmlink','person_manager');
+				$langhelp = LocalizationUtility::translate('mail.confirmlink','person_manager');
 				$mailcontent .= "$langhelp<br/><br/>";
 				//$mailcontent .= "" . $path . "tx_personmanager_personmanagerfront" . urlencode("[action]") . "=activate&tx_personmanager_personmanagerfront" . urlencode("[controller]") . "=Person&tx_personmanager_personmanagerfront" . urlencode("[token]") . "=" . $newPerson->getToken() . "&no_cache=1<br/>";
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.confirmreg','person_manager');
+				$langhelp = LocalizationUtility::translate('mail.confirmreg','person_manager');
 				if(is_numeric($path)){
 					$this->uriBuilder->reset();
 					$this->uriBuilder->setArguments(array(
@@ -283,14 +309,14 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 					}
 					$mailcontent .= "<a href='" . $path . "tx_personmanager_personmanagerfront" . urlencode("[action]") . "=activate&tx_personmanager_personmanagerfront" . urlencode("[controller]") . "=Person&tx_personmanager_personmanagerfront" . urlencode("[token]") . "=" . $newPerson->getToken() . "&no_cache=1'>$langhelp</a><br/>";
 				}		
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.ifnot','person_manager');
+				$langhelp = LocalizationUtility::translate('mail.ifnot','person_manager');
 				$mailcontent .= "<br/>$langhelp";
 				$mailcontent .= "<br/><br/>".$this->getSignature();
 				$empfaenger = $newPerson->getEmail();
 				$this->sendMail($empfaenger, $mailcontent, $subject);
 				
 				//$this->redirect('checkMail');
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.createmail','person_manager');
+				$langhelp = LocalizationUtility::translate('log.createmail','person_manager');
 				$this->insertLog($newPerson->getUid(),$newPerson->getEmail(),$newPerson->getFirstname(),$newPerson->getLastname(),"create","$langhelp","",1);
 
 				$this->forward('text', null, null, array('text' => $this->flexcheckmail));
@@ -302,23 +328,23 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				$persistenceManager->persistAll();
 				
 				if($sendInMail == 1){
-					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.registration','person_manager');
+					$langhelp = LocalizationUtility::translate('mail.registration','person_manager');
 					$subject = $langhelp ." ".$newPerson->getEmail();
-					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.notifyRegistration','person_manager');
+					$langhelp = LocalizationUtility::translate('mail.notifyRegistration','person_manager');
 					$user = $newPerson->getFirstname()." ".$newPerson->getLastname()." (".$newPerson->getEmail().")";
 					$mailcontent = str_replace("%s",$user,$langhelp);
 					$this->sendMail($mail, $mailcontent, $subject);
 				}
 
 				//$this->redirect('confirm');
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.createsuccess','person_manager');
+				$langhelp = LocalizationUtility::translate('log.createsuccess','person_manager');
 				$this->insertLog($newPerson->getUid(),$newPerson->getEmail(),$newPerson->getFirstname(),$newPerson->getLastname(),"create","$langhelp","",1);
 				$this->forward('text', null, null, array('text' => $this->flexconfirm));
 			}
 		}else{
 			$this->view->assign('error', $error);
 			$this->view->assign('newPerson', $newPerson);
-			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.createfail','person_manager');
+			$langhelp = LocalizationUtility::translate('log.createfail','person_manager');
 			$this->insertLog(0,$newPerson->getEmail(),$newPerson->getFirstname(),$newPerson->getLastname(),"create","$langhelp",$error,0);
 			$this->forward('new', null, null, array('error' => $error, 'newPerson' => $newPerson));
 		}
@@ -336,19 +362,19 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		$newPerson->setEmail(trim($newPerson->getEmail()));
 
 		if($newPerson->getLastname() == "" || $newPerson->getLastname() == NULL || $newPerson->getFirstname() == "" || $newPerson->getFirstname() == NULL){
-			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.name','person_manager');
+			$langhelp = LocalizationUtility::translate('error.name','person_manager');
 			$error .= "<p>$langhelp</p>";
 			$failed = 1;
 		}
 		if (!filter_var($newPerson->getEmail(), FILTER_VALIDATE_EMAIL)) {
-			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.email','person_manager');
+			$langhelp = LocalizationUtility::translate('error.email','person_manager');
 			$error .= "<p>$langhelp</p>";
 			$failed = 1;
 		}
 		$oldMail = $this->personRepository->findOneByEmail($newPerson->getEmail());
 		if($oldMail != NULL){
 			if($oldMail->isUnsubscribed() == 0) {
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.emailagain','person_manager');
+				$langhelp = LocalizationUtility::translate('error.emailagain','person_manager');
 				$error .= "<p>$langhelp</p>";
 				$failed = 1;
 			}else{
@@ -389,9 +415,9 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	 */
 	public function editAction(\Personmanager\PersonManager\Domain\Model\Person $person) {
 		$this->view->assign('person', $person);
-		$langhelp1 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mrmrs','person_manager');
-		$langhelp2 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mr','person_manager');
-		$langhelp3 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mrs','person_manager');
+		$langhelp1 = LocalizationUtility::translate('labels.mrmrs','person_manager');
+		$langhelp2 = LocalizationUtility::translate('labels.mr','person_manager');
+		$langhelp3 = LocalizationUtility::translate('labels.mrs','person_manager');
 		$arr = array(0=>$langhelp1,1=>$langhelp2,2=>$langhelp3);
 		$this->view->assign('anrarr', $arr);
 
@@ -451,21 +477,21 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$persistenceManager->persistAll();
 
 			if($sendInMail == 1){
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.registration','person_manager');
+				$langhelp = LocalizationUtility::translate('mail.registration','person_manager');
 				$subject = $langhelp ." ".$pers->getEmail();
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.notifyRegistration','person_manager');
+				$langhelp = LocalizationUtility::translate('mail.notifyRegistration','person_manager');
 				$user = $pers->getFirstname()." ".$pers->getLastname()." (".$pers->getEmail().")";
 				$mailcontent = str_replace("%s",$user,$langhelp);
 				$this->sendMail($mail, $mailcontent, $subject);
 			}
 			
 			//$this->redirect('confirm');
-			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.activate','person_manager');
+			$langhelp = LocalizationUtility::translate('log.activate','person_manager');
 			$this->insertLog($pers->getUid(),$pers->getEmail(),$pers->getFirstname(),$pers->getLastname(),"activate","$langhelp","",1);
 			$this->forward('text', null, null, array('text' => $this->flexconfirm));
 		}else{
-			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.activate','person_manager');
-			$langhelp2 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.activatefail','person_manager');
+			$langhelp = LocalizationUtility::translate('log.activate','person_manager');
+			$langhelp2 = LocalizationUtility::translate('log.activatefail','person_manager');
 			$this->insertLog(0,"-","-","-","activate","$langhelp","$langhelp2",0);
 			$this->forward('text', null, null, array('text' => $this->flexerr));
 		}
@@ -509,14 +535,14 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		if($pers != NULL){
 			if($pers->isUnsubscribed() == 0) {
 				if($opt == 1) {
-					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.confirmdata','person_manager');
+					$langhelp = LocalizationUtility::translate('mail.confirmdata','person_manager');
 					$subject = $site . ": $langhelp";
-					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.leavethx','person_manager');
+					$langhelp = LocalizationUtility::translate('mail.leavethx','person_manager');
 					$mailcontent = sprintf("$langhelp",$site)."<br/><br/>";
-					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.confirmlink','person_manager');
+					$langhelp = LocalizationUtility::translate('mail.confirmlink','person_manager');
 					$mailcontent .= "$langhelp<br/><br/>";
 					//$mailcontent .= "" . $path . "tx_personmanager_personmanagerunsub" . urlencode("[action]") . "=unsubscribe&tx_personmanager_personmanagerunsub" . urlencode("[controller]") . "=Person&tx_personmanager_personmanagerunsub" . urlencode("[token]") . "=" . $pers->getToken() . "&no_cache=1<br/>";
-					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.confirmleave','person_manager');
+					$langhelp = LocalizationUtility::translate('mail.confirmleave','person_manager');
 					if(is_numeric($path)){
 						$this->uriBuilder->reset();
 						$this->uriBuilder->setArguments(array(
@@ -545,14 +571,14 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 						}
 						$mailcontent .= "<a href='" . $path . "tx_personmanager_personmanagerunsub" . urlencode("[action]") . "=unsubscribe&tx_personmanager_personmanagerunsub" . urlencode("[controller]") . "=Person&tx_personmanager_personmanagerunsub" . urlencode("[token]") . "=" . $pers->getToken() . "&no_cache=1'>$langhelp</a><br/>";
 					}					
-					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.ifnot','person_manager');
+					$langhelp = LocalizationUtility::translate('mail.ifnot','person_manager');
 					$mailcontent .= "<br/>$langhelp.";
 					$mailcontent .= "<br/><br/>" . $this->getSignature();
 					$empfaenger = $pers->getEmail();
 					$this->sendMail($empfaenger, $mailcontent, $subject);
 
 					//$this->redirect('checkMailLeave');
-					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.leavemail','person_manager');
+					$langhelp = LocalizationUtility::translate('log.leavemail','person_manager');
 					$this->insertLog($pers->getUid(),$pers->getEmail(),$pers->getFirstname(),$pers->getLastname(),"leave","$langhelp","",1);
 					$this->forward('text', null, null, array('text' => $this->flexcheckmailleave));
 				}else{
@@ -562,28 +588,28 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 					$persistenceManager->persistAll();
 
 					if($sendOutMail == 1){
-						$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.deregistration','person_manager');
+						$langhelp = LocalizationUtility::translate('mail.deregistration','person_manager');
 						$subject = $langhelp ." ".$pers->getEmail();
-						$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.notifyDeregistration','person_manager');
+						$langhelp = LocalizationUtility::translate('mail.notifyDeregistration','person_manager');
 						$user = $pers->getFirstname()." ".$pers->getLastname()." (".$pers->getEmail().")";
 						$mailcontent = str_replace("%s",$user,$langhelp);
 						$this->sendMail($mail, $mailcontent, $subject);
 					}
 					
-					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.leavesuccess','person_manager');
+					$langhelp = LocalizationUtility::translate('log.leavesuccess','person_manager');
 					$this->insertLog($pers->getUid(),$pers->getEmail(),$pers->getFirstname(),$pers->getLastname(),"leave","$langhelp","",1);
 					$this->forward('text', null, null, array('text' => $this->flexunsubscribe));
 				}
 			}else{
 				//$this->redirect('isunsubscribed');
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.leavewant','person_manager');
-				$langhelp2 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.leavealready','person_manager');
+				$langhelp = LocalizationUtility::translate('log.leavewant','person_manager');
+				$langhelp2 = LocalizationUtility::translate('log.leavealready','person_manager');
 				$this->insertLog($pers->getUid(),$pers->getEmail(),$pers->getFirstname(),$pers->getLastname(),"leave","$langhelp","$langhelp2",0);
 				$this->forward('text', null, null, array('text' => $this->flexisunsubscribed));
 			}
 		}
-		$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.leavewant','person_manager');
-		$langhelp2 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.leavenot','person_manager');
+		$langhelp = LocalizationUtility::translate('log.leavewant','person_manager');
+		$langhelp2 = LocalizationUtility::translate('log.leavenot','person_manager');
 		$this->insertLog(0,$mail,"-","-","leave","$langhelp","$langhelp2",0);
 		$this->forward('text', null, null, array('text' => $this->flexleave));
 	}
@@ -605,15 +631,15 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$persistenceManager->persistAll();
 
 			if($sendOutMail == 1){
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.deregistration','person_manager');
+				$langhelp = LocalizationUtility::translate('mail.deregistration','person_manager');
 				$subject = $langhelp ." ".$pers->getEmail();
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('mail.notifyDeregistration','person_manager');
+				$langhelp = LocalizationUtility::translate('mail.notifyDeregistration','person_manager');
 				$user = $pers->getFirstname()." ".$pers->getLastname()." (".$pers->getEmail().")";
 				$mailcontent = str_replace("%s",$user,$langhelp);
 				$this->sendMail($mail, $mailcontent, $subject);
 			}
 			
-			$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('log.unsubscribe','person_manager');
+			$langhelp = LocalizationUtility::translate('log.unsubscribe','person_manager');
 			$this->insertLog($pers->getUid(),$pers->getEmail(),$pers->getFirstname(),$pers->getLastname(),"unsubscribe","$langhelp","",1);
 			$this->forward('text', null, null, array('text' => $this->flexunsubscribe));
 		}else {
@@ -654,102 +680,102 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$desc = "";
 			switch ($prop->getName()) {
 				case "firstname":
-					$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.firstname", "PersonManager");
+					$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.firstname", "PersonManager");
 					break;
 				case "lastname":
-					$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.lastname", "PersonManager");
+					$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.lastname", "PersonManager");
 					break;
 				case "firstname":
-					$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.firstname", "PersonManager");
+					$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.firstname", "PersonManager");
 					break;
 				case "lastname":
-					$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.lastname", "PersonManager");
+					$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.lastname", "PersonManager");
 					break;
 				case "email":
-					$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.email", "PersonManager");
+					$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.email", "PersonManager");
 					break;
 				case "salutation":
 					if($vars["salutation"] == 1){
-						$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.salutation", "PersonManager");
+						$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.salutation", "PersonManager");
 						if($isimp){
-							$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mrmrs','person_manager');
-							$langhelp2 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mr','person_manager');
-							$langhelp3 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mrs','person_manager');
+							$langhelp = LocalizationUtility::translate('labels.mrmrs','person_manager');
+							$langhelp2 = LocalizationUtility::translate('labels.mr','person_manager');
+							$langhelp3 = LocalizationUtility::translate('labels.mrs','person_manager');
 							$desc .= " ($langhelp | $langhelp2 | $langhelp3) (0|1|2)";
 						}
 					}
 					break;
 				case "titel":
-					if($vars["titel"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.titel", "PersonManager");}
+					if($vars["titel"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.titel", "PersonManager");}
 					break;
 				case "nachgtitel":
-					if($vars["nachgtitel"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.nachgtitel", "PersonManager");}
+					if($vars["nachgtitel"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.nachgtitel", "PersonManager");}
 					break;
 				case "geb":
-					if($vars["geb"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.geb", "PersonManager");}
+					if($vars["geb"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.geb", "PersonManager");}
 					break;
 				case "tel":
-					if($vars["tel"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.tel", "PersonManager");}
+					if($vars["tel"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.tel", "PersonManager");}
 					break;
 				case "company":
-					if($vars["company"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.company", "PersonManager");}
+					if($vars["company"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.company", "PersonManager");}
 					break;
 				case "active":
-					$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.active", "PersonManager");
+					$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.active", "PersonManager");
 					if($isimp){
-						$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.no','person_manager');
-						$langhelp2 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.yes','person_manager');
+						$langhelp = LocalizationUtility::translate('labels.no','person_manager');
+						$langhelp2 = LocalizationUtility::translate('labels.yes','person_manager');
 						$desc .= " ($langhelp|$langhelp2) (0|1)";
 					}
 					break;
 				case "confirmed":
-					$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.confirmed", "PersonManager");
+					$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.confirmed", "PersonManager");
 					if($isimp){
-						$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.no','person_manager');
-						$langhelp2 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.yes','person_manager');
+						$langhelp = LocalizationUtility::translate('labels.no','person_manager');
+						$langhelp2 = LocalizationUtility::translate('labels.yes','person_manager');
 						$desc .= " ($langhelp|$langhelp2) (0|1)";
 					}
 					break;
 				case "unsubscribed":
-					$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.unsubscribed", "PersonManager");
+					$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.unsubscribed", "PersonManager");
 					if($isimp){
-						$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.no','person_manager');
-						$langhelp2 = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.yes','person_manager');
+						$langhelp = LocalizationUtility::translate('labels.no','person_manager');
+						$langhelp2 = LocalizationUtility::translate('labels.yes','person_manager');
 						$desc .= " ($langhelp|$langhelp2) (0|1)";
 					}
 					break;
 				case "frtxt0":
-					if($vars["frtxt0"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt0", "PersonManager");}
+					if($vars["frtxt0"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt0", "PersonManager");}
 					break;
 				case "frtxt1":
-					if($vars["frtxt1"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt1", "PersonManager");}
+					if($vars["frtxt1"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt1", "PersonManager");}
 					break;
 				case "frtxt2":
-					if($vars["frtxt2"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt2", "PersonManager");}
+					if($vars["frtxt2"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt2", "PersonManager");}
 					break;
 				case "frtxt3":
-					if($vars["frtxt3"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt3", "PersonManager");}
+					if($vars["frtxt3"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt3", "PersonManager");}
 					break;
 				case "frtxt4":
-					if($vars["frtxt4"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt4", "PersonManager");}
+					if($vars["frtxt4"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt4", "PersonManager");}
 					break;
 				case "frtxt5":
-					if($vars["frtxt5"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt5", "PersonManager");}
+					if($vars["frtxt5"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt5", "PersonManager");}
 					break;
 				case "frtxt6":
-					if($vars["frtxt6"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt6", "PersonManager");}
+					if($vars["frtxt6"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt6", "PersonManager");}
 					break;
 				case "frtxt7":
-					if($vars["frtxt7"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt7", "PersonManager");}
+					if($vars["frtxt7"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt7", "PersonManager");}
 					break;
 				case "frtxt8":
-					if($vars["frtxt8"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt8", "PersonManager");}
+					if($vars["frtxt8"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt8", "PersonManager");}
 					break;
 				case "frtxt9":
-					if($vars["frtxt9"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt9", "PersonManager");}
+					if($vars["frtxt9"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.frtxt9", "PersonManager");}
 					break;
 				case "category":
-					if($vars["category"] == 1){$desc = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate("tx_personmanager_domain_model_person.category", "PersonManager");}
+					if($vars["category"] == 1){$desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.category", "PersonManager");}
 					break;
 			}
 			if($desc != "") {
@@ -815,7 +841,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
 		foreach($arr as $val){
 			if(!$obj->hasProperty($val)){
-				$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.nocol','person_manager');
+				$langhelp = LocalizationUtility::translate('error.nocol','person_manager');
 				$error.= "<p>".sprintf("$langhelp",$val)."</p>";
 				$failed = 1;
 			}
@@ -833,7 +859,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$csv_datei = $uploaddir . "/" . $uploadfile;
 			if (move_uploaded_file($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['tmp_name']['jsonobj'], $csv_datei)) {
 				if (@file_exists($csv_datei) == false) {
-					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.nofile','person_manager');
+					$langhelp = LocalizationUtility::translate('error.nofile','person_manager');
 					echo sprintf($langhelp,$csv_datei);
 					exit;
 				} else {
@@ -1087,12 +1113,12 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 					$objPHPExcel->getActiveSheet()->setCellValue($col.$row,$pers->getProperty($prop["value"]));
 					$help = $pers->getCategory()->getName();
 				}elseif($prop["value"] == "salutation" || $prop["value"] == "salutation"){
-					if($pers->getSalutation() == "0")$help = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mrmrs','person_manager');
-					if($pers->getSalutation() == "1")$help = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mr','person_manager');
-					if($pers->getSalutation() == "2")$help = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mrs','person_manager');
+					if($pers->getSalutation() == "0")$help = LocalizationUtility::translate('labels.mrmrs','person_manager');
+					if($pers->getSalutation() == "1")$help = LocalizationUtility::translate('labels.mr','person_manager');
+					if($pers->getSalutation() == "2")$help = LocalizationUtility::translate('labels.mrs','person_manager');
 				}elseif($prop["value"] == "active" || $prop["value"] == "confirmed" || $prop["value"] == "unsubscribed"){
-					if($pers->getProperty($prop["value"]) == "0")$help = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.no','person_manager');
-					if($pers->getProperty($prop["value"]) == "1")$help = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.yes','person_manager');
+					if($pers->getProperty($prop["value"]) == "0")$help = LocalizationUtility::translate('labels.no','person_manager');
+					if($pers->getProperty($prop["value"]) == "1")$help = LocalizationUtility::translate('labels.yes','person_manager');
 				}else {
 					$help = $pers->getProperty($prop["value"]);
 				}
@@ -1129,13 +1155,13 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				if($prop["value"] == "category"){
 					echo utf8_decode($pers->getCategory()->getName()) . $delimiter;
 				}elseif($prop["value"] == "salutation" || $prop["value"] == "salutation"){
-					if($pers->getSalutation() == "0")$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mrmrs','person_manager');
-					if($pers->getSalutation() == "1")$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mr','person_manager');
-					if($pers->getSalutation() == "2")$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.mrs','person_manager');
+					if($pers->getSalutation() == "0")$langhelp = LocalizationUtility::translate('labels.mrmrs','person_manager');
+					if($pers->getSalutation() == "1")$langhelp = LocalizationUtility::translate('labels.mr','person_manager');
+					if($pers->getSalutation() == "2")$langhelp = LocalizationUtility::translate('labels.mrs','person_manager');
 					echo $langhelp . $delimiter;
 				}elseif($prop["value"] == "active" || $prop["value"] == "confirmed" || $prop["value"] == "unsubscribed"){
-					if($pers->getProperty($prop["value"]) == "0")$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.no','person_manager');
-					if($pers->getProperty($prop["value"]) == "1")$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('labels.yes','person_manager');
+					if($pers->getProperty($prop["value"]) == "0")$langhelp = LocalizationUtility::translate('labels.no','person_manager');
+					if($pers->getProperty($prop["value"]) == "1")$langhelp = LocalizationUtility::translate('labels.yes','person_manager');
 					echo $langhelp . $delimiter;
 				}else {
 					echo utf8_decode($pers->getProperty($prop["value"])) . $delimiter;
@@ -1243,7 +1269,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$csv_datei = $uploaddir . "/" . $uploadfile;
 			if (move_uploaded_file($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['tmp_name']['jsonobj'], $csv_datei)) {
 				if (@file_exists($csv_datei) == false) {
-					$langhelp = \TYPO3\CMS\Extbase\Utility\LocalizationUtility::translate('error.nofile','person_manager');
+					$langhelp = LocalizationUtility::translate('error.nofile','person_manager');
 					echo sprintf($langhelp,$csv_datei);
 					exit;
 				} else {

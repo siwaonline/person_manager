@@ -63,8 +63,12 @@ plugin.tx_personmanager {
 		frtxt8 = 0
 		# cat=plugin.tx_personmanager/enable/p; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.frtxt9
         frtxt9 = 0
-        # cat=plugin.tx_personmanager/enable/q; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.category
-        category = 0
+		# cat=plugin.tx_personmanager/enable/q; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:tx_personmanager_domain_model_person.category
+		category = 0
+		# cat=plugin.tx_personmanager/enable/r; type=boolean; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:const.terms
+		terms = 0
+		# cat=plugin.tx_personmanager/enable/s; type=string; label=LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:const.termsPid
+		termsPid =
 	}
 }
 

@@ -123,7 +123,7 @@
 				<source>Settings</source>
 			</trans-unit>
 			<trans-unit id="flex.msgs">
-				<source>Messages</source>
+				<source>Message Overrides</source>
 			</trans-unit>
 			<trans-unit id="flex.ancheckmail">
 				<source>Subscribe Check Mailbox</source>

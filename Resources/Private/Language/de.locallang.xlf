@@ -272,6 +272,12 @@
 			<trans-unit id="labels.send">
 				<target>Absenden</target>
 			</trans-unit>
+			<trans-unit id="labels.terms">
+				<target>Ich habe die %s zur Kenntnis genommen und stimme ihnen uneingeschränkt zu.</target>
+			</trans-unit>
+			<trans-unit id="labels.datapolicy">
+				<target>Datenschutzbestimmungen</target>
+			</trans-unit>
 			<!-- ### Format ### -->
 			<trans-unit id="dateFormat">
 				<target>%d.%m.%Y</target>
@@ -296,7 +302,10 @@
 				<target>Die Datei %s gibt es nicht!</target>
 			</trans-unit>
 			<trans-unit id="error.notext">
-				<source>(kein Text angegeben für diese Aktion)</source>
+				<target>(kein Text angegeben für diese Aktion)</target>
+			</trans-unit>
+			<trans-unit id="error.terms">
+				<target>Bitte stimmen Sie der Datenschutzerklärung zu!</target>
 			</trans-unit>
 			<!-- ### Log ### -->
 			<trans-unit id="log.create">
@@ -391,6 +400,40 @@
             <trans-unit id="const.sendOutMail">
                 <target>Sende E-Mail an Admin, wenn sich User abmeldet</target>
             </trans-unit>
+			<trans-unit id="const.terms">
+				<target>Checkbox für AGBs und Datenschutz</target>
+			</trans-unit>
+			<trans-unit id="const.termsPid">
+				<target>ID der Seite für AGBs und Datenschutz</target>
+			</trans-unit>
+			<!-- ### Messages ### -->
+			<trans-unit id="msg.thx">
+				<target>Vielen Dank</target>
+			</trans-unit>
+			<trans-unit id="msg.error">
+				<target>Fehler</target>
+			</trans-unit>
+			<trans-unit id="msg.ancheckmail">
+				<target>Bitte prüfen Sie Ihr E-Mail Postfach und bestätigen Sie Ihre Registrierung.</target>
+			</trans-unit>
+			<trans-unit id="msg.anconfirm">
+				<target>Sie wurden erfolgreich zu unserem System hinzugefügt.</target>
+			</trans-unit>
+			<trans-unit id="msg.anerror">
+				<target>Diese Person existiert nicht.</target>
+			</trans-unit>
+			<trans-unit id="msg.abcheckmail">
+				<target>Bitte prüfen Sie Ihr E-Mail Postfach und bestätigen Sie Ihre Abmeldung.</target>
+			</trans-unit>
+			<trans-unit id="msg.abalready">
+				<target>Diese E-Mail Adresse ist bereits abgemeldet.</target>
+			</trans-unit>
+			<trans-unit id="msg.abnomail">
+				<target>Diese E-Mail Adresse ist nicht in unserem System vorhanden.</target>
+			</trans-unit>
+			<trans-unit id="msg.abconfirm">
+				<target>Sie wurden erfolgreich aus unserem System abgemeldet.</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

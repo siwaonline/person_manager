@@ -36,6 +36,8 @@ plugin.tx_personmanager {
 		frtxt8 = {$plugin.tx_personmanager.variables.frtxt8}
 		frtxt9 = {$plugin.tx_personmanager.variables.frtxt9}
 		category = {$plugin.tx_personmanager.variables.category}
+		terms = {$plugin.tx_personmanager.variables.terms}
+		termsPid = {$plugin.tx_personmanager.variables.termsPid}
 	}
 	features {
 		# uncomment the following line to enable the new Property Mapper.

@@ -272,6 +272,12 @@
 			<trans-unit id="labels.send">
 				<source>Send</source>
 			</trans-unit>
+			<trans-unit id="labels.terms">
+				<source>I have read the %s and agree unconditionally.</source>
+			</trans-unit>
+			<trans-unit id="labels.datapolicy">
+				<source>data policy</source>
+			</trans-unit>
 			<!-- ### Format ### -->
 			<trans-unit id="dateFormat">
 				<source>%Y-%m-%d</source>
@@ -297,6 +303,9 @@
 			</trans-unit>
 			<trans-unit id="error.notext">
 				<source>(no text specified for this action)</source>
+			</trans-unit>
+			<trans-unit id="error.terms">
+				<source>Please accept the data policy!</source>
 			</trans-unit>
 			<!-- ### Log ### -->
 			<trans-unit id="log.create">
@@ -391,6 +400,40 @@
             <trans-unit id="const.sendOutMail">
                 <source>Send email notification to owner, when user deregisters</source>
             </trans-unit>
+			<trans-unit id="const.terms">
+				<source>Checkbox for Terms, Conditions and Data Policy</source>
+			</trans-unit>
+			<trans-unit id="const.termsPid">
+				<source>ID of the Terms and Conditions Page</source>
+			</trans-unit>
+			<!-- ### Messages ### -->
+			<trans-unit id="msg.thx">
+				<source>Thank you</source>
+			</trans-unit>
+			<trans-unit id="msg.error">
+				<source>Error</source>
+			</trans-unit>
+			<trans-unit id="msg.ancheckmail">
+				<source>Please check your email-account and confirm your registration.</source>
+			</trans-unit>
+			<trans-unit id="msg.anconfirm">
+				<source>You have been successfully added to our system.</source>
+			</trans-unit>
+			<trans-unit id="msg.anerror">
+				<source>This person doen't exist.</source>
+			</trans-unit>
+			<trans-unit id="msg.abcheckmail">
+				<source>Please check your email-account and confirm your deregistration.</source>
+			</trans-unit>
+			<trans-unit id="msg.abalready">
+				<source>This email-address is already unsubscribed.</source>
+			</trans-unit>
+			<trans-unit id="msg.abnomail">
+				<source>This email-address is not registered in our system.</source>
+			</trans-unit>
+			<trans-unit id="msg.abconfirm">
+				<source>You have been successfully removed from our system.</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>

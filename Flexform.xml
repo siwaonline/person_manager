@@ -46,7 +46,6 @@
 								<rows>10</rows>
 								<eval>trim</eval>
 								<enableRichtext>1</enableRichtext>
-								<default>&lt;h1&gt;Thank you&lt;/h1&gt;&lt;h3&gt;Please check your email-account and confirm your registration.&lt;/h3&gt;</default>
 							</config>
 						</TCEforms>
 					</settings.flexcheckmail>
@@ -59,7 +58,6 @@
 								<rows>10</rows>
 								<eval>trim</eval>
 								<enableRichtext>1</enableRichtext>
-								<default>&lt;h1&gt;Thank you&lt;/h1&gt;&lt;h3&gt;You have been successfully added to our system.&lt;/h3&gt;</default>
 							</config>
 						</TCEforms>
 					</settings.flexconfirm>
@@ -72,7 +70,6 @@
 								<rows>10</rows>
 								<eval>trim</eval>
 								<enableRichtext>1</enableRichtext>
-								<default>&lt;h1&gt;Error&lt;/h1&gt;&lt;h3&gt;This person doen't exist.&lt;/h3&gt;</default>
 							</config>
 						</TCEforms>
 					</settings.flexerr>
