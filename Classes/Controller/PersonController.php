@@ -170,8 +170,15 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	public function newShortAction() {
 		$this->view->assign('showpage', $this->settings["flexshowpage"]);
 	}
-	
-	/**
+
+    protected function initializeNewAction(){
+        $propertyMappingConfiguration = $this->arguments['newPerson']->getPropertyMappingConfiguration();
+        $propertyMappingConfiguration->allowAllProperties();
+        $propertyMappingConfiguration->setTypeConverterOption('TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter', \TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED, TRUE);
+    }
+
+
+    /**
 	 * action new
 	 *
 	 * @param \Personmanager\PersonManager\Domain\Model\Person $newPerson
