@@ -11,9 +11,6 @@ return array(
 		'versioningWS' => 2,
 		'versioning_followPages' => TRUE,
 
-		'languageField' => 'sys_language_uid',
-		'transOrigPointerField' => 'l10n_parent',
-		'transOrigDiffSourceField' => 'l10n_diffsource',
 		'delete' => 'deleted',
 		'enablecolumns' => array(
 			'disabled' => 'hidden',
@@ -45,6 +42,7 @@ return array(
 					array('LLL:EXT:lang/locallang_general.xlf:LGL.allLanguages', -1),
 					array('LLL:EXT:lang/locallang_general.xlf:LGL.default_value', 0)
 				),
+                'default' => -1,
 			),
 		),
 		'l10n_parent' => array(
