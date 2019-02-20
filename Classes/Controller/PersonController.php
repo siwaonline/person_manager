@@ -30,6 +30,7 @@ namespace Personmanager\PersonManager\Controller;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
+use Personmanager\PersonManager\Phpexcel\MyReadFilter;
 
 /**
  * PersonController
@@ -68,6 +69,8 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	 */
 	protected $blacklistRepository = NULL;
 
+	protected $persistenceManager = NULL;
+
 
 	public $signature = "";
 	public $sitename = "";
@@ -81,9 +84,9 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	public $flexcheckmailleave = "";
 	public $flexunsubscribe = "";
 
-	public $newIcons = 1;
-
 	public function initializeAction(){
+        $this->persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+
 		$langhelp = LocalizationUtility::translate('error.notext','person_manager');
 
 		$this->signature = $this->configurationManager->getContentObject()->parseFunc($this->settings['flexsignature'], array(), '< lib.parseFunc_RTE');
@@ -149,19 +152,6 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		$this->view->assign('term', $term);
 		$this->view->assign('order', $order);
 		$this->view->assign('countPers', count($persons));
-		$this->view->assign('newIcons', $this->newIcons);
-	}
-
-	/**
-	 * action show
-	 *
-	 * @param \Personmanager\PersonManager\Domain\Model\Person $person
-	 * @return void
-	 */
-	public function showAction(\Personmanager\PersonManager\Domain\Model\Person $person) {
-		$this->view->assign('person', $person);
-		$this->view->assign('vars', $this->settings);
-		$this->view->assign('newIcons', $this->newIcons);
 	}
 
 	/**
@@ -204,7 +194,6 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
 		$kats = $this->categoryRepository->findAll();
 		$this->view->assign('kats', $kats);
-		$this->view->assign('newIcons', $this->newIcons);
 	}
 
 	/**
@@ -256,7 +245,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				$renew=1;
 			}
 		}
-		
+
 		if($failed == 0) {
 			$opt = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["doubleOptIn"];
 			$path = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["path"];
@@ -317,13 +306,13 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 						}
 					}
 					$mailcontent .= "<a href='" . $path . "tx_personmanager_personmanagerfront" . urlencode("[action]") . "=activate&tx_personmanager_personmanagerfront" . urlencode("[controller]") . "=Person&tx_personmanager_personmanagerfront" . urlencode("[token]") . "=" . $newPerson->getToken() . "&no_cache=1'>$langhelp</a><br/>";
-				}		
+				}
 				$langhelp = LocalizationUtility::translate('mail.ifnot','person_manager');
 				$mailcontent .= "<br/>$langhelp";
 				$mailcontent .= "<br/><br/>".$this->getSignature();
 				$empfaenger = $newPerson->getEmail();
 				$this->sendMail($empfaenger, $mailcontent, $subject);
-				
+
 				//$this->redirect('checkMail');
 				$langhelp = LocalizationUtility::translate('log.createmail','person_manager');
 				$this->insertLog($newPerson->getUid(),$newPerson->getEmail(),$newPerson->getFirstname(),$newPerson->getLastname(),"create","$langhelp","",1);
@@ -335,7 +324,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				$this->personRepository->update($newPerson);
 				$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 				$persistenceManager->persistAll();
-				
+
 				if($sendInMail == 1){
 					$langhelp = LocalizationUtility::translate('mail.registration','person_manager');
 					$subject = $langhelp ." ".$newPerson->getEmail();
@@ -416,49 +405,6 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	}
 
 	/**
-	 * action edit
-	 *
-	 * @param \Personmanager\PersonManager\Domain\Model\Person $person
-	 * @ignorevalidation $person
-	 * @return void
-	 */
-	public function editAction(\Personmanager\PersonManager\Domain\Model\Person $person) {
-		$this->view->assign('person', $person);
-		$langhelp1 = LocalizationUtility::translate('labels.mrmrs','person_manager');
-		$langhelp2 = LocalizationUtility::translate('labels.mr','person_manager');
-		$langhelp3 = LocalizationUtility::translate('labels.mrs','person_manager');
-		$arr = array(0=>$langhelp1,1=>$langhelp2,2=>$langhelp3);
-		$this->view->assign('anrarr', $arr);
-
-		$kats = $this->categoryRepository->findAll();
-		$this->view->assign('kats', $kats);
-		$this->view->assign('vars', $this->settings);
-		$this->view->assign('newIcons', $this->newIcons);
-	}
-
-	/**
-	 * action update
-	 *
-	 * @param \Personmanager\PersonManager\Domain\Model\Person $person
-	 * @return void
-	 */
-	public function updateAction(\Personmanager\PersonManager\Domain\Model\Person $person) {
-		$this->personRepository->update($person);
-		$this->redirect('list');
-	}
-
-	/**
-	 * action delete
-	 *
-	 * @param \Personmanager\PersonManager\Domain\Model\Person $person
-	 * @return void
-	 */
-	public function deleteAction(\Personmanager\PersonManager\Domain\Model\Person $person) {
-		$this->personRepository->remove($person);
-		$this->redirect('list');
-	}
-
-	/**
 	 * action text
 	 *
 	 * @param string $text
@@ -493,7 +439,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				$mailcontent = str_replace("%s",$user,$langhelp);
 				$this->sendMail($mail, $mailcontent, $subject);
 			}
-			
+
 			//$this->redirect('confirm');
 			$langhelp = LocalizationUtility::translate('log.activate','person_manager');
 			$this->insertLog($pers->getUid(),$pers->getEmail(),$pers->getFirstname(),$pers->getLastname(),"activate","$langhelp","",1);
@@ -533,14 +479,14 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		}
 
 		$pers = $this->personRepository->findOneByEmail($mail);
-		
+
 		$opt = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["doubleOptOut"];
 		$path = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["pathout"];
 		$site = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["site"];
 		$sendOutMail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["sendOutMail"];
 		$mail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["mail"];
 		//$site = $this->sitename;
-		
+
 		if($pers != NULL){
 			if($pers->isUnsubscribed() == 0) {
 				if($opt == 1) {
@@ -579,7 +525,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 							}
 						}
 						$mailcontent .= "<a href='" . $path . "tx_personmanager_personmanagerunsub" . urlencode("[action]") . "=unsubscribe&tx_personmanager_personmanagerunsub" . urlencode("[controller]") . "=Person&tx_personmanager_personmanagerunsub" . urlencode("[token]") . "=" . $pers->getToken() . "&no_cache=1'>$langhelp</a><br/>";
-					}					
+					}
 					$langhelp = LocalizationUtility::translate('mail.ifnot','person_manager');
 					$mailcontent .= "<br/>$langhelp.";
 					$mailcontent .= "<br/><br/>" . $this->getSignature();
@@ -604,7 +550,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 						$mailcontent = str_replace("%s",$user,$langhelp);
 						$this->sendMail($mail, $mailcontent, $subject);
 					}
-					
+
 					$langhelp = LocalizationUtility::translate('log.leavesuccess','person_manager');
 					$this->insertLog($pers->getUid(),$pers->getEmail(),$pers->getFirstname(),$pers->getLastname(),"leave","$langhelp","",1);
 					$this->forward('text', null, null, array('text' => $this->flexunsubscribe));
@@ -647,7 +593,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				$mailcontent = str_replace("%s",$user,$langhelp);
 				$this->sendMail($mail, $mailcontent, $subject);
 			}
-			
+
 			$langhelp = LocalizationUtility::translate('log.unsubscribe','person_manager');
 			$this->insertLog($pers->getUid(),$pers->getEmail(),$pers->getFirstname(),$pers->getLastname(),"unsubscribe","$langhelp","",1);
 			$this->forward('text', null, null, array('text' => $this->flexunsubscribe));
@@ -820,7 +766,6 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
 		$props = $this->getProps(1);
 		$this->view->assign('props', $props);
-		$this->view->assign('newIcons', $this->newIcons);
 	}
 
 	/**
@@ -877,8 +822,8 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				$csv_datei=$filen;
 			}
 			if ($impformat == "excel") {
-				require_once 'excel/PHPExcel/IOFactory.php';
-				require_once 'excel/Filter.php';
+				//require_once 'excel/PHPExcel/IOFactory.php';
+				//require_once 'excel/Filter.php';
 				ini_set('display_errors', '1');
 
 				$cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
@@ -888,7 +833,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				$inputFileType = \PHPExcel_IOFactory::identify($csv_datei);
 				$objReader = \PHPExcel_IOFactory::createReader($inputFileType);
 				$objReader->setReadDataOnly(true);
-				$objReader->setReadFilter(new \MyReadFilter());
+				$objReader->setReadFilter(new MyReadFilter());
 				$objPHPExcel = $objReader->load($csv_datei);
 
 
@@ -946,8 +891,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 						if($newPerson->getEmail() != "" && $newPerson->getEmail() != NULL) {
 							if ($check == "1") {
 								$this->personRepository->add($newPerson);
-								$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
-								$persistenceManager->persistAll();
+								$this->persistenceManager->persistAll();
 							} else {
 								array_push($personen, $newPerson);
 							}
@@ -1059,7 +1003,6 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	public function newExportAction() {
 		$anz = $this->personRepository->findAll()->count();
 		$this->view->assign('countPers', $anz);
-		$this->view->assign('newIcons', $this->newIcons);
 	}
 
 	/**
@@ -1216,7 +1159,6 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 	public function loglistAction() {
 		$logs = $this->logRepository->findAll();
 		$this->view->assign('logs', $logs);
-		$this->view->assign('newIcons', $this->newIcons);
 	}
 
 	/**
@@ -1238,7 +1180,6 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
 		$props = $this->getProps(1);
 		$this->view->assign('props', $props);
-		$this->view->assign('newIcons', $this->newIcons);
 	}
 
 	/**
@@ -1296,7 +1237,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				$inputFileType = \PHPExcel_IOFactory::identify($csv_datei);
 				$objReader = \PHPExcel_IOFactory::createReader($inputFileType);
 				$objReader->setReadDataOnly(true);
-				$objReader->setReadFilter(new \MyReadFilter());
+				$objReader->setReadFilter(new MyReadFilter());
 				$objPHPExcel = $objReader->load($csv_datei);
 
 
@@ -1316,8 +1257,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 						if($newBlacklist->getEmail() != "" && $newBlacklist->getEmail() != NULL) {
 							if ($check == "1") {
 								$this->blacklistRepository->add($newBlacklist);
-								$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
-								$persistenceManager->persistAll();
+								$this->persistenceManager->persistAll();
 							} else {
 								array_push($blacklists, $newBlacklist);
 							}

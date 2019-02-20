@@ -1,0 +1,60 @@
+<?php
+namespace Personmanager\PersonManager\ViewHelpers\Be;
+
+/**
+ * This file is part of the TYPO3 CMS project.
+ *
+ * It is free software; you can redistribute it and/or modify it under
+ * the terms of the GNU General Public License, either version 2
+ * of the License, or any later version.
+ *
+ * For the full copyright and license information, please read the
+ * LICENSE.txt file that was distributed with this source code.
+ *
+ * The TYPO3 project - inspiring people to share!
+ */
+
+class EditLinkViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper {
+    /**
+     * @var string
+     */
+    protected $tagName = 'a';
+    /**
+     * Initialize arguments
+     *
+     * @return void
+     * @api
+     */
+    public function initializeArguments() {
+        $this->registerUniversalTagAttributes();
+        $this->registerTagAttribute('name', 'string', 'Specifies the name of an anchor');
+        $this->registerTagAttribute('target', 'string', 'Specifies where to open the linked document');
+    }
+    /**
+     * Crafts a link to edit a database record or create a new one
+     *
+     * @param string $parameters Query string parameters
+     * @return string The <a> tag
+     * @see \TYPO3\CMS\Backend\Utility::editOnClick()
+     */
+    public function render($parameters) {
+        $uri = \TYPO3\CMS\Backend\Utility\BackendUtility::getModuleUrl('record_edit') . '&' . $parameters;
+
+        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance( 'TYPO3\CMS\Extbase\Object\ObjectManager' );
+        $uriBuilder = $objectManager->get( 'TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder' );
+        $uriBuilder->initializeObject();
+        $returnUri = $uriBuilder->reset()->setAddQueryString(true)->setArguments(array(
+            'M' => 'web_PersonManagerPersonmanagerback',
+            'tx_personmanager_web_personmanagerpersonmanagerback' => array(
+                'action' => 'list'
+            ),
+        ))->buildBackendUri();
+        $returnUri = str_replace("&","%26",$returnUri);
+        $uri .= '&returnUrl=' . $returnUri;
+
+        $this->tag->addAttribute('href', $uri);
+        $this->tag->setContent($this->renderChildren());
+        $this->tag->forceClosingTag(TRUE);
+        return $this->tag->render();
+    }
+}

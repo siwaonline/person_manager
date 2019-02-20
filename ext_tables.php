@@ -31,7 +31,7 @@ if (TYPO3_MODE === 'BE') {
 		'personmanagerback',    // Submodule key
 		'',                        // Position
 		array(
-			'Person' => 'list, newImport, show, new, createBe, edit, update, delete, import, export, newExport, insertData, clear, loglist, blNewImport, blImport, blClear',
+			'Person' => 'list, newImport, new, createBe, import, export, newExport, insertData, clear, loglist, blNewImport, blImport, blClear',
 		),
 		array(
 			'access' => 'user,group',
@@ -42,8 +42,8 @@ if (TYPO3_MODE === 'BE') {
 
 }
 
-$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Imaging\\IconRegistry');
-$iconRegistry->registerIcon('extensions-person-manager', 'TYPO3\\CMS\\Core\\Imaging\\IconProvider\\BitmapIconProvider', array("source" => 'EXT:person_manager/ext_icon.svg',));
+//$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Imaging\\IconRegistry');
+//$iconRegistry->registerIcon('extensions-person-manager', 'TYPO3\\CMS\\Core\\Imaging\\IconProvider\\BitmapIconProvider', array("source" => 'EXT:person_manager/ext_icon.svg',));
 
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'Person Manager');

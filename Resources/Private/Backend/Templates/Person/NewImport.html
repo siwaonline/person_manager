@@ -20,7 +20,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
       <f:translate key="labels.avail" />
     </label><br /><br />
     <f:for each="{props}" as="prop">
-      <p><span>{prop.value}</span>{prop.name}</p>
+      <p><label>{prop.value}</label> &nbsp; {prop.name}</p>
     </f:for>
     <br />
     <div class="err"><f:format.html>{error}</f:format.html></div>

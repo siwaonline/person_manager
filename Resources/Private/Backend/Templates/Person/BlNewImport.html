@@ -33,11 +33,11 @@ Otherwise your changes will be overwritten the next time you save the extension 
     </label><br />
     <f:form.upload name="jsonobj" />
     <br /><br />
-    <f:form.submit value="{f:translate(key:'labels.import')}" />
+    <f:form.submit value="{f:translate(key:'labels.import')}" class="btn btn-primary" />
   </f:form>
   <br/><br/>
   <p>{countPers} <f:translate key="labels.addressesbl" /></p>
   <br/><br/>
-  <f:link.action action="blClear"><f:translate key="labels.clearbl" /></f:link.action><br />
+  <f:link.action action="blClear" class="btn btn-danger"><f:translate key="labels.clearbl" /></f:link.action><br />
 
 </f:section>
