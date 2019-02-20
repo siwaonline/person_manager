@@ -15,19 +15,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 <f:section name="content">
   <h1><f:translate key="labels.importbl" /></h1>
 
-  <style>
-    span{
-      width:100px;
-      float: left;
-      font-weight: 600;
-    }
-    .err{
-      color:red;
-    }
-    a{
-      text-decoration: underline;
-    }
-  </style>
+
 
   <f:form action="blImport"  name="newBlacklist" enctype="multipart/form-data">
 
@@ -36,23 +24,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
     <label>
       <b><f:translate key="labels.emaila" /></b>
     </label><br /><br />
-    <label>
-      <f:translate key="labels.firstrow" />
-    </label><br />
-    <f:if condition="{first}=='1'">
-      <f:then>
-        <f:form.checkbox name="first" value="1" checked="checked" /><br />
-      </f:then>
-      <f:else>
-        <f:form.checkbox name="first" value="1" /><br />
-      </f:else>
-    </f:if>
-    <label>
-      <f:translate key="labels.format" />
-    </label><br />
-    <f:form.radio name="impformat" value="excel" checked="{impformat}=='excel'" />Excel<br />
-    <f:form.radio name="impformat" value="csv" checked="{impformat}=='csv'"/>CSV<br />
-
+    <f:render partial="Form/File" arguments="{_all}" />
 
 
     <br />

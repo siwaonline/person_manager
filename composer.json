@@ -7,16 +7,19 @@
     "GPL-2.0+"
   ],
   "keywords": [
-    "TYPO3 CMS",
-    "foo bar"
+    "Newsletter",
+    "Management",
+    "Person",
+    "Manager"
   ],
   "support": {
-    "issues": "https://forge.typo3.org/projects/extension-foo"
+    "issues": "https://forge.typo3.org/projects/extension-person_manager/issues"
   },
   "require": {
-    "typo3/cms-core": "^8.7.0"
+    "typo3/cms-core": "^8.7.0",
+    "phpoffice/phpspreadsheet": "^1.6.0"
   },
-  "version": "8.7.0",
+  "version": "3.0.0",
   "config": {
     "vendor-dir": ".Build/vendor",
     "bin-dir": ".Build/bin"
@@ -31,9 +34,6 @@
     ]
   },
   "extra": {
-    "branch-alias": {
-      "master": "1.0.0"
-    },
     "typo3/cms": {
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
       "web-dir": ".Build/Web"

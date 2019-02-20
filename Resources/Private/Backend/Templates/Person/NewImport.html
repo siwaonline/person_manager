@@ -15,20 +15,6 @@ Otherwise your changes will be overwritten the next time you save the extension 
 <f:section name="content">
   <h1><f:translate key="labels.importp" /></h1>
 
-  <style>
-    span{
-      width:100px;
-      float: left;
-      font-weight: 600;
-    }
-    .err{
-      color:red;
-    }
-    a{
-      text-decoration: underline;
-    }
-  </style>
-
   <f:form action="import"  name="newPerson" enctype="multipart/form-data">
     <label>
       <f:translate key="labels.avail" />
@@ -42,29 +28,12 @@ Otherwise your changes will be overwritten the next time you save the extension 
     <label>
       <f:translate key="labels.rows" />
     </label><br />
-    <f:form.textfield name="spalten" value="{spalten}" size="100"/><br />
+    <f:form.textfield name="spalten" value="{spalten}" size="100" class="form-control"/><br />
     <label>
       <f:translate key="labels.sep" />
     </label><br />
-    <f:form.textfield name="trenn" value="{trenn}" size="2" /><br />
-    <label>
-      <f:translate key="labels.firstrow" />
-    </label><br />
-    <f:if condition="{first}=='1'">
-      <f:then>
-        <f:form.checkbox name="first" value="1" checked="checked" /><br />
-      </f:then>
-      <f:else>
-        <f:form.checkbox name="first" value="1" /><br />
-      </f:else>
-    </f:if>
-    <label>
-      <f:translate key="labels.format" />
-    </label><br />
-    <f:form.radio name="impformat" value="excel" checked="{impformat}=='excel'" />Excel<br />
-    <f:form.radio name="impformat" value="csv" checked="{impformat}=='csv'"/>CSV<br />
-
-
+    <f:form.textfield name="trenn" value="{trenn}" size="2" class="form-control" /><br />
+    <f:render partial="Form/File" arguments="{_all}" />
 
     <br />
     <label for="jsonobj">
@@ -72,11 +41,12 @@ Otherwise your changes will be overwritten the next time you save the extension 
     </label><br />
     <f:form.upload name="jsonobj" />
     <br /><br />
-    <f:form.submit value="{f:translate(key:'labels.import')}" />
+    <f:form.submit value="{f:translate(key:'labels.import')}" class="btn btn-primary" />
   </f:form>
   <br/><br/>
   <p>{countPers} <f:translate key="labels.pindb" /></p>
   <br/><br/>
-  <f:link.action action="clear"><f:translate key="labels.clearp" /></f:link.action><br />
+  <f:link.action action="clear" class="btn btn-danger"><f:translate key="labels.clearp" /></f:link.action>
+  <br /><br />
 
 </f:section>

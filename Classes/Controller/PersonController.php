@@ -27,7 +27,9 @@ namespace Personmanager\PersonManager\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
-use \TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 
 /**
  * PersonController
@@ -273,7 +275,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			}
 
 			$this->personRepository->add($newPerson);
-			$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+			$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 			$persistenceManager->persistAll();
 			$langhelp = LocalizationUtility::translate('log.create','person_manager');
 			$this->insertLog($newPerson->getUid(),$newPerson->getEmail(),$newPerson->getFirstname(),$newPerson->getLastname(),"create","$langhelp","",1);
@@ -331,7 +333,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				$newPerson->setActive(TRUE);
 				$newPerson->setConfirmed(TRUE);
 				$this->personRepository->update($newPerson);
-				$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+				$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 				$persistenceManager->persistAll();
 				
 				if($sendInMail == 1){
@@ -401,7 +403,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$newPerson->setActive(TRUE);
 			$newPerson->setConfirmed(TRUE);
 			$this->personRepository->add($newPerson);
-			$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+			$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 			$persistenceManager->persistAll();
 
 			$this->forward('list');
@@ -480,7 +482,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$pers->setConfirmed(TRUE);
 			$pers->setActive(TRUE);
 			$this->personRepository->update($pers);
-			$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+			$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 			$persistenceManager->persistAll();
 
 			if($sendInMail == 1){
@@ -591,7 +593,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 				}else{
 					$pers->setUnsubscribed(TRUE);
 					$this->personRepository->update($pers);
-					$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+					$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 					$persistenceManager->persistAll();
 
 					if($sendOutMail == 1){
@@ -634,7 +636,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		if($pers != NULL) {
 			$pers->setUnsubscribed(TRUE);
 			$this->personRepository->update($pers);
-			$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+			$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 			$persistenceManager->persistAll();
 
 			if($sendOutMail == 1){
@@ -859,9 +861,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$feler_trenner = $trenn;
 			$zeilen_trenner = (string)chr(10);
 
-			$uploaddir = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath("person_manager");
-			//$uploaddir = $uploaddir . "Resources/Public/Data";
-			$uploaddir = $uploaddir . "Data";
+			$uploaddir = GeneralUtility::getFileAbsFileName(GeneralUtility::resolveBackPath(PATH_site . "uploads/tx_personmanager"));
 			$uploadfile = basename($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['name']['jsonobj']);
 			$csv_datei = $uploaddir . "/" . $uploadfile;
 			if (move_uploaded_file($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['tmp_name']['jsonobj'], $csv_datei)) {
@@ -919,7 +919,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 									$newKat = new \Personmanager\PersonManager\Domain\Model\Category();
 									$newKat->setName($cell->getValue());
 									$this->categoryRepository->add($newKat);
-                                    $persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+                                    $persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
                                     $persistenceManager->persistAll();
 								}
 								$newPerson->setCategory($newKat);
@@ -946,7 +946,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 						if($newPerson->getEmail() != "" && $newPerson->getEmail() != NULL) {
 							if ($check == "1") {
 								$this->personRepository->add($newPerson);
-								$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+								$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 								$persistenceManager->persistAll();
 							} else {
 								array_push($personen, $newPerson);
@@ -987,7 +987,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 										$newKat = new \Personmanager\PersonManager\Domain\Model\Category();
 										$newKat->setName($cell);
 										$this->categoryRepository->add($newKat);
-										$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+										$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 										$persistenceManager->persistAll();
 									}
 									$newPerson->setCategory($newKat);
@@ -1014,7 +1014,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 							if($newPerson->getEmail() != "" && $newPerson->getEmail() != NULL) {
 								if ($check == "1") {
 									$this->personRepository->add($newPerson);
-									$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+									$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 									$persistenceManager->persistAll();
 								} else {
 									array_push($personen, $newPerson);
@@ -1204,7 +1204,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 		$newLog->setSuccess($success);
 
 		$this->logRepository->add($newLog);
-		$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+		$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 		$persistenceManager->persistAll();
 	}
 
@@ -1269,9 +1269,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 			$feler_trenner = ";";
 			$zeilen_trenner = (string)chr(10);
 
-			$uploaddir = \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath("person_manager");
-			//$uploaddir = $uploaddir . "Resources/Public/Data";
-			$uploaddir = $uploaddir . "Data";
+            $uploaddir = GeneralUtility::getFileAbsFileName(GeneralUtility::resolveBackPath(PATH_site . "uploads/tx_personmanager"));
 			$uploadfile = basename($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['name']['jsonobj']);
 			$csv_datei = $uploaddir . "/" . $uploadfile;
 			if (move_uploaded_file($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['tmp_name']['jsonobj'], $csv_datei)) {
@@ -1318,7 +1316,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 						if($newBlacklist->getEmail() != "" && $newBlacklist->getEmail() != NULL) {
 							if ($check == "1") {
 								$this->blacklistRepository->add($newBlacklist);
-								$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+								$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 								$persistenceManager->persistAll();
 							} else {
 								array_push($blacklists, $newBlacklist);
@@ -1345,7 +1343,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 							if($newBlacklist->getEmail() != "" && $newBlacklist->getEmail() != NULL) {
 								if ($check == "1") {
 									$this->blacklistRepository->add($newBlacklist);
-									$persistenceManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+									$persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 									$persistenceManager->persistAll();
 								} else {
 									array_push($blacklists, $newBlacklist);
