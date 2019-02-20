@@ -349,7 +349,7 @@
 				<target>Daten bestätigen</target>
 			</trans-unit>
 			<trans-unit id="mail.confirmthx">
-				<target>Vielen Dank für Ihre Anmeldung bei</target>
+				<target>Vielen Dank für Ihre Anmeldung bei %s.</target>
 			</trans-unit>
 			<trans-unit id="mail.confirmlink">
 				<target>Bitte bestätigen Sie Ihre Daten durch klick auf den folgenden Link:</target>

@@ -1,4 +1,5 @@
 <?php
+
 namespace Personmanager\PersonManager\Domain\Repository;
 
 
@@ -30,6 +31,7 @@ namespace Personmanager\PersonManager\Domain\Repository;
 /**
  * The repository for Blacklists
  */
-class BlacklistRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
+class BlacklistRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+{
 
 }

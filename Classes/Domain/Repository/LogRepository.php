@@ -1,4 +1,5 @@
 <?php
+
 namespace Personmanager\PersonManager\Domain\Repository;
 
 
@@ -30,9 +31,10 @@ namespace Personmanager\PersonManager\Domain\Repository;
 /**
  * The repository for Logs
  */
-class LogRepository extends \TYPO3\CMS\Extbase\Persistence\Repository {
+class LogRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+{
     protected $defaultOrderings = array(
         'uid' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING,
     );
-	
+
 }

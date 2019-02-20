@@ -1,0 +1,56 @@
+
+<f:layout name="Default" />
+
+This Template is responsible for creating a table of domain objects.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Templates:
+        List.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="content">
+<h1>Log</h1>
+
+	<br/>
+	<br/>
+	<f:link.action action="loglist" class="btn btn-default"> <f:translate key="labels.reload" /></f:link.action>
+	<br/>
+
+<f:flashMessages />
+	<br/><br/>
+	<f:be.widget.paginate objects="{logs}" as="paglogs" configuration="{itemsPerPage: 100, insertAbove: 1, insertBelow: 0, maximumNumberOfLinks: 10}">
+		<table class="tx_personmanager table table-striped table-hover" >
+			<tr>
+				<th><f:translate key="tx_personmanager_domain_model_log.person" /></th>
+				<th><f:translate key="tx_personmanager_domain_model_log.email" /></th>
+				<th><f:translate key="tx_personmanager_domain_model_log.firstname" /></th>
+				<th><f:translate key="tx_personmanager_domain_model_log.lastname" /></th>
+				<th><f:translate key="tx_personmanager_domain_model_log.action" /></th>
+				<th><f:translate key="tx_personmanager_domain_model_log.detail" /></th>
+				<th><f:translate key="tx_personmanager_domain_model_log.fehler" /></th>
+				<th><f:translate key="tx_personmanager_domain_model_log.success" /></th>
+				<th><f:translate key="labels.time" /></th>
+			</tr>
+
+			<f:for each="{paglogs}" as="log">
+				<tr>
+					<td>{log.person}</td>
+					<td>{log.email}</td>
+					<td>{log.firstname}</td>
+					<td>{log.lastname}</td>
+					<td>{log.action}</td>
+					<td>{log.detail}</td>
+					<td><f:format.stripTags>{log.fehler}</f:format.stripTags></td>
+					<f:if condition="{log.success} == 0"><td><f:translate key="labels.no" /></td></f:if>
+					<f:if condition="{log.success} == 1"><td><f:translate key="labels.yes" /></td></f:if>
+					<td><f:format.date format="d.m.Y - H:i:s">{log.crdate}</f:format.date></td>
+				</tr>
+			</f:for>
+		</table>
+	</f:be.widget.paginate>
+
+</f:section>

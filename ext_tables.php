@@ -31,7 +31,7 @@ if (TYPO3_MODE === 'BE') {
 		'personmanagerback',    // Submodule key
 		'',                        // Position
 		array(
-			'Person' => 'list, newImport, show, new, createBe, edit, update, delete, import, export, newExport, insertData, clear, loglist, blNewImport, blImport, blClear',
+			'Backend' => 'list, newImport, new, createBe, import, export, newExport, insertData, clear, loglist, blNewImport, blImport, blClear',
 		),
 		array(
 			'access' => 'user,group',
@@ -42,20 +42,23 @@ if (TYPO3_MODE === 'BE') {
 
 }
 
+//$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\\CMS\\Core\\Imaging\\IconRegistry');
+//$iconRegistry->registerIcon('extensions-person-manager', 'TYPO3\\CMS\\Core\\Imaging\\IconProvider\\BitmapIconProvider', array("source" => 'EXT:person_manager/ext_icon.svg',));
+
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'Person Manager');
 
 $pluginSignature = str_replace('_', '', $_EXTKEY) . '_personmanagerfront';
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Flexform.xml');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/Flexforms/Flexform.xml');
 
 $pluginSignature = str_replace('_', '', $_EXTKEY) . '_personmanagerunsub';
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Flexform2.xml');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/Flexforms/Flexform2.xml');
 
 $pluginSignature = str_replace('_', '', $_EXTKEY) . '_personmanagershort';
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Flexform3.xml');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/Flexforms/Flexform3.xml');
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_personmanager_domain_model_person', 'EXT:person_manager/Resources/Private/Language/locallang_csh_tx_personmanager_domain_model_person.xlf');
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_personmanager_domain_model_person');

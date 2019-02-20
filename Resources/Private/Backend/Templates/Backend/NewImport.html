@@ -1,0 +1,52 @@
+
+<f:layout name="Default" />
+
+This template displays a NEW form for the current domain object.
+
+If you modify this template, do not forget to change the overwrite settings
+in /Configuration/ExtensionBuilder/settings.yaml:
+  Resources:
+    Private:
+      Templates:
+        New.html: keep
+
+Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+
+<f:section name="content">
+  <h1><f:translate key="labels.importp" /></h1>
+
+  <f:form action="import"  name="newPerson" enctype="multipart/form-data">
+    <label>
+      <f:translate key="labels.avail" />
+    </label><br /><br />
+    <f:for each="{props}" as="prop">
+      <p><label>{prop.value}</label> &nbsp; {prop.name}</p>
+    </f:for>
+    <br />
+    <div class="err"><f:format.html>{error}</f:format.html></div>
+    <br />
+    <label>
+      <f:translate key="labels.rows" />
+    </label><br />
+    <f:form.textfield name="spalten" value="{spalten}" size="100" class="form-control"/><br />
+    <label>
+      <f:translate key="labels.sep" />
+    </label><br />
+    <f:form.textfield name="trenn" value="{trenn}" size="2" class="form-control" /><br />
+    <f:render partial="Form/File" arguments="{_all}" />
+
+    <br />
+    <label for="jsonobj">
+      <f:translate key="labels.data" />
+    </label><br />
+    <f:form.upload name="jsonobj" />
+    <br /><br />
+    <f:form.submit value="{f:translate(key:'labels.import')}" class="btn btn-primary" />
+  </f:form>
+  <br/><br/>
+  <p>{countPers} <f:translate key="labels.pindb" /></p>
+  <br/><br/>
+  <f:link.action action="clear" class="btn btn-danger"><f:translate key="labels.clearp" /></f:link.action>
+  <br /><br />
+
+</f:section>

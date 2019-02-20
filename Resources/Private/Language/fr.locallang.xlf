@@ -302,8 +302,8 @@
 			<target>confirmer l'inscription</target>
 		</trans-unit>
 		<trans-unit id="mail.confirmthx" approved="yes">
-			<source>Thank you for your subscription at</source>
-			<target>Merci pour votre inscription à</target>
+			<source>Thank you for your subscription at %s.</source>
+			<target>Merci pour votre inscription à %s.</target>
 		</trans-unit>
 		<trans-unit id="mail.deregister" approved="yes">
 			<source>unsubscribe</source>

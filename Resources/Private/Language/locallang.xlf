@@ -349,7 +349,7 @@
 				<source>confirm Data</source>
 			</trans-unit>
 			<trans-unit id="mail.confirmthx">
-				<source>Thank you for your subscription at</source>
+				<source>Thank you for your subscription at %s.</source>
 			</trans-unit>
 			<trans-unit id="mail.confirmlink">
 				<source>Please confirm your data, by clicking the following link:</source>

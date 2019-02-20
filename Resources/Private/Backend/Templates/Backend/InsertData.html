@@ -12,13 +12,11 @@ in /Configuration/ExtensionBuilder/settings.yaml:
 
 Otherwise your changes will be overwritten the next time you save the extension in the extension builder
 
-<f:section name="main">
+<f:section name="content">
+  <h1><f:translate key="labels.thx" /></h1>
+  <h3><f:translate key="labels.imsucc" /></h3>
 
-  <div class="err"><f:format.html>{error}</f:format.html></div>
+  <br/><br/>
+  <f:link.action action="list" class="btn btn-default"><f:translate key="labels.backtolist" /></f:link.action>
 
-  <f:form action="create"  name="newPerson" object="{newPerson}">
-    <f:render partial="Person/FormFields" arguments="{vars : vars, kats : kats, anrarr : anrarr, anr:newPerson.salutation}"/>
-
-	<f:form.submit value="{f:translate(key:'labels.send')}" class="btn btn-primary" />
-  </f:form>
 </f:section>
