@@ -31,7 +31,7 @@ if (TYPO3_MODE === 'BE') {
 		'personmanagerback',    // Submodule key
 		'',                        // Position
 		array(
-			'Person' => 'list, newImport, new, createBe, import, export, newExport, insertData, clear, loglist, blNewImport, blImport, blClear',
+			'Backend' => 'list, newImport, new, createBe, import, export, newExport, insertData, clear, loglist, blNewImport, blImport, blClear',
 		),
 		array(
 			'access' => 'user,group',

@@ -17,9 +17,9 @@ Otherwise your changes will be overwritten the next time you save the extension 
 
 <f:flashMessages />
 
-	<f:link.action class="btn btn-success" action="new" title="{f:translate(key:'labels.newp')}"> &nbsp;<i class="fa fa-plus"></i> <f:translate key="labels.create" />&nbsp; </f:link.action>
+	<siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{vars.storagePid}]=new" class="btn btn-success" title="{f:translate(key:'labels.newp')}"> &nbsp;<i class="fa fa-plus"></i> <f:translate key="labels.create" />&nbsp; </siwa:be.editLink>
 	<br/>
-	<p>{countPers} <f:if condition="{countPers} == 1"><f:then><f:translate key="labels.p1indb" /></f:then><f:else><f:translate key="labels.pindb" /></f:else></f:if></p>
+	<p>{persons -> f:count()} <f:if condition="{persons -> f:count()} == 1"><f:then><f:translate key="labels.p1indb" /></f:then><f:else><f:translate key="labels.pindb" /></f:else></f:if></p>
 	<br/>
 	<f:form action="list" arguments="{order:order}">
 		<f:form.textfield name="search" value="{term}" class="form-control" />

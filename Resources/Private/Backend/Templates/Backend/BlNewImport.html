@@ -1,4 +1,4 @@
-
+{namespace siwa=Personmanager\PersonManager\ViewHelpers}
 <f:layout name="Default" />
 
 This template displays a NEW form for the current domain object.
@@ -15,7 +15,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 <f:section name="content">
   <h1><f:translate key="labels.importbl" /></h1>
 
-
+  <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_blacklist][{vars.storagePid}]=new" returnAction="blNewImport" class="btn btn-success" title="{f:translate(key:'labels.newp')}"> &nbsp;<i class="fa fa-plus"></i> <f:translate key="labels.create" />&nbsp; </siwa:be.editLink>
 
   <f:form action="blImport"  name="newBlacklist" enctype="multipart/form-data">
 
@@ -25,7 +25,6 @@ Otherwise your changes will be overwritten the next time you save the extension 
       <b><f:translate key="labels.emaila" /></b>
     </label><br /><br />
     <f:render partial="Form/File" arguments="{_all}" />
-
 
     <br />
     <label for="jsonobj">

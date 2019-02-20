@@ -19,6 +19,6 @@ Otherwise your changes will be overwritten the next time you save the extension 
   <f:form action="create"  name="newPerson" object="{newPerson}">
     <f:render partial="Person/FormFields" arguments="{vars : vars, kats : kats, anrarr : anrarr, anr:newPerson.salutation}"/>
 
-	<f:form.submit value="{f:translate(key:'labels.send')}" />
+	<f:form.submit value="{f:translate(key:'labels.send')}" class="btn btn-primary" />
   </f:form>
 </f:section>

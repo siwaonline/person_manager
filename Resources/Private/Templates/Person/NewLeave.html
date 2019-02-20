@@ -17,10 +17,8 @@ Otherwise your changes will be overwritten the next time you save the extension 
 
 <f:form action="leave">
 
-  <h1><f:translate key="labels.wanttoderegister" /></h1>
-  <h3><f:translate key="labels.insertmail" /></h3>
-    <f:form.textfield name="tx_personmanager_personmanagerunsub[mail]" /><br /><br />
+    <f:form.textfield name="mail" /><br /><br />
 
-	<f:form.submit value="{f:translate(key:'labels.deregister')}" />
+	<f:form.submit value="{f:translate(key:'labels.deregister')}" class="btn btn-primary" />
 </f:form>
 </f:section>

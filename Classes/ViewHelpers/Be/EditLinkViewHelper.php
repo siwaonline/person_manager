@@ -1,4 +1,5 @@
 <?php
+
 namespace Personmanager\PersonManager\ViewHelpers\Be;
 
 /**
@@ -13,23 +14,27 @@ namespace Personmanager\PersonManager\ViewHelpers\Be;
  *
  * The TYPO3 project - inspiring people to share!
  */
-
-class EditLinkViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper {
+class EditLinkViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper
+{
     /**
      * @var string
      */
     protected $tagName = 'a';
+
     /**
      * Initialize arguments
      *
      * @return void
      * @api
      */
-    public function initializeArguments() {
+    public function initializeArguments()
+    {
         $this->registerUniversalTagAttributes();
         $this->registerTagAttribute('name', 'string', 'Specifies the name of an anchor');
         $this->registerTagAttribute('target', 'string', 'Specifies where to open the linked document');
+        $this->registerTagAttribute('returnAction', 'string', 'Specifies which action to return to');
     }
+
     /**
      * Crafts a link to edit a database record or create a new one
      *
@@ -37,19 +42,21 @@ class EditLinkViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBas
      * @return string The <a> tag
      * @see \TYPO3\CMS\Backend\Utility::editOnClick()
      */
-    public function render($parameters) {
+    public function render($parameters)
+    {
         $uri = \TYPO3\CMS\Backend\Utility\BackendUtility::getModuleUrl('record_edit') . '&' . $parameters;
+        $returnAction = $this->arguments['returnAction'] ? $this->arguments['returnAction'] : 'list';
 
-        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance( 'TYPO3\CMS\Extbase\Object\ObjectManager' );
-        $uriBuilder = $objectManager->get( 'TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder' );
+        $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
+        $uriBuilder = $objectManager->get('TYPO3\CMS\Extbase\Mvc\Web\Routing\UriBuilder');
         $uriBuilder->initializeObject();
         $returnUri = $uriBuilder->reset()->setAddQueryString(true)->setArguments(array(
             'M' => 'web_PersonManagerPersonmanagerback',
             'tx_personmanager_web_personmanagerpersonmanagerback' => array(
-                'action' => 'list'
+                'action' => $returnAction
             ),
         ))->buildBackendUri();
-        $returnUri = str_replace("&","%26",$returnUri);
+        $returnUri = str_replace("&", "%26", $returnUri);
         $uri .= '&returnUrl=' . $returnUri;
 
         $this->tag->addAttribute('href', $uri);
