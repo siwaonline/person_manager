@@ -17,7 +17,7 @@
   },
   "require": {
     "typo3/cms-core": "^8.7.0",
-    "phpoffice/phpspreadsheet": "^1.6.0"
+    "codeplex/phpexcel": "^1.7.8"
   },
   "version": "3.0.0",
   "config": {
