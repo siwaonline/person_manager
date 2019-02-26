@@ -21,7 +21,7 @@ return array(
 			'endtime' => 'endtime',
 		),
 		'searchFields' => 'email,',
-		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath("person_manager") . 'Resources/Public/Icons/tx_personmanager_domain_model_log.gif'
+		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath("person_manager") . 'Resources/Public/Icons/tx_personmanager_domain_model_log.gif'
 	),
 	'interface' => array(
 		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, action, detail, email, firstname, lastname, fehler, person, success',

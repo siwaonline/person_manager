@@ -18,7 +18,7 @@ return array(
 			'endtime' => 'endtime',
 		),
 		'searchFields' => 'firstname,lastname,email,salutation,titel,nachgtitel,geb,tel,company,active,confirmed,unsubscribed,token,frtxt0,frtxt1,frtxt2,frtxt3,frtxt4,frtxt5,frtxt6,frtxt7,frtxt8,frtxt9,category,',
-		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extRelPath('person_manager') . 'Resources/Public/Icons/tx_personmanager_domain_model_person.gif'
+		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('person_manager') . 'Resources/Public/Icons/tx_personmanager_domain_model_person.gif'
 	),
 	'interface' => array(
 		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, firstname, lastname, email, salutation, titel, nachgtitel, geb, tel, company, active, confirmed, unsubscribed, token, frtxt0, frtxt1, frtxt2, frtxt3, frtxt4, frtxt5, frtxt6, frtxt7, frtxt8, frtxt9, category',

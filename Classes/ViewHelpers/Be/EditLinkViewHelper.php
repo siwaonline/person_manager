@@ -2,6 +2,9 @@
 
 namespace Personmanager\PersonManager\ViewHelpers\Be;
 
+use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+
 /**
  * This file is part of the TYPO3 CMS project.
  *
@@ -14,7 +17,7 @@ namespace Personmanager\PersonManager\ViewHelpers\Be;
  *
  * The TYPO3 project - inspiring people to share!
  */
-class EditLinkViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper
+class EditLinkViewHelper extends \TYPO3Fluid\Fluid\Core\ViewHelper\AbstractTagBasedViewHelper
 {
     /**
      * @var string
@@ -33,18 +36,20 @@ class EditLinkViewHelper extends \TYPO3\CMS\Fluid\Core\ViewHelper\AbstractTagBas
         $this->registerTagAttribute('name', 'string', 'Specifies the name of an anchor');
         $this->registerTagAttribute('target', 'string', 'Specifies where to open the linked document');
         $this->registerTagAttribute('returnAction', 'string', 'Specifies which action to return to');
+        $this->registerArgument('parameters', 'string', 'Parameters to pass');
     }
 
     /**
      * Crafts a link to edit a database record or create a new one
      *
-     * @param string $parameters Query string parameters
      * @return string The <a> tag
      * @see \TYPO3\CMS\Backend\Utility::editOnClick()
      */
-    public function render($parameters)
+    public function render()
     {
-        $uri = \TYPO3\CMS\Backend\Utility\BackendUtility::getModuleUrl('record_edit') . '&' . $parameters;
+        /* @var \TYPO3\CMS\Backend\Routing\UriBuilder $uriBuilder */
+        $uriBuilder = GeneralUtility::makeInstance(UriBuilder::class);
+        $uri = $uriBuilder->buildUriFromRoute('record_edit') . "&" . $this->arguments['parameters'];
         $returnAction = $this->arguments['returnAction'] ? $this->arguments['returnAction'] : 'list';
 
         $objectManager = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance('TYPO3\CMS\Extbase\Object\ObjectManager');
