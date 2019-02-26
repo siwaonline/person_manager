@@ -16,10 +16,10 @@
     "issues": "https://forge.typo3.org/projects/extension-person_manager/issues"
   },
   "require": {
-    "typo3/cms-core": "^8.7.0",
+    "typo3/cms-core": "^9.5.0",
     "codeplex/phpexcel": "^1.7.8"
   },
-  "version": "2.1.0",
+  "version": "3.0.0-dev",
   "config": {
     "vendor-dir": ".Build/vendor",
     "bin-dir": ".Build/bin"
