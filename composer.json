@@ -15,7 +15,7 @@
   },
   "require": {
   },
-  "version": "7.6.9",
+  "version": "1.4.12",
   "config": {
     "vendor-dir": ".Build/vendor",
     "bin-dir": ".Build/bin"
@@ -30,9 +30,6 @@
     ]
   },
   "extra": {
-    "branch-alias": {
-      "master": "1.0.0"
-    },
     "typo3/cms": {
       "cms-package-dir": "{$vendor-dir}/typo3/cms",
       "web-dir": ".Build/Web"
