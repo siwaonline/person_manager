@@ -34,6 +34,7 @@ use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Personmanager\PersonManager\Phpexcel\MyReadFilter;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 
+
 /**
  * BackendController
  */
@@ -231,6 +232,11 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             if ($check == "1") {
                 $csv_datei = $filen;
             }
+
+            /** @var QueryBuilder $queryBuilder */
+            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_personmanager_domain_model_person');
+            $personMails = $queryBuilder->select('email')->from('tx_personmanager_domain_model_person')->execute()->fetchAll();
+            $personMails = array_map(function($a){return $a['email'];},$personMails);
             if ($impformat == "excel") {
                 foreach ($this->doLoadExcel($csv_datei) as $worksheet) {
                     $worksheetTitle = $worksheet->getTitle();
@@ -244,7 +250,11 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         $emailKey = array_search('email', $arr);
                         if ($emailKey !== false) {
                             $cell = $worksheet->getCellByColumnAndRow($emailKey, $row);
-                            $newPerson = $this->personRepository->findOneByEmail($this->extractEmail($cell->getValue()));
+                            if(in_array($this->extractEmail($cell->getValue()), $personMails)) {
+                                $newPerson = $this->personRepository->findOneByEmail($this->extractEmail($cell->getValue()));
+                            } else {
+                                $newPerson = false;
+                            }
                         }
                         if (!$newPerson) {
                             $newPerson = new \Personmanager\PersonManager\Domain\Model\Person();
@@ -285,13 +295,13 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         if ($newPerson->getEmail() != "" && $newPerson->getEmail() != NULL) {
                             if ($check == "1") {
                                 $this->personRepository->add($newPerson);
-                                $this->persistenceManager->persistAll();
                             } else {
                                 array_push($personen, $newPerson);
                             }
                         }
                     }
                 }
+                $this->persistenceManager->persistAll();
             } else {
                 $datei_inhalt = @file_get_contents($csv_datei);
                 $zeilen = explode($zeilen_trenner, $datei_inhalt);
@@ -345,7 +355,6 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                             if ($newPerson->getEmail() != "" && $newPerson->getEmail() != NULL) {
                                 if ($check == "1") {
                                     $this->personRepository->add($newPerson);
-                                    $this->persistenceManager->persistAll();
                                 } else {
                                     array_push($personen, $newPerson);
                                 }
@@ -353,6 +362,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         }
                     }
                 }
+                $this->persistenceManager->persistAll();
             }
             if ($check == "1") {
                 $this->redirect('insertData');
