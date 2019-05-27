@@ -405,7 +405,8 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->forward('text', null, null, array('text' => $this->flexunsubscribe));
     }
 
-    protected function doBuildLinkMail($new, $site, $path, $pers){
+    protected function doBuildLinkMail($new, $site, $path, $pers)
+    {
         $langhelp = LocalizationUtility::translate('mail.confirmdata', $this->extKey);
         $subject = $site . ": $langhelp";
         $langhelp = LocalizationUtility::translate($new ? 'mail.confirmthx' : 'mail.leavethx', $this->extKey);
@@ -427,6 +428,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         $this->forward('text', null, null, array('text' => $new ? $this->flexcheckmail : $this->flexcheckmailleave));
     }
+
     protected function doBuildLinkUrl($pers, $path, $plugin, $action, $text)
     {
         if (is_numeric($path)) {

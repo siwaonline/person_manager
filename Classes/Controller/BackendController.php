@@ -93,6 +93,14 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
     }
 
+    protected function checkRoot()
+    {
+        if (!$_GET['id']) {
+            $this->view->assign('root', 1);
+            $this->addFlashMessage(LocalizationUtility::translate("msg.root", "PersonManager"), '', \TYPO3\CMS\Core\Messaging\AbstractMessage::INFO);
+        }
+    }
+
     /**
      * action list
      *
@@ -102,6 +110,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function listAction($order = 0, $getterm = "")
     {
+        $this->checkRoot();
         $term = $this->request->getArguments()["search"];
         if ($term == NULL || $term == "") {
             $term = $getterm;
@@ -172,6 +181,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function newImportAction($error = "", $spalten = "", $trenn = "", $first = "", $impformat = "")
     {
+        $this->checkRoot();
         $anz = $this->personRepository->findAll()->count();
         $this->view->assign('countPers', $anz);
 
@@ -196,6 +206,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function importAction()
     {
+        $this->checkRoot();
         $failed = 0;
         $vars = $_POST["tx_personmanager_web_personmanagerpersonmanagerback"];
         $spalten = $vars["spalten"];
@@ -379,7 +390,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function insertDataAction()
     {
-
+        $this->checkRoot();
     }
 
     /**
@@ -389,6 +400,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function newExportAction()
     {
+        $this->checkRoot();
         $anz = $this->personRepository->findAll()->count();
         $this->view->assign('countPers', $anz);
     }
@@ -400,6 +412,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function exportAction()
     {
+        $this->checkRoot();
         $active = $_POST["active"];
         $confirmed = $_POST["confirmed"];
         $unsubscribed = $_POST["unsubscribed"];
@@ -510,6 +523,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function loglistAction()
     {
+        $this->checkRoot();
         $logs = $this->logRepository->findAll();
         $this->view->assign('logs', $logs);
     }
@@ -524,6 +538,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function blNewImportAction($error = "", $first = "", $impformat = "")
     {
+        $this->checkRoot();
         $anz = $this->blacklistRepository->findAll()->count();
         $this->view->assign('countPers', $anz);
 
@@ -545,6 +560,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function blImportAction()
     {
+        $this->checkRoot();
         $failed = 0;
         $vars = $_POST["tx_personmanager_web_personmanagerpersonmanagerback"];
         $first = $vars["first"];
@@ -637,7 +653,8 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
     }
 
-    protected function doUploadFile(){
+    protected function doUploadFile()
+    {
         $uploaddir = GeneralUtility::getFileAbsFileName(GeneralUtility::resolveBackPath(PATH_site . "uploads/tx_personmanager"));
         $uploadfile = basename($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['name']['jsonobj']);
         $csv_datei = $uploaddir . "/" . $uploadfile;
@@ -652,7 +669,9 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
         return $csv_datei;
     }
-    protected function doLoadExcel($csv_datei){
+
+    protected function doLoadExcel($csv_datei)
+    {
         ini_set('display_errors', '1');
 
         $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
@@ -675,6 +694,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function clearAction()
     {
+        $this->checkRoot();
         $this->doClear("tx_personmanager_domain_model_person");
     }
 
@@ -685,6 +705,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function blClearAction()
     {
+        $this->checkRoot();
         $this->doClear("tx_personmanager_domain_model_blacklist");
     }
 

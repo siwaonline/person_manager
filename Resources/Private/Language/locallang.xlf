@@ -434,6 +434,9 @@
 			<trans-unit id="msg.abconfirm">
 				<source>You have been successfully removed from our system.</source>
 			</trans-unit>
+			<trans-unit id="msg.root">
+				<source>Please select a page.</source>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
