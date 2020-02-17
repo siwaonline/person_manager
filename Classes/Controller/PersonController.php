@@ -215,7 +215,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             $error .= "<p>$langhelp</p>";
             $failed = 1;
         }
-        if (!filter_var(idn_to_ascii($newPerson->getEmail()), FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var(idn_to_ascii($newPerson->getEmail(),0,INTL_IDNA_VARIANT_UTS46), FILTER_VALIDATE_EMAIL)) {
             $langhelp = LocalizationUtility::translate('error.email', $this->extKey);
             $error .= "<p>$langhelp</p>";
             $failed = 1;
