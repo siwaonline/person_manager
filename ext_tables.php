@@ -4,17 +4,17 @@ if (!defined('TYPO3_MODE')) {
 }
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-	$_EXTKEY,
+	'person_manager',
 	'Personmanagerfront',
 	'Person Manager Registration'
 );
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-	$_EXTKEY,
+	'person_manager',
 	'Personmanagerunsub',
 	'Person Manager Deregistration'
 );
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-	$_EXTKEY,
+	'person_manager',
 	'Personmanagershort',
 	'Person Manager Short Registration'
 );
@@ -26,7 +26,7 @@ if (TYPO3_MODE === 'BE') {
 	 * Registers a Backend Module
 	 */
 	\TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerModule(
-		'Personmanager.' . $_EXTKEY,
+		'Personmanager.PersonManager',
 		'web',     // Make module a submodule of 'web'
 		'personmanagerback',    // Submodule key
 		'',                        // Position
@@ -36,7 +36,7 @@ if (TYPO3_MODE === 'BE') {
 		array(
 			'access' => 'user,group',
 			'icon' => 'EXT:person_manager/ext_icon.png',
-			'labels' => 'LLL:EXT:' . $_EXTKEY . '/Resources/Private/Language/locallang_personmanagerback.xlf',
+			'labels' => 'LLL:EXT:person_manager/Resources/Private/Language/locallang_personmanagerback.xlf',
 		)
 	);
 
@@ -46,19 +46,19 @@ if (TYPO3_MODE === 'BE') {
 //$iconRegistry->registerIcon('extensions-person-manager', 'TYPO3\\CMS\\Core\\Imaging\\IconProvider\\BitmapIconProvider', array("source" => 'EXT:person_manager/ext_icon.svg',));
 
 
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile($_EXTKEY, 'Configuration/TypoScript', 'Person Manager');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addStaticFile('person_manager', 'Configuration/TypoScript', 'Person Manager');
 
-$pluginSignature = str_replace('_', '', $_EXTKEY) . '_personmanagerfront';
+$pluginSignature = str_replace('_', '', 'person_manager') . '_personmanagerfront';
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/Flexforms/Flexform.xml');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:person_manager/Configuration/Flexforms/Flexform.xml');
 
-$pluginSignature = str_replace('_', '', $_EXTKEY) . '_personmanagerunsub';
+$pluginSignature = str_replace('_', '', 'person_manager') . '_personmanagerunsub';
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/Flexforms/Flexform2.xml');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:person_manager/Configuration/Flexforms/Flexform2.xml');
 
-$pluginSignature = str_replace('_', '', $_EXTKEY) . '_personmanagershort';
+$pluginSignature = str_replace('_', '', 'person_manager') . '_personmanagershort';
 $TCA['tt_content']['types']['list']['subtypes_addlist'][$pluginSignature] = 'pi_flexform';
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:' . $_EXTKEY . '/Configuration/Flexforms/Flexform3.xml');
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPiFlexFormValue($pluginSignature, 'FILE:EXT:person_manager/Configuration/Flexforms/Flexform3.xml');
 
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addLLrefForTCAdescr('tx_personmanager_domain_model_person', 'EXT:person_manager/Resources/Private/Language/locallang_csh_tx_personmanager_domain_model_person.xlf');
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::allowTableOnStandardPages('tx_personmanager_domain_model_person');

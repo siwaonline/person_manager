@@ -12,7 +12,6 @@ return array(
 		'versioning_followPages' => TRUE,
 
 		'languageField' => 'sys_language_uid',
-		'transOrigPointerField' => 'l10n_parent',
 		'transOrigDiffSourceField' => 'l10n_diffsource',
 		'delete' => 'deleted',
 		'enablecolumns' => array(
@@ -23,11 +22,8 @@ return array(
 		'searchFields' => 'name,',
 		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath("person_manager") . 'Resources/Public/Icons/tx_personmanager_domain_model_category.gif',
 	),
-	'interface' => array(
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, name',
-	),
 	'types' => array(
-		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, name, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'),
+		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_diffsource, hidden;;1, name, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'),
 	),
 	'palettes' => array(
 		'1' => array('showitem' => ''),
