@@ -44,7 +44,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      * personRepository
      *
      * @var \Personmanager\PersonManager\Domain\Repository\PersonRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $personRepository = NULL;
 
@@ -52,7 +52,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      * categoryRepository
      *
      * @var \Personmanager\PersonManager\Domain\Repository\CategoryRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $categoryRepository = NULL;
 
@@ -60,7 +60,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      * logRepository
      *
      * @var \Personmanager\PersonManager\Domain\Repository\LogRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $logRepository = NULL;
 
@@ -68,7 +68,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      * blacklistRepository
      *
      * @var \Personmanager\PersonManager\Domain\Repository\BlacklistRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $blacklistRepository = NULL;
 
@@ -94,7 +94,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         $langhelp = LocalizationUtility::translate('error.notext', $this->extKey);
 
-        $this->signature = $this->configurationManager->getContentObject()->parseFunc($this->settings['flexsignature'], array(), '< lib.parseFunc_RTE');
+        $this->signature = $this->configurationManager->getContentObjectRenderer()->parseFunc($this->settings['flexsignature'], array(), '< lib.parseFunc_RTE');
         $this->sitename = $this->settings['flexsitename'];
         if ($this->sitename == NULL || $this->sitename == "") {
             $this->sitename = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["site"];
@@ -159,7 +159,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      *
      * @param \Personmanager\PersonManager\Domain\Model\Person $newPerson
      * @param string $error
-     * @ignorevalidation $newPerson
+     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation $newPerson
      * @return void
      */
     public function newAction(\Personmanager\PersonManager\Domain\Model\Person $newPerson = NULL, $error = "")

@@ -33,6 +33,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Personmanager\PersonManager\Phpexcel\MyReadFilter;
+use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 
 
@@ -46,7 +47,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * personRepository
      *
      * @var \Personmanager\PersonManager\Domain\Repository\PersonRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $personRepository = null;
 
@@ -54,7 +55,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * categoryRepository
      *
      * @var \Personmanager\PersonManager\Domain\Repository\CategoryRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $categoryRepository = null;
 
@@ -62,7 +63,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * logRepository
      *
      * @var \Personmanager\PersonManager\Domain\Repository\LogRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $logRepository = null;
 
@@ -70,7 +71,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * blacklistRepository
      *
      * @var \Personmanager\PersonManager\Domain\Repository\BlacklistRepository
-     * @inject
+     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $blacklistRepository = null;
 
@@ -741,7 +742,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     protected function doUploadFile()
     {
-        $uploaddir = GeneralUtility::getFileAbsFileName(GeneralUtility::resolveBackPath(PATH_site . "uploads/tx_personmanager"));
+        $uploaddir = GeneralUtility::getFileAbsFileName(GeneralUtility::resolveBackPath(Environment::getPublicPath() . "uploads/tx_personmanager"));
         $uploadfile = basename($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['name']['jsonobj']);
         $csv_datei = $uploaddir . "/" . $uploadfile;
         if (move_uploaded_file($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['tmp_name']['jsonobj'],
