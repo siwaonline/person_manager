@@ -28,11 +28,12 @@ namespace Personmanager\PersonManager\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Personmanager\PersonManager\Domain\Repository\BlacklistRepository;
+use Personmanager\PersonManager\Domain\Repository\CategoryRepository;
+use Personmanager\PersonManager\Domain\Repository\LogRepository;
+use Personmanager\PersonManager\Domain\Repository\PersonRepository;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
-use Personmanager\PersonManager\Phpexcel\MyReadFilter;
-use TYPO3\CMS\Core\Database\ConnectionPool;
 
 /**
  * PersonController
@@ -43,32 +44,28 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     /**
      * personRepository
      *
-     * @var \Personmanager\PersonManager\Domain\Repository\PersonRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
+     * @var PersonRepository
      */
     protected $personRepository = NULL;
 
     /**
      * categoryRepository
      *
-     * @var \Personmanager\PersonManager\Domain\Repository\CategoryRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
+     * @var CategoryRepository
      */
     protected $categoryRepository = NULL;
 
     /**
      * logRepository
      *
-     * @var \Personmanager\PersonManager\Domain\Repository\LogRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
+     * @var LogRepository
      */
     protected $logRepository = NULL;
 
     /**
      * blacklistRepository
      *
-     * @var \Personmanager\PersonManager\Domain\Repository\BlacklistRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
+     * @var BlacklistRepository
      */
     protected $blacklistRepository = NULL;
 
@@ -88,13 +85,42 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     public $flexcheckmailleave = "";
     public $flexunsubscribe = "";
 
+    /**
+     * @param PersonRepository $personRepository
+     */
+    public function injectPersonRepository(PersonRepository $personRepository)
+    {
+        $this->personRepository = $personRepository;
+    }
+    /**
+     * @param CategoryRepository $categoryRepository
+     */
+    public function injectCategoryRepository(CategoryRepository $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+    /**
+     * @param CategoryRepository $logRepository
+     */
+    public function injectLogRepository(LogRepository $logRepository)
+    {
+        $this->logRepository = $logRepository;
+    }
+    /**
+     * @param BlacklistRepository $blacklistRepository
+     */
+    public function injectBlacklistRepository(BlacklistRepository $blacklistRepository)
+    {
+        $this->blacklistRepository = $blacklistRepository;
+    }
+
     public function initializeAction()
     {
         $this->persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
 
         $langhelp = LocalizationUtility::translate('error.notext', $this->extKey);
 
-        $this->signature = $this->configurationManager->getContentObjectRenderer()->parseFunc($this->settings['flexsignature'], array(), '< lib.parseFunc_RTE');
+        $this->signature = $this->configurationManager->getContentObject()->parseFunc($this->settings['flexsignature'], array(), '< lib.parseFunc_RTE');
         $this->sitename = $this->settings['flexsitename'];
         if ($this->sitename == NULL || $this->sitename == "") {
             $this->sitename = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["site"];
