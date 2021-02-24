@@ -44,3 +44,6 @@ if (!defined('TYPO3_MODE')) {
 
 	)
 );
+
+	// wizards
+	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig("@import 'EXT:person_manager/Configuration/PageTS/*.typoscript'");

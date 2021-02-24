@@ -3,6 +3,16 @@
 	<file source-language="en" datatype="plaintext" original="messages" date="2015-02-09T07:22:46Z" product-name="person_manager">
 		<header/>
 		<body>
+			<trans-unit id="tx_personmanager.Personmanagerfront">
+				<source>Person Manager Registration</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager.Personmanagerunsub">
+				<source>Person Manager Deregistration</source>
+			</trans-unit>
+			<trans-unit id="tx_personmanager.Personmanagershort">
+				<source>Person Manager Short Registration</source>
+			</trans-unit>
+
 			<!-- ### Model ### -->
 			<trans-unit id="tx_personmanager_domain_model_person">
 				<source>Person</source>

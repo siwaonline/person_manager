@@ -6,17 +6,17 @@ if (!defined('TYPO3_MODE')) {
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
 	'person_manager',
 	'Personmanagerfront',
-	'Person Manager Registration'
+	'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager.Personmanagerfront'
 );
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
 	'person_manager',
 	'Personmanagerunsub',
-	'Person Manager Deregistration'
+	'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager.Personmanagerunsub'
 );
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
 	'person_manager',
 	'Personmanagershort',
-	'Person Manager Short Registration'
+	'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager.Personmanagershort'
 );
 
 
