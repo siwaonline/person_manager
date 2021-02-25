@@ -498,7 +498,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             ->setFrom(array($mail => $site))
             ->setTo(array($empfaenger => $empfaenger))
             ->setSubject("=?utf-8?b?" . base64_encode($subject) . "?=")
-            ->setBody($text, "text/html");
+            ->html($text);
         $message->send();
     }
 
