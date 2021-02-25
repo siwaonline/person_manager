@@ -213,6 +213,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      */
     public function createAction(\Personmanager\PersonManager\Domain\Model\Person $newPerson)
     {
+        //TODO create Validators for Error Handling
         $failed = 0;
         $honey = $this->request->getArguments()["tx_personmanager_personmanagerfront"]["honeypot"];
         $anr = $this->request->getArguments()["anr"];
@@ -289,7 +290,10 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             $this->view->assign('newPerson', $newPerson);
             $langhelp = LocalizationUtility::translate('log.createfail', $this->extKey);
             $this->insertLog(0, $newPerson->getEmail(), $newPerson->getFirstname(), $newPerson->getLastname(), "create", "$langhelp", $error, 0);
-            $this->forward('new', null, null, array('error' => $error, 'newPerson' => $newPerson));
+
+            // will not be needed in the futur when custom validator are implemented
+            // $this->forward('new', null, null, array('error' => $error, 'newPerson' => $newPerson));
+            $this->forward('new', null, null, array('error' => $error));
         }
     }
 

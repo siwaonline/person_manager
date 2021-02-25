@@ -28,6 +28,10 @@ namespace Personmanager\PersonManager\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Personmanager\PersonManager\Domain\Repository\BlacklistRepository;
+use Personmanager\PersonManager\Domain\Repository\CategoryRepository;
+use Personmanager\PersonManager\Domain\Repository\LogRepository;
+use Personmanager\PersonManager\Domain\Repository\PersonRepository;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
@@ -47,7 +51,6 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * personRepository
      *
      * @var \Personmanager\PersonManager\Domain\Repository\PersonRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $personRepository = null;
 
@@ -55,7 +58,6 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * categoryRepository
      *
      * @var \Personmanager\PersonManager\Domain\Repository\CategoryRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $categoryRepository = null;
 
@@ -63,7 +65,6 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * logRepository
      *
      * @var \Personmanager\PersonManager\Domain\Repository\LogRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $logRepository = null;
 
@@ -71,7 +72,6 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * blacklistRepository
      *
      * @var \Personmanager\PersonManager\Domain\Repository\BlacklistRepository
-     * @TYPO3\CMS\Extbase\Annotation\Inject
      */
     protected $blacklistRepository = null;
 
@@ -94,6 +94,35 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public function initializeAction()
     {
         $this->persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+    }
+
+    /**
+     * @param PersonRepository $personRepository
+     */
+    public function injectPersonRepository(PersonRepository $personRepository)
+    {
+        $this->personRepository = $personRepository;
+    }
+    /**
+     * @param CategoryRepository $categoryRepository
+     */
+    public function injectCategoryRepository(CategoryRepository $categoryRepository)
+    {
+        $this->categoryRepository = $categoryRepository;
+    }
+    /**
+     * @param CategoryRepository $logRepository
+     */
+    public function injectLogRepository(LogRepository $logRepository)
+    {
+        $this->logRepository = $logRepository;
+    }
+    /**
+     * @param BlacklistRepository $blacklistRepository
+     */
+    public function injectBlacklistRepository(BlacklistRepository $blacklistRepository)
+    {
+        $this->blacklistRepository = $blacklistRepository;
     }
 
     /**

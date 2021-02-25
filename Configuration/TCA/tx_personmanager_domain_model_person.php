@@ -33,6 +33,7 @@ return array(
 			'label' => 'LLL:EXT:lang/locallang_general.xlf:LGL.language',
 			'config' => array(
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'foreign_table' => 'sys_language',
 				'foreign_table_where' => 'ORDER BY sys_language.title',
 				'items' => array(
@@ -142,6 +143,7 @@ return array(
 			'label' => 'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager_domain_model_person.salutation',
 			'config' => array(
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'items' => array(
 					array('LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:labels.mrmrs', 0),
 					array('LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:labels.mr', 1),
@@ -325,6 +327,7 @@ return array(
 			'label' => 'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager_domain_model_person.category',
 			'config' => array(
 				'type' => 'select',
+				'renderType' => 'selectSingle',
 				'foreign_table' => 'tx_personmanager_domain_model_category',
 				'minitems' => 0,
 				'maxitems' => 1,

@@ -1,6 +1,7 @@
 <?php
 namespace Personmanager\PersonManager\Domain\Model;
 
+use DateTime;
 
 /***************************************************************
  *
