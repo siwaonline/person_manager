@@ -1,0 +1,11 @@
+$langhelp = LocalizationUtility::translate($new ? 'mail.confirmthx' : 'mail.leavethx', $this->extKey);
+$mailcontent = sprintf("$langhelp", $site) . "<br/><br/>";
+$langhelp = LocalizationUtility::translate('mail.confirmlink', $this->extKey);
+$mailcontent .= "$langhelp<br/><br/>";
+
+$langhelp = LocalizationUtility::translate($new ? 'mail.confirmreg' : 'mail.confirmleave', $this->extKey);
+$mailcontent .= $this->doBuildLinkUrl($pers, $path, $new ? 'tx_personmanager_personmanagerfront' : 'tx_personmanager_personmanagerunsub', $new ? 'activate' : 'unsubscribe', $langhelp);
+
+$langhelp = LocalizationUtility::translate('mail.ifnot', $this->extKey);
+$mailcontent .= "<br/>$langhelp";
+$mailcontent .= "<br/><br/>" . $this->getSignature();

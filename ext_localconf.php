@@ -6,44 +6,50 @@ if (!defined('TYPO3_MODE')) {
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
 	'Personmanager.person_manager',
 	'Personmanagerfront',
-	array(
+	[
 		'Person' => 'new, create, activate, unsubscribe,isunsubscribed,text',
 
-	),
+	],
 	// non-cacheable actions
-	array(
+	[
 		'Person' => 'new, create, activate, unsubscribe,isunsubscribed,text',
 
-	)
+	]
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
 	'Personmanager.person_manager',
 	'Personmanagerunsub',
-	array(
+	[
 		'Person' => 'newLeave, leave, unsubscribe, text',
 
-	),
+	],
 	// non-cacheable actions
-	array(
+	[
 		'Person' => 'newLeave, leave, unsubscribe, text',
 
-	)
+	]
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
 	'Personmanager.person_manager',
 	'Personmanagershort',
-	array(
+	[
 		'Person' => 'newShort',
 
-	),
+	],
 	// non-cacheable actions
-	array(
+	[
 		'Person' => 'newShort',
 
-	)
+	]
 );
 
-	// wizards
-	\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig("@import 'EXT:person_manager/Configuration/PageTS/*.typoscript'");
+// wizards
+\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig("@import 'EXT:person_manager/Configuration/PageTS/*.typoscript'");
+
+
+// Mail API
+$GLOBALS['TYPO3_CONF_VARS']['MAIL']['layoutRootPaths'][500] = 'EXT:person_manager/Resources/Private/Mail/Layouts';
+$GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'][500] = 'EXT:person_manager/Resources/Private/Mail/Templates';
+$GLOBALS['TYPO3_CONF_VARS']['MAIL']['partialRootPaths'][500] = 'EXT:person_manager/Resources/Private/Mail/Partials';

@@ -33,6 +33,9 @@ use Personmanager\PersonManager\Domain\Repository\BlacklistRepository;
 use Personmanager\PersonManager\Domain\Repository\CategoryRepository;
 use Personmanager\PersonManager\Domain\Repository\LogRepository;
 use Personmanager\PersonManager\Domain\Repository\PersonRepository;
+use Symfony\Component\Mime\Address;
+use TYPO3\CMS\Core\Mail\FluidEmail;
+use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
@@ -261,7 +264,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         }
     }
 
-    protected function doActivate($pers, $sendInMail, $mail, $msgKey, $log)
+    protected function doActivate($pers, $sendInMail, $to, $msgKey, $log)
     {
         $pers->setConfirmed(TRUE);
         $pers->setActive(TRUE);
@@ -269,12 +272,15 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->persistenceManager->persistAll();
 
         if ($sendInMail == 1) {
-            $langhelp = LocalizationUtility::translate('mail.registration', $this->extKey);
-            $subject = $langhelp . " " . $pers->getEmail();
-            $langhelp = LocalizationUtility::translate('mail.notifyRegistration', $this->extKey);
-            $user = $pers->getFirstname() . " " . $pers->getLastname() . " (" . $pers->getEmail() . ")";
-            $mailcontent = str_replace("%s", $user, $langhelp);
-            $this->sendMail($mail, $mailcontent, $subject);
+            $mail = GeneralUtility::makeInstance(FluidEmail::class);
+            $mail
+                ->subject(LocalizationUtility::translate('mail.registration', $this->extKey). " " . $pers->getEmail())
+                ->setTemplate('DoActivate')
+                ->assign('user', $pers)
+                ->assign('msgKey', $msgKey)
+                ->to($to);
+        
+            $this->_sendMail($mail);
         }
 
         $langhelp = LocalizationUtility::translate($msgKey, $this->extKey);
@@ -358,19 +364,22 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         }
     }
 
-    protected function doUnsubscribe($pers, $sendOutMail, $mail, $msgKey, $log)
+    protected function doUnsubscribe($pers, $sendOutMail, $to, $msgKey, $log)
     {
         $pers->setUnsubscribed(TRUE);
         $this->personRepository->update($pers);
         $this->persistenceManager->persistAll();
 
         if ($sendOutMail == 1) {
-            $langhelp = LocalizationUtility::translate('mail.deregistration', $this->extKey);
-            $subject = $langhelp . " " . $pers->getEmail();
-            $langhelp = LocalizationUtility::translate('mail.notifyDeregistration', $this->extKey);
-            $user = $pers->getFirstname() . " " . $pers->getLastname() . " (" . $pers->getEmail() . ")";
-            $mailcontent = str_replace("%s", $user, $langhelp);
-            $this->sendMail($mail, $mailcontent, $subject);
+            $mail = GeneralUtility::makeInstance(FluidEmail::class);
+            $mail
+                ->subject(LocalizationUtility::translate('mail.deregistration', $this->extKey) . " " . $pers->getEmail())
+                ->setTemplate('DoUnsubscribe')
+                ->assign('user', $pers)
+                ->assign('msgKey', $msgKey)
+                ->to($to);
+        
+            $this->_sendMail($mail);
         }
 
         $langhelp = LocalizationUtility::translate($msgKey, $this->extKey);
@@ -379,21 +388,20 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     }
 
     protected function doBuildLinkMail($new, $site, $path, $pers){
-        $langhelp = LocalizationUtility::translate('mail.confirmdata', $this->extKey);
-        $subject = $site . ": $langhelp";
-        $langhelp = LocalizationUtility::translate($new ? 'mail.confirmthx' : 'mail.leavethx', $this->extKey);
-        $mailcontent = sprintf("$langhelp", $site) . "<br/><br/>";
-        $langhelp = LocalizationUtility::translate('mail.confirmlink', $this->extKey);
-        $mailcontent .= "$langhelp<br/><br/>";
+        debug($new);
+        debug($site);
+        debug($path);
+        debug($pers);
+        // $mail = GeneralUtility::makeInstance(FluidEmail::class);
+        // $mail
+        //     ->subject($site . ": " . LocalizationUtility::translate('mail.confirmdata', $this->extKey))
+        //     ->setTemplate('DoBuildLinkMail')
+        //     ->assign('user', $pers)
+        //     ->assign('signature', $this->signature)
+        //     ->to($pers->getEmail());
+    
+        // $this->_sendMail($mail);
 
-        $langhelp = LocalizationUtility::translate($new ? 'mail.confirmreg' : 'mail.confirmleave', $this->extKey);
-        $mailcontent .= $this->doBuildLinkUrl($pers, $path, $new ? 'tx_personmanager_personmanagerfront' : 'tx_personmanager_personmanagerunsub', $new ? 'activate' : 'unsubscribe', $langhelp);
-
-        $langhelp = LocalizationUtility::translate('mail.ifnot', $this->extKey);
-        $mailcontent .= "<br/>$langhelp";
-        $mailcontent .= "<br/><br/>" . $this->getSignature();
-        $empfaenger = $pers->getEmail();
-        $this->sendMail($empfaenger, $mailcontent, $subject);
 
         $langhelp = LocalizationUtility::translate($new ? 'log.createmail' : 'log.leavemail', $this->extKey);
         $this->insertLog($pers->getUid(), $pers->getEmail(), $pers->getFirstname(), $pers->getLastname(), $new ? "create" : "leave", "$langhelp", "", 1);
@@ -446,6 +454,12 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $message->send();
     }
 
+    private function _sendMail(FluidEmail $mail){
+        $mail->from(new Address($this->settings["options"]["mail"], $this->settings["options"]["site"]));
+
+        GeneralUtility::makeInstance(Mailer::class)->send($mail);
+    }
+
     /**
      * action text
      *
@@ -472,15 +486,5 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         $this->logRepository->add($newLog);
         $this->persistenceManager->persistAll();
-    }
-
-    public function getSignature()
-    {
-        if ($_SERVER['HTTPS'] == "on") {
-            $base = "https://" . $_SERVER['HTTP_HOST'];
-        } else {
-            $base = "http://" . $_SERVER['HTTP_HOST'];
-        }
-        return str_replace('img src="', 'img src="' . $base . "/", $this->signature);
     }
 }
