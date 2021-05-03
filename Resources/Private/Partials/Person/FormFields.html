@@ -1,20 +1,4 @@
-<f:if condition="{vars.salutation} == '1'">
-	<label for="salutation">
-		<f:translate key="tx_personmanager_domain_model_person.salutation" /> *
-	</label><br />
-	<select class="form-control" name="tx_personmanager_personmanagerfront[anr]" required>
-		<option value=""><f:translate key="labels.choose" /></option>
-		<f:if condition="{anr}==1">
-			<f:then><option value="1" selected><f:translate key="labels.mr" /></option></f:then>
-			<f:else><option value="1"><f:translate key="labels.mr" /></option></f:else>
-		</f:if>
-		<f:if condition="{anr}==2">
-			<f:then><option value="2" selected><f:translate key="labels.mrs" /></option></f:then>
-			<f:else><option value="2"><f:translate key="labels.mrs" /></option></f:else>
-		</f:if>
-	</select>
-	<br />
-</f:if>
+<f:render partial="Person/Salutation" arguments="{_all}"></f:render>
 
 <f:if condition="{vars.titel} == '1'">
 	<label for="titel">
@@ -163,4 +147,4 @@
 	</div>
 </f:if>
 
-<f:form.textfield name="tx_personmanager_personmanagerfront[honeypot]" style="display:none;" placeholder="Do not fill out this field!!!" /><br />
+<f:render partial="Honeypot"></f:render>

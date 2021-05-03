@@ -32,8 +32,10 @@ use Personmanager\PersonManager\Domain\Repository\BlacklistRepository;
 use Personmanager\PersonManager\Domain\Repository\CategoryRepository;
 use Personmanager\PersonManager\Domain\Repository\LogRepository;
 use Personmanager\PersonManager\Domain\Repository\PersonRepository;
+use Personmanager\PersonManager\Utility\FormUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Annotation as Extbase;
 
 /**
  * PersonController
@@ -208,92 +210,33 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     /**
      * action create
      *
+     * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\HoneyPotValidator")
+     * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\TermsValidator")
+     * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\Person\NameValidator")
+     * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\Person\EmailValidator")
+     * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\Person\EmailAgainValidator")
      * @param \Personmanager\PersonManager\Domain\Model\Person $newPerson
      * @return void
      */
     public function createAction(\Personmanager\PersonManager\Domain\Model\Person $newPerson)
     {
-        //TODO create Validators for Error Handling
-        $failed = 0;
-        $honey = $this->request->getArguments()["tx_personmanager_personmanagerfront"]["honeypot"];
-        $anr = $this->request->getArguments()["anr"];
-        $terms = $this->request->getArguments()["terms"];
+        $hash = $newPerson->getEmail() . time();
+        $newPerson->setToken(md5($hash));
 
-        $termVar = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["variables."]["terms"];
-
-        $newPerson->setSalutation($anr);
-        $error = "";
-        $newPerson->setEmail(trim($newPerson->getEmail()));
-
-        if ($honey != "" && $honey != NULL) {
-            $langhelp = LocalizationUtility::translate('error.spam', $this->extKey);
-            $error .= "<p>$langhelp</p>";
-            $failed = 1;
-        }
-        if ($termVar) {
-            if ($terms != "1" || $terms != 1) {
-                $langhelp = LocalizationUtility::translate('error.terms', $this->extKey);
-                $error .= "<p>$langhelp</p>";
-                $failed = 1;
-            }
-        }
-        if ($newPerson->getLastname() == "" || $newPerson->getLastname() == NULL || $newPerson->getFirstname() == "" || $newPerson->getFirstname() == NULL) {
-            $langhelp = LocalizationUtility::translate('error.name', $this->extKey);
-            $error .= "<p>$langhelp</p>";
-            $failed = 1;
-        }
-        if (!filter_var(idn_to_ascii($newPerson->getEmail(),0,INTL_IDNA_VARIANT_UTS46), FILTER_VALIDATE_EMAIL)) {
-            $langhelp = LocalizationUtility::translate('error.email', $this->extKey);
-            $error .= "<p>$langhelp</p>";
-            $failed = 1;
-        }
         $oldMail = $this->personRepository->findOneByEmail($newPerson->getEmail());
-        if ($oldMail != NULL) {
-            if ($oldMail->isUnsubscribed() == 0) {
-                $langhelp = LocalizationUtility::translate('error.emailagain', $this->extKey);
-                $error .= "<p>$langhelp</p>";
-                $failed = 1;
-            } else {
-                $renew = 1;
-            }
+        if ($oldMail->isUnsubscribed() !== 0) { // renew
+            $this->personRepository->remove($oldMail);
         }
 
-        if ($failed == 0) {
-            $opt = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["doubleOptIn"];
-            $path = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["path"];
-            $sendInMail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["sendInMail"];
-            $mail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["mail"];
-            //$site = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["site"];
-            $site = $this->sitename;
+        $this->personRepository->add($newPerson);
+        $this->persistenceManager->persistAll();
+        $langhelp = LocalizationUtility::translate('log.create', $this->extKey);
+        $this->insertLog($newPerson->getUid(), $newPerson->getEmail(), $newPerson->getFirstname(), $newPerson->getLastname(), "create", $langhelp, "", 1);
 
-            $tstmp = time();
-            $hash = $newPerson->getEmail() . $tstmp;
-
-            $newPerson->setToken(md5($hash));
-
-            if ($renew == 1) {
-                $this->personRepository->remove($oldMail);
-            }
-
-            $this->personRepository->add($newPerson);
-            $this->persistenceManager->persistAll();
-            $langhelp = LocalizationUtility::translate('log.create', $this->extKey);
-            $this->insertLog($newPerson->getUid(), $newPerson->getEmail(), $newPerson->getFirstname(), $newPerson->getLastname(), "create", "$langhelp", "", 1);
-
-            if ($opt == 1) {
-                $this->doBuildLinkMail(TRUE, $site, $path, $newPerson);
-            } else {
-                $this->doActivate($newPerson, $sendInMail, $mail, "log.createsuccess", "create");
-            }
+        if ($this->settings['options']["doubleOptIn"] == 1) {
+            $this->doBuildLinkMail(TRUE, $this->sitename, $this->settings['options']["options."]["path"], $newPerson);
         } else {
-            $this->view->assign('error', $error);
-            $this->view->assign('newPerson', $newPerson);
-            $langhelp = LocalizationUtility::translate('log.createfail', $this->extKey);
-            $this->insertLog(0, $newPerson->getEmail(), $newPerson->getFirstname(), $newPerson->getLastname(), "create", "$langhelp", $error, 0);
-
-            // will not be needed in the futur when custom validator are implemented
-            // $this->forward('new', null, null, array('error' => $error, 'newPerson' => $newPerson));
-            $this->forward('new', null, null, array('error' => $error));
+            $this->doActivate($newPerson, $this->settings['options']["options."]["sendInMail"], $this->settings['options']["options."]["mail"], "log.createsuccess", "create");
         }
     }
 
@@ -457,6 +400,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         $this->forward('text', null, null, array('text' => $new ? $this->flexcheckmail : $this->flexcheckmailleave));
     }
+
     protected function doBuildLinkUrl($pers, $path, $plugin, $action, $text)
     {
         if (is_numeric($path)) {
