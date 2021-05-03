@@ -28,11 +28,11 @@ namespace Personmanager\PersonManager\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use Personmanager\PersonManager\Domain\Model\Person;
 use Personmanager\PersonManager\Domain\Repository\BlacklistRepository;
 use Personmanager\PersonManager\Domain\Repository\CategoryRepository;
 use Personmanager\PersonManager\Domain\Repository\LogRepository;
 use Personmanager\PersonManager\Domain\Repository\PersonRepository;
-use Personmanager\PersonManager\Utility\FormUtility;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
@@ -190,7 +190,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation $newPerson
      * @return void
      */
-    public function newAction(\Personmanager\PersonManager\Domain\Model\Person $newPerson = NULL, $error = "")
+    public function newAction(Person $newPerson = NULL, $error = "")
     {
         $langhelp1 = LocalizationUtility::translate('labels.mrmrs', $this->extKey);
         $langhelp2 = LocalizationUtility::translate('labels.mr', $this->extKey);
@@ -215,16 +215,16 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\Person\NameValidator")
      * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\Person\EmailValidator")
      * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\Person\EmailAgainValidator")
-     * @param \Personmanager\PersonManager\Domain\Model\Person $newPerson
+     * @param Person $newPerson
      * @return void
      */
-    public function createAction(\Personmanager\PersonManager\Domain\Model\Person $newPerson)
+    public function createAction(Person $newPerson)
     {
         $hash = $newPerson->getEmail() . time();
         $newPerson->setToken(md5($hash));
 
         $oldMail = $this->personRepository->findOneByEmail($newPerson->getEmail());
-        if ($oldMail->isUnsubscribed() !== 0) { // renew
+        if ($oldMail instanceof Person && $oldMail->isUnsubscribed() !== 0) { // renew
             $this->personRepository->remove($oldMail);
         }
 
@@ -234,9 +234,9 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->insertLog($newPerson->getUid(), $newPerson->getEmail(), $newPerson->getFirstname(), $newPerson->getLastname(), "create", $langhelp, "", 1);
 
         if ($this->settings['options']["doubleOptIn"] == 1) {
-            $this->doBuildLinkMail(TRUE, $this->sitename, $this->settings['options']["options."]["path"], $newPerson);
+            $this->doBuildLinkMail(TRUE, $this->sitename, $this->settings['options']["path"], $newPerson);
         } else {
-            $this->doActivate($newPerson, $this->settings['options']["options."]["sendInMail"], $this->settings['options']["options."]["mail"], "log.createsuccess", "create");
+            $this->doActivate($newPerson, $this->settings['options']["sendInMail"], $this->settings['options']["mail"], "log.createsuccess", "create");
         }
     }
 
