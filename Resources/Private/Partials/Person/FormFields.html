@@ -1,150 +1,31 @@
-<f:render partial="Person/Salutation" arguments="{_all}"></f:render>
+<f:render partial="Person/Fields/Salutation" arguments="{_all}"></f:render>
 
-<f:if condition="{vars.titel} == '1'">
-	<label for="titel">
-		<f:translate key="tx_personmanager_domain_model_person.titel" />
-	</label><br />
-	<f:form.textfield class="form-control" property="titel" /><br />
-</f:if>
+<f:render partial="Person/Fields/Titel" arguments="{_all}"></f:render>
 
-<label for="firstname">
-	<f:translate key="tx_personmanager_domain_model_person.firstname" /> *
-</label><br />
-	<f:form.textfield class="form-control" property="firstname" required="required" /><br />
-	
-<label for="lastname">
-	<f:translate key="tx_personmanager_domain_model_person.lastname" /> *
-</label><br />
-	<f:form.textfield class="form-control" property="lastname" required="required" /><br />
+<f:render partial="Person/Fields/Firstname" arguments="{_all}"></f:render>
+<f:render partial="Person/Fields/Lastname" arguments="{_all}"></f:render>
+<f:render partial="Person/Fields/TitelNachg" arguments="{_all}"></f:render>
 
-<f:if condition="{vars.nachgtitel} == '1'">
-	<label for="nachgtitel">
-		<f:translate key="tx_personmanager_domain_model_person.nachgtitel" />
-	</label><br />
-	<f:form.textfield class="form-control" property="nachgtitel" /><br />
-</f:if>
+<f:render partial="Person/Fields/Email" arguments="{_all}"></f:render>
 
-<label for="email">
-	<f:translate key="tx_personmanager_domain_model_person.email" /> *
-</label><br />
-	<f:form.textfield class="form-control" property="email" required="required" /><br />
+<f:render partial="Person/Fields/Geb" arguments="{_all}"></f:render>
 
-<f:if condition="{vars.geb} == '1'">
-<label for="geb">
-	<f:translate key="tx_personmanager_domain_model_person.geb" />
-</label><br />
-	<f:form.textfield class="form-control" property="geb" /><br />
-</f:if>
-	
-<f:if condition="{vars.tel} == '1'">
-<label for="tel">
-	<f:translate key="tx_personmanager_domain_model_person.tel" />
-</label><br />
-	<f:form.textfield class="form-control" property="tel" /><br />
-</f:if>
-	
-<f:if condition="{vars.company} == '1'">
-<label for="company">
-	<f:translate key="tx_personmanager_domain_model_person.company" />
-</label><br />
-	<f:form.textfield class="form-control" property="company" /><br />
-</f:if>
-	
-<f:if condition="{vars.frtxt0} == '1'">
-<label for="frtxt0">
-	<f:translate key="tx_personmanager_domain_model_person.frtxt0" />
-</label><br />
-	<f:form.textfield class="form-control" property="frtxt0" /><br />
-</f:if>
-	
-<f:if condition="{vars.frtxt1} == '1'">
-<label for="frtxt1">
-	<f:translate key="tx_personmanager_domain_model_person.frtxt1" />
-</label><br />
-	<f:form.textfield class="form-control" property="frtxt1" /><br />
-</f:if>
+<f:render partial="Person/Fields/Tel" arguments="{_all}"></f:render>
 
-<f:if condition="{vars.frtxt2} == '1'">	
-<label for="frtxt2">
-	<f:translate key="tx_personmanager_domain_model_person.frtxt2" />
-</label><br />
-	<f:form.textfield class="form-control" property="frtxt2" /><br />
-</f:if>
+<f:render partial="Person/Fields/Company" arguments="{_all}"></f:render>
 
-<f:if condition="{vars.frtxt3} == '1'">	
-<label for="frtxt3">
-	<f:translate key="tx_personmanager_domain_model_person.frtxt3" />
-</label><br />
-	<f:form.textfield class="form-control" property="frtxt3" /><br />
-</f:if>
+<f:render partial="Person/Fields/Frtxt/Frtxt0" arguments="{_all}"></f:render>
+<f:render partial="Person/Fields/Frtxt/Frtxt1" arguments="{_all}"></f:render>
+<f:render partial="Person/Fields/Frtxt/Frtxt2" arguments="{_all}"></f:render>
+<f:render partial="Person/Fields/Frtxt/Frtxt3" arguments="{_all}"></f:render>
+<f:render partial="Person/Fields/Frtxt/Frtxt4" arguments="{_all}"></f:render>
+<f:render partial="Person/Fields/Frtxt/Frtxt5" arguments="{_all}"></f:render>
+<f:render partial="Person/Fields/Frtxt/Frtxt6" arguments="{_all}"></f:render>
+<f:render partial="Person/Fields/Frtxt/Frtxt7" arguments="{_all}"></f:render>
+<f:render partial="Person/Fields/Frtxt/Frtxt8" arguments="{_all}"></f:render>
+<f:render partial="Person/Fields/Frtxt/Frtxt9" arguments="{_all}"></f:render>
 
-<f:if condition="{vars.frtxt4} == '1'">	
-<label for="frtxt4">
-	<f:translate key="tx_personmanager_domain_model_person.frtxt4" />
-</label><br />
-	<f:form.textfield class="form-control" property="frtxt4" /><br />
-</f:if>
 
-<f:if condition="{vars.frtxt5} == '1'">	
-<label for="frtxt5">
-	<f:translate key="tx_personmanager_domain_model_person.frtxt5" />
-</label><br />
-	<f:form.textfield class="form-control" property="frtxt5" /><br />
-</f:if>
-	
-<f:if condition="{vars.frtxt6} == '1'">
-<label for="frtxt6">
-	<f:translate key="tx_personmanager_domain_model_person.frtxt6" />
-</label><br />
-	<f:form.textfield class="form-control" property="frtxt6" /><br />
-</f:if>
-
-<f:if condition="{vars.frtxt7} == '1'">	
-<label for="frtxt7">
-	<f:translate key="tx_personmanager_domain_model_person.frtxt7" />
-</label><br />
-	<f:form.textfield class="form-control" property="frtxt7" /><br />
-</f:if>
-	
-<f:if condition="{vars.frtxt8} == '1'">
-<label for="frtxt8">
-	<f:translate key="tx_personmanager_domain_model_person.frtxt8" />
-</label><br />
-	<f:form.textfield class="form-control" property="frtxt8" /><br />
-</f:if>
-	
-<f:if condition="{vars.frtxt9} == '1'">
-<label for="frtxt9">
-	<f:translate key="tx_personmanager_domain_model_person.frtxt9" />
-</label><br />
-	<f:form.textfield class="form-control" property="frtxt9" /><br />
-</f:if>
-
-<f:if condition="{vars.category} == '1'">
-	<f:if condition="{kats}">
-		<label for="category">
-			<f:translate key="tx_personmanager_domain_model_person.category" />
-		</label><br />
-		<f:form.select class="form-control" property="category" options="{kats}" optionValueField="uid" optionLabelField="name" /><br />
-	</f:if>
-</f:if><br />
-
-<f:if condition="{vars.terms} == '1'">
-	<div class="form-check checkbox">
-		<label class="form-check-label" for="terms">
-			<input class="form-check-input" type="checkbox" required="required" value="1" id="terms" name="tx_personmanager_personmanagerfront[terms]">
-			<f:if condition="{vars.termsPid}">
-				<f:then>
-					<f:format.htmlentitiesDecode>
-						<f:translate key="labels.terms" arguments="{0:'<a target=\'_blank\' href=\'{f:uri.typolink(parameter:vars.termsPid)}\'>{f:translate(key:\'labels.datapolicy\')}</a>'}" />
-					</f:format.htmlentitiesDecode>
-				</f:then>
-				<f:else>
-					<f:translate key="labels.terms" arguments="{0:'{f:translate(key:\'labels.datapolicy\')}'}" />
-				</f:else>
-			</f:if>
-		</label>
-	</div>
-</f:if>
+<f:render partial="Person/Fields/Categories" arguments="{_all}"></f:render>
 
 <f:render partial="Honeypot"></f:render>

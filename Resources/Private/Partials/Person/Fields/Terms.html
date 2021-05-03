@@ -1,0 +1,17 @@
+<f:if condition="{settings.variables.terms} == '1'">
+    <div class="form-check checkbox">
+        <label class="form-check-label" for="terms">
+			<input class="form-check-input" type="checkbox" required="required" value="1" id="terms" name="tx_personmanager_personmanagerfront[terms]">
+			<f:if condition="{settings.variables.termsPid}">
+				<f:then>
+					<f:format.htmlentitiesDecode>
+						<f:translate key="labels.terms" arguments="{0:'<a target=\'_blank\' href=\'{f:uri.typolink(parameter:settings.variables.termsPid)}\'>{f:translate(key:\'labels.datapolicy\')}</a>'}" />
+					</f:format.htmlentitiesDecode>
+				</f:then>
+				<f:else>
+					<f:translate key="labels.terms" arguments="{0:'{f:translate(key:\'labels.datapolicy\')}'}" />
+				</f:else>
+			</f:if>
+		</label>
+    </div>
+</f:if>

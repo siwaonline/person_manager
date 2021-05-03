@@ -41,10 +41,6 @@ plugin.tx_personmanager {
 			termsPid = {$plugin.tx_personmanager.variables.termsPid}
 		}
 	}
-	features {
-		# uncomment the following line to enable the new Property Mapper.
-		# rewrittenPropertyMapper = 1
-	}
 }
 
 plugin.tx_personmanager._CSS_DEFAULT_STYLE (

@@ -1,98 +1,235 @@
 {namespace siwa=Personmanager\PersonManager\ViewHelpers}
-<f:layout name="Default" />
-
-This Template is responsible for creating a table of domain objects.
-
-If you modify this template, do not forget to change the overwrite settings
-in /Configuration/ExtensionBuilder/settings.yaml:
-  Resources:
-    Private:
-      Templates:
-        List.html: keep
-
-Otherwise your changes will be overwritten the next time you save the extension in the extension builder
+<f:layout name="Default" /> This Template is responsible for creating a table of domain objects. If you modify this template, do not forget to change the overwrite settings in /Configuration/ExtensionBuilder/settings.yaml: Resources: Private: Templates: List.html: keep Otherwise
+your changes will be overwritten the next time you save the extension in the extension builder
 
 <f:section name="content">
-<h1><f:translate key="labels.plist" /></h1>
+    <h1>
+        <f:translate key="labels.plist" />
+    </h1>
 
-<f:flashMessages />
+    <f:flashMessages />
 
-	<siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{vars.storagePid}]=new" class="btn btn-success" title="{f:translate(key:'labels.newp')}"> &nbsp;<i class="fa fa-plus"></i> <f:translate key="labels.create" />&nbsp; </siwa:be.editLink>
-	<br/>
-	<p>{persons -> f:count()} <f:if condition="{persons -> f:count()} == 1"><f:then><f:translate key="labels.p1indb" /></f:then><f:else><f:translate key="labels.pindb" /></f:else></f:if></p>
-	<br/>
-	<f:form action="list" arguments="{order:order}">
-		<f:form.textfield name="search" value="{term}" class="form-control" />
-		<f:if condition="{term}">
-			<f:link.action action="list" arguments="{order:order}" title="{f:translate(key:'labels.clearsearch')}"><i class="fa fa-close"></i></f:link.action>
-		</f:if>
-		<f:form.submit value="{f:translate(key:'labels.search')}" class="btn btn-primary" />
-	</f:form>
-	<br/>
+    <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{settings.storagePid}]=new" class="btn btn-success" title="{f:translate(key:'labels.newp')}"> &nbsp;<i class="fa fa-plus"></i>
+        <f:translate key="labels.create" />&nbsp; </siwa:be.editLink>
+    <br/>
+    <p>{persons -> f:count()}
+        <f:if condition="{persons -> f:count()} == 1">
+            <f:then>
+                <f:translate key="labels.p1indb" /></f:then>
+            <f:else>
+                <f:translate key="labels.pindb" /></f:else>
+        </f:if>
+    </p>
+    <br/>
+    <f:form action="list" arguments="{order:order}">
+        <f:form.textfield name="search" value="{term}" class="form-control" />
+        <f:if condition="{term}">
+            <f:link.action action="list" arguments="{order:order}" title="{f:translate(key:'labels.clearsearch')}"><i class="fa fa-close"></i></f:link.action>
+        </f:if>
+        <f:form.submit value="{f:translate(key:'labels.search')}" class="btn btn-primary" />
+    </f:form>
+    <br/>
 
 
-	<f:be.widget.paginate objects="{persons}" as="pagpersons" configuration="{itemsPerPage: 100, insertAbove: 1, insertBelow: 0, maximumNumberOfLinks: 10}">
-		<table class="tx_personmanager table table-striped table-hover">
-			<tr>
-				<f:if condition="{vars.salutation} == '1'"><th><f:translate key="tx_personmanager_domain_model_person.salutation" /></th></f:if>
-				<f:if condition="{vars.titel} == '1'"><th><f:translate key="tx_personmanager_domain_model_person.titel" /></th></f:if>
-				<th>
-					<f:if condition="{order}!=1"><f:link.action action="list" arguments="{order:1,getterm:term}"><f:translate key="tx_personmanager_domain_model_person.firstname" /> <f:if condition="{order} == 2"><i class="fa fa-caret-up"></i></f:if></f:link.action></f:if>
-					<f:if condition="{order}==1"><f:link.action action="list" arguments="{order:2,getterm:term}"><f:translate key="tx_personmanager_domain_model_person.firstname" /> <i class="fa fa-caret-down"></i></f:link.action></f:if>
-				</th>
-				<th>
-					<f:if condition="{order}!=3"><f:link.action action="list" arguments="{order:3,getterm:term}"><f:translate key="tx_personmanager_domain_model_person.lastname" /> <f:if condition="{order} == 4"><i class="fa fa-caret-up"></i></f:if></f:link.action></f:if>
-					<f:if condition="{order}==3"><f:link.action action="list" arguments="{order:4,getterm:term}"><f:translate key="tx_personmanager_domain_model_person.lastname" /> <i class="fa fa-caret-down"></i></f:link.action></f:if>
-				</th>
-				<f:if condition="{vars.nachgtitel} == '1'"><th><f:translate key="tx_personmanager_domain_model_person.nachgtitel" /></th></f:if>
-				<th>
-					<f:if condition="{order}!=5"><f:link.action action="list" arguments="{order:5,getterm:term}"><f:translate key="tx_personmanager_domain_model_person.email" /> <f:if condition="{order} == 6"><i class="fa fa-caret-up"></i></f:if></f:link.action></f:if>
-					<f:if condition="{order}==5"><f:link.action action="list" arguments="{order:6,getterm:term}"><f:translate key="tx_personmanager_domain_model_person.email" /> <i class="fa fa-caret-down"></i></f:link.action></f:if>
-				</th>
-				<f:if condition="{vars.geb} == '1'"><th><f:translate key="tx_personmanager_domain_model_person.geb" /></th></f:if>
-				<f:if condition="{vars.tel} == '1'"><th><f:translate key="tx_personmanager_domain_model_person.tel" /></th></f:if>
-				<f:if condition="{vars.company} == '1'">
-					<th>
-						<f:if condition="{order}!=7"><f:link.action action="list" arguments="{order:7,getterm:term}"><f:translate key="tx_personmanager_domain_model_person.company" /> <f:if condition="{order} == 8"><i class="fa fa-caret-up"></i></f:if></f:link.action></f:if>
-						<f:if condition="{order}==7"><f:link.action action="list" arguments="{order:8,getterm:term}"><f:translate key="tx_personmanager_domain_model_person.company" /> <i class="fa fa-caret-down"></i></f:link.action></f:if>
-					</th>
-				</f:if>
-				<th><f:translate key="tx_personmanager_domain_model_person.crdate" /></th>
-				<th><f:translate key="tx_personmanager_domain_model_person.active" /></th>
-				<th><f:translate key="tx_personmanager_domain_model_person.confirmed" /></th>
-				<th><f:translate key="tx_personmanager_domain_model_person.unsubscribed" /></th>
-				<f:if condition="{vars.category} == '1'"><th><f:translate key="tx_personmanager_domain_model_person.category" /></th></f:if>
-			</tr>
+    <f:be.widget.paginate objects="{persons}" as="pagpersons" configuration="{itemsPerPage: 100, insertAbove: 1, insertBelow: 0, maximumNumberOfLinks: 10}">
+        <table class="tx_personmanager table table-striped table-hover">
+            <tr>
+                <f:if condition="{settings.variables.salutation} == '1'">
+                    <th>
+                        <f:translate key="tx_personmanager_domain_model_person.salutation" />
+                    </th>
+                </f:if>
+                <f:if condition="{settings.variables.titel} == '1'">
+                    <th>
+                        <f:translate key="tx_personmanager_domain_model_person.titel" />
+                    </th>
+                </f:if>
+                <th>
+                    <f:if condition="{order}!=1">
+                        <f:link.action action="list" arguments="{order:1,getterm:term}">
+                            <f:translate key="tx_personmanager_domain_model_person.firstname" />
+                            <f:if condition="{order} == 2"><i class="fa fa-caret-up"></i></f:if>
+                        </f:link.action>
+                    </f:if>
+                    <f:if condition="{order}==1">
+                        <f:link.action action="list" arguments="{order:2,getterm:term}">
+                            <f:translate key="tx_personmanager_domain_model_person.firstname" /> <i class="fa fa-caret-down"></i></f:link.action>
+                    </f:if>
+                </th>
+                <th>
+                    <f:if condition="{order}!=3">
+                        <f:link.action action="list" arguments="{order:3,getterm:term}">
+                            <f:translate key="tx_personmanager_domain_model_person.lastname" />
+                            <f:if condition="{order} == 4"><i class="fa fa-caret-up"></i></f:if>
+                        </f:link.action>
+                    </f:if>
+                    <f:if condition="{order}==3">
+                        <f:link.action action="list" arguments="{order:4,getterm:term}">
+                            <f:translate key="tx_personmanager_domain_model_person.lastname" /> <i class="fa fa-caret-down"></i></f:link.action>
+                    </f:if>
+                </th>
+                <f:if condition="{settings.variables.nachgtitel} == '1'">
+                    <th>
+                        <f:translate key="tx_personmanager_domain_model_person.nachgtitel" />
+                    </th>
+                </f:if>
+                <th>
+                    <f:if condition="{order}!=5">
+                        <f:link.action action="list" arguments="{order:5,getterm:term}">
+                            <f:translate key="tx_personmanager_domain_model_person.email" />
+                            <f:if condition="{order} == 6"><i class="fa fa-caret-up"></i></f:if>
+                        </f:link.action>
+                    </f:if>
+                    <f:if condition="{order}==5">
+                        <f:link.action action="list" arguments="{order:6,getterm:term}">
+                            <f:translate key="tx_personmanager_domain_model_person.email" /> <i class="fa fa-caret-down"></i></f:link.action>
+                    </f:if>
+                </th>
+                <f:if condition="{settings.variables.geb} == '1'">
+                    <th>
+                        <f:translate key="tx_personmanager_domain_model_person.geb" />
+                    </th>
+                </f:if>
+                <f:if condition="{settings.variables.tel} == '1'">
+                    <th>
+                        <f:translate key="tx_personmanager_domain_model_person.tel" />
+                    </th>
+                </f:if>
+                <f:if condition="{settings.variables.company} == '1'">
+                    <th>
+                        <f:if condition="{order}!=7">
+                            <f:link.action action="list" arguments="{order:7,getterm:term}">
+                                <f:translate key="tx_personmanager_domain_model_person.company" />
+                                <f:if condition="{order} == 8"><i class="fa fa-caret-up"></i></f:if>
+                            </f:link.action>
+                        </f:if>
+                        <f:if condition="{order}==7">
+                            <f:link.action action="list" arguments="{order:8,getterm:term}">
+                                <f:translate key="tx_personmanager_domain_model_person.company" /> <i class="fa fa-caret-down"></i></f:link.action>
+                        </f:if>
+                    </th>
+                </f:if>
+                <th>
+                    <f:translate key="tx_personmanager_domain_model_person.crdate" />
+                </th>
+                <th>
+                    <f:translate key="tx_personmanager_domain_model_person.active" />
+                </th>
+                <th>
+                    <f:translate key="tx_personmanager_domain_model_person.confirmed" />
+                </th>
+                <th>
+                    <f:translate key="tx_personmanager_domain_model_person.unsubscribed" />
+                </th>
+                <f:if condition="{settings.variables.category} == '1'">
+                    <th>
+                        <f:translate key="tx_personmanager_domain_model_person.category" />
+                    </th>
+                </f:if>
+            </tr>
 
-			<f:for each="{pagpersons}" as="person">
-				<tr>
-					<f:if condition="{vars.salutation} == '1'">
-						<td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
-							<f:if condition="{person.salutation} == 0"><f:translate key="labels.mrmrs" /></f:if>
-							<f:if condition="{person.salutation} == 1"><f:translate key="labels.mr" /></f:if>
-							<f:if condition="{person.salutation} == 2"><f:translate key="labels.mrs" /></f:if>
-						</siwa:be.editLink></td>
-					</f:if>
-					<f:if condition="{vars.titel} == '1'"><td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.titel}</siwa:be.editLink></td></f:if>
-					<td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.firstname}</siwa:be.editLink></td>
-					<td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.lastname}</siwa:be.editLink></td>
-					<f:if condition="{vars.nachgtitel} == '1'"><td>{person.nachgtitel}</td></f:if>
-					<td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.email}</siwa:be.editLink></td>
-					<f:if condition="{vars.geb} == '1'"><td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.geb}</siwa:be.editLink></td></f:if>
-					<f:if condition="{vars.tel} == '1'"><td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.tel}</siwa:be.editLink></td></f:if>
-					<f:if condition="{vars.company} == '1'"><td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.company}</siwa:be.editLink></td></f:if>
-					<td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit"><f:format.date format="{f:translate(key:'dateFormat')}">{person.crdate}</f:format.date></siwa:be.editLink></td>
-					<f:if condition="{person.active} == 0"><td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit"><f:translate key="labels.no" /></siwa:be.editLink></td></f:if>
-					<f:if condition="{person.active} == 1"><td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit"><f:translate key="labels.yes" /></siwa:be.editLink></td></f:if>
-					<f:if condition="{person.confirmed} == 0"><td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit"><f:translate key="labels.no" /></siwa:be.editLink></td></f:if>
-					<f:if condition="{person.confirmed} == 1"><td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit"><f:translate key="labels.yes" /></siwa:be.editLink></td></f:if>
-					<f:if condition="{person.unsubscribed} == 0"><td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit"><f:translate key="labels.no" /></siwa:be.editLink></td></f:if>
-					<f:if condition="{person.unsubscribed} == 1"><td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit"><f:translate key="labels.yes" /></siwa:be.editLink></td></f:if>
-					<f:if condition="{vars.category} == '1'"><td><siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.category.name}</siwa:be.editLink></td></f:if>
-				</tr>
-			</f:for>
+            <f:for each="{pagpersons}" as="person">
+                <tr>
+                    <f:if condition="{settings.variables.salutation} == '1'">
+                        <td>
+                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                                <f:if condition="{person.salutation} == 0">
+                                    <f:translate key="labels.mrmrs" /></f:if>
+                                <f:if condition="{person.salutation} == 1">
+                                    <f:translate key="labels.mr" /></f:if>
+                                <f:if condition="{person.salutation} == 2">
+                                    <f:translate key="labels.mrs" /></f:if>
+                            </siwa:be.editLink>
+                        </td>
+                    </f:if>
+                    <f:if condition="{settings.variables.titel} == '1'">
+                        <td>
+                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.titel}</siwa:be.editLink>
+                        </td>
+                    </f:if>
+                    <td>
+                        <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.firstname}</siwa:be.editLink>
+                    </td>
+                    <td>
+                        <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.lastname}</siwa:be.editLink>
+                    </td>
+                    <f:if condition="{settings.variables.nachgtitel} == '1'">
+                        <td>{person.nachgtitel}</td>
+                    </f:if>
+                    <td>
+                        <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.email}</siwa:be.editLink>
+                    </td>
+                    <f:if condition="{settings.variables.geb} == '1'">
+                        <td>
+                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.geb}</siwa:be.editLink>
+                        </td>
+                    </f:if>
+                    <f:if condition="{settings.variables.tel} == '1'">
+                        <td>
+                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.tel}</siwa:be.editLink>
+                        </td>
+                    </f:if>
+                    <f:if condition="{settings.variables.company} == '1'">
+                        <td>
+                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.company}</siwa:be.editLink>
+                        </td>
+                    </f:if>
+                    <td>
+                        <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                            <f:format.date format="{f:translate(key:'dateFormat')}">{person.crdate}</f:format.date>
+                        </siwa:be.editLink>
+                    </td>
+                    <f:if condition="{person.active} == 0">
+                        <td>
+                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                                <f:translate key="labels.no" />
+                            </siwa:be.editLink>
+                        </td>
+                    </f:if>
+                    <f:if condition="{person.active} == 1">
+                        <td>
+                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                                <f:translate key="labels.yes" />
+                            </siwa:be.editLink>
+                        </td>
+                    </f:if>
+                    <f:if condition="{person.confirmed} == 0">
+                        <td>
+                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                                <f:translate key="labels.no" />
+                            </siwa:be.editLink>
+                        </td>
+                    </f:if>
+                    <f:if condition="{person.confirmed} == 1">
+                        <td>
+                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                                <f:translate key="labels.yes" />
+                            </siwa:be.editLink>
+                        </td>
+                    </f:if>
+                    <f:if condition="{person.unsubscribed} == 0">
+                        <td>
+                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                                <f:translate key="labels.no" />
+                            </siwa:be.editLink>
+                        </td>
+                    </f:if>
+                    <f:if condition="{person.unsubscribed} == 1">
+                        <td>
+                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                                <f:translate key="labels.yes" />
+                            </siwa:be.editLink>
+                        </td>
+                    </f:if>
+                    <f:if condition="{settings.variables.category} == '1'">
+                        <td>
+                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.category.name}</siwa:be.editLink>
+                        </td>
+                    </f:if>
+                </tr>
+            </f:for>
 
-		</table>
-	</f:be.widget.paginate>
+        </table>
+    </f:be.widget.paginate>
 
 </f:section>
