@@ -31,27 +31,23 @@ namespace Personmanager\PersonManager\Controller;
 use Personmanager\PersonManager\Domain\Model\Person;
 use Personmanager\PersonManager\Domain\Repository\BlacklistRepository;
 use Personmanager\PersonManager\Domain\Repository\CategoryRepository;
-use Personmanager\PersonManager\Domain\Repository\LogRepository;
 use Personmanager\PersonManager\Domain\Repository\PersonRepository;
+use Personmanager\PersonManager\Service\LogService;
+use Personmanager\PersonManager\Service\MailService;
+use Personmanager\PersonManager\Service\PersonService;
 use Symfony\Component\Mime\Address;
 use TYPO3\CMS\Core\Mail\FluidEmail;
 use TYPO3\CMS\Core\Mail\Mailer;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 /**
  * PersonController
  */
 class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
 {
-
-    /**
-     * personRepository
-     *
-     * @var PersonRepository
-     */
-    protected $personRepository = NULL;
 
     /**
      * categoryRepository
@@ -61,19 +57,37 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     protected $categoryRepository = NULL;
 
     /**
-     * logRepository
+     * personRepository
      *
-     * @var LogRepository
+     * @var PersonRepository
      */
-    protected $logRepository = NULL;
+    protected $personRepository = NULL;
 
     /**
-     * blacklistRepository
+     * logService
      *
-     * @var BlacklistRepository
+     * @var LogService
      */
-    protected $blacklistRepository = NULL;
+    protected $logService = NULL;
 
+    /**
+     * personService
+     *
+     * @var PersonService
+     */
+    protected $personService = NULL;
+
+    /**
+     * mailService
+     *
+     * @var MailService
+     */
+    protected $mailService = NULL;
+
+    /**
+     * 
+     * @var PersistenceManager
+     */
     protected $persistenceManager = NULL;
 
     protected $extKey = 'person_manager';
@@ -91,11 +105,27 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     public $flexunsubscribe = "";
 
     /**
-     * @param PersonRepository $personRepository
+     * @param LogService $logService
      */
-    public function injectPersonRepository(PersonRepository $personRepository)
+    public function injectLogService(LogService $logService)
     {
-        $this->personRepository = $personRepository;
+        $this->logService = $logService;
+    }
+
+    /**
+     * @param PersonService $personService
+     */
+    public function injectPersonService(PersonService $personService)
+    {
+        $this->personService = $personService;
+    }
+
+    /**
+     * @param MailService $mailService
+     */
+    public function injectMailService(MailService $mailService)
+    {
+        $this->mailService = $mailService;
     }
     /**
      * @param CategoryRepository $categoryRepository
@@ -104,31 +134,31 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     {
         $this->categoryRepository = $categoryRepository;
     }
+
     /**
-     * @param CategoryRepository $logRepository
+     * @param PersonService $personService
      */
-    public function injectLogRepository(LogRepository $logRepository)
+    public function injectPersonRepository(PersonRepository $personRepository)
     {
-        $this->logRepository = $logRepository;
+        $this->personRepository = $personRepository;
     }
+
     /**
-     * @param BlacklistRepository $blacklistRepository
+     * @param PersistenceManager $persistenceManager
      */
-    public function injectBlacklistRepository(BlacklistRepository $blacklistRepository)
+    public function injectPersistenceManager(PersistenceManager $persistenceManager)
     {
-        $this->blacklistRepository = $blacklistRepository;
+        $this->persistenceManager = $persistenceManager;
     }
 
     public function initializeAction()
     {
-        $this->persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
-
-        $langhelp = LocalizationUtility::translate('error.notext', $this->extKey);
+        $this->personService->setSettings($this->settings);
 
         $this->signature = $this->configurationManager->getContentObject()->parseFunc($this->settings['flexsignature'], array(), '< lib.parseFunc_RTE');
         $this->sitename = $this->settings['flexsitename'];
         if ($this->sitename == NULL || $this->sitename == "") {
-            $this->sitename = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["site"];
+            $this->sitename = $this->settings["options"]["site"];
         }
 
         $this->flexcheckmail = $this->settings['flexcheckmail'];
@@ -201,9 +231,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $arr = array(0 => $langhelp1, 1 => $langhelp2, 2 => $langhelp3);
         $this->view->assign('anrarr', $arr);
 
-        $vars = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["variables."];
         $this->view->assign('newPerson', $newPerson);
-        $this->view->assign('vars', $vars);
         $this->view->assign('error', $error);
 
         $kats = $this->categoryRepository->findAll();
@@ -234,12 +262,14 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->personRepository->add($newPerson);
         $this->persistenceManager->persistAll();
         $langhelp = LocalizationUtility::translate('log.create', $this->extKey);
-        $this->insertLog($newPerson->getUid(), $newPerson->getEmail(), $newPerson->getFirstname(), $newPerson->getLastname(), "create", $langhelp, "", 1);
+        $this->logService->insertLog($newPerson->getUid(), $newPerson->getEmail(), $newPerson->getFirstname(), $newPerson->getLastname(), "create", $langhelp, "", 1);
 
         if ($this->settings['options']["doubleOptIn"] == 1) {
-            $this->doBuildLinkMail(TRUE, $this->sitename, $this->settings['options']["path"], $newPerson);
+            $this->mailService->doBuildLinkMail(TRUE, $this->sitename, $this->settings['options']["path"], $newPerson);
+            $this->forward('text', null, null, array('text' => $this->flexcheckmail));
         } else {
-            $this->doActivate($newPerson, $this->settings['options']["sendInMail"], $this->settings['options']["mail"], "log.createsuccess", "create");
+            $this->personService->doActivate($newPerson, $this->settings['options']["sendInMail"], $this->settings['options']["mail"], "log.createsuccess", "create");
+            $this->forward('text', null, null, array('text' => $this->flexconfirm));
         }
     }
 
@@ -250,42 +280,24 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      */
     public function activateAction()
     {
-        $sendInMail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["sendInMail"];
-        $mail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["mail"];
         $vars = $this->request->getArguments();
         $pers = $this->personRepository->findOneByToken($vars['token']);
         if ($pers != NULL) {
-            $this->doActivate($pers, $sendInMail, $mail, "log.activate", "activate");
+            $this->personService->doActivate($pers, $this->settings["options"]["sendInMail"], $this->settings["options"]["mail"], "log.activate", "activate");
+            $this->forward('text', null, null, array('text' => $this->flexconfirm));
         } else {
-            $langhelp = LocalizationUtility::translate('log.activate', $this->extKey);
-            $langhelp2 = LocalizationUtility::translate('log.activatefail', $this->extKey);
-            $this->insertLog(0, "-", "-", "-", "activate", "$langhelp", "$langhelp2", 0);
+            $this->logService->insertLog(
+                0,
+                "-",
+                 "-",
+                 "-",
+                 "activate",
+                 LocalizationUtility::translate('log.activate', $this->extKey),
+                 LocalizationUtility::translate('log.activatefail', $this->extKey),
+                 0
+            );
             $this->forward('text', null, null, array('text' => $this->flexerr));
         }
-    }
-
-    protected function doActivate($pers, $sendInMail, $to, $msgKey, $log)
-    {
-        $pers->setConfirmed(TRUE);
-        $pers->setActive(TRUE);
-        $this->personRepository->update($pers);
-        $this->persistenceManager->persistAll();
-
-        if ($sendInMail == 1) {
-            $mail = GeneralUtility::makeInstance(FluidEmail::class);
-            $mail
-                ->subject(LocalizationUtility::translate('mail.registration', $this->extKey). " " . $pers->getEmail())
-                ->setTemplate('DoActivate')
-                ->assign('user', $pers)
-                ->assign('msgKey', $msgKey)
-                ->to($to);
-        
-            $this->_sendMail($mail);
-        }
-
-        $langhelp = LocalizationUtility::translate($msgKey, $this->extKey);
-        $this->insertLog($pers->getUid(), $pers->getEmail(), $pers->getFirstname(), $pers->getLastname(), $log, "$langhelp", "", 1);
-        $this->forward('text', null, null, array('text' => $this->flexconfirm));
     }
 
     /**
@@ -309,8 +321,9 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      */
     public function leaveAction($mail = "")
     {
+        // Don't take the easy route - do it the hard way
         if ($mail == "") {
-            $mail = trim($this->request->getArguments()["mail"]);
+            $mail = trim($this->request->getArguments()["email"]);
         }
         if ($mail == "") {
             $mail = trim($_POST["mail"]);
@@ -318,31 +331,31 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         $pers = $this->personRepository->findOneByEmail($mail);
 
-        $opt = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["doubleOptOut"];
-        $path = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["pathout"];
-        $site = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["site"];
-        $sendOutMail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["sendOutMail"];
-        $mail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["mail"];
-        //$site = $this->sitename;
+        $opt = $this->settings["options"]["doubleOptOut"];
+        $path = $this->settings["options"]["pathout"];
+        $site = $this->settings["options"]["site"];
+        $sendOutMail = $this->settings["options"]["sendOutMail"];
+        $mail = $this->settings["options"]["mail"];
 
         if ($pers != NULL) {
             if ($pers->isUnsubscribed() == 0) {
                 if ($opt == 1) {
-                    $this->doBuildLinkMail(FALSE, $site, $path, $pers);
+                    $this->mailService->doBuildLinkMail(FALSE, $site, $path, $pers);
+                    $this->forward('text', null, null, array('text' => $this->flexcheckmailleave));
                 } else {
-                    $this->doUnsubscribe($pers, $sendOutMail, $mail, 'log.leavesuccess', 'leave');
+                    $this->personService->doUnsubscribe($pers, $sendOutMail, $mail, 'log.leavesuccess', 'leave');
+                    $this->forward('text', null, null, array('text' => $this->flexunsubscribe));
                 }
             } else {
-                //$this->redirect('isunsubscribed');
                 $langhelp = LocalizationUtility::translate('log.leavewant', $this->extKey);
                 $langhelp2 = LocalizationUtility::translate('log.leavealready', $this->extKey);
-                $this->insertLog($pers->getUid(), $pers->getEmail(), $pers->getFirstname(), $pers->getLastname(), "leave", "$langhelp", "$langhelp2", 0);
+                $this->logService->insertLog($pers->getUid(), $pers->getEmail(), $pers->getFirstname(), $pers->getLastname(), "leave", "$langhelp", "$langhelp2", 0);
                 $this->forward('text', null, null, array('text' => $this->flexisunsubscribed));
             }
         }
         $langhelp = LocalizationUtility::translate('log.leavewant', $this->extKey);
         $langhelp2 = LocalizationUtility::translate('log.leavenot', $this->extKey);
-        $this->insertLog(0, $mail, "-", "-", "leave", "$langhelp", "$langhelp2", 0);
+        $this->logService->insertLog(0, $mail, "-", "-", "leave", "$langhelp", "$langhelp2", 0);
         $this->forward('text', null, null, array('text' => $this->flexleave));
     }
 
@@ -353,111 +366,16 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
      */
     public function unsubscribeAction()
     {
-        $sendOutMail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["sendOutMail"];
-        $mail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["mail"];
+        $sendOutMail = $this->settings["options"]["sendOutMail"];
+        $mail = $this->settings["options"]["mail"];
         $vars = $this->request->getArguments();
         $pers = $this->personRepository->findOneByToken($vars['token']);
         if ($pers != NULL) {
-            $this->doUnsubscribe($pers, $sendOutMail, $mail, 'log.unsubscribe', 'unsubscribe');
+            $this->personService->doUnsubscribe($pers, $sendOutMail, $mail, 'log.unsubscribe', 'unsubscribe');
+            $this->forward('text', null, null, array('text' => $this->flexunsubscribe));
         } else {
             $this->forward('leave', null, null, array('mail' => ""));
         }
-    }
-
-    protected function doUnsubscribe($pers, $sendOutMail, $to, $msgKey, $log)
-    {
-        $pers->setUnsubscribed(TRUE);
-        $this->personRepository->update($pers);
-        $this->persistenceManager->persistAll();
-
-        if ($sendOutMail == 1) {
-            $mail = GeneralUtility::makeInstance(FluidEmail::class);
-            $mail
-                ->subject(LocalizationUtility::translate('mail.deregistration', $this->extKey) . " " . $pers->getEmail())
-                ->setTemplate('DoUnsubscribe')
-                ->assign('user', $pers)
-                ->assign('msgKey', $msgKey)
-                ->to($to);
-        
-            $this->_sendMail($mail);
-        }
-
-        $langhelp = LocalizationUtility::translate($msgKey, $this->extKey);
-        $this->insertLog($pers->getUid(), $pers->getEmail(), $pers->getFirstname(), $pers->getLastname(), $log, "$langhelp", "", 1);
-        $this->forward('text', null, null, array('text' => $this->flexunsubscribe));
-    }
-
-    protected function doBuildLinkMail($new, $site, $path, $pers){
-        debug($new);
-        debug($site);
-        debug($path);
-        debug($pers);
-        // $mail = GeneralUtility::makeInstance(FluidEmail::class);
-        // $mail
-        //     ->subject($site . ": " . LocalizationUtility::translate('mail.confirmdata', $this->extKey))
-        //     ->setTemplate('DoBuildLinkMail')
-        //     ->assign('user', $pers)
-        //     ->assign('signature', $this->signature)
-        //     ->to($pers->getEmail());
-    
-        // $this->_sendMail($mail);
-
-
-        $langhelp = LocalizationUtility::translate($new ? 'log.createmail' : 'log.leavemail', $this->extKey);
-        $this->insertLog($pers->getUid(), $pers->getEmail(), $pers->getFirstname(), $pers->getLastname(), $new ? "create" : "leave", "$langhelp", "", 1);
-
-        $this->forward('text', null, null, array('text' => $new ? $this->flexcheckmail : $this->flexcheckmailleave));
-    }
-
-    protected function doBuildLinkUrl($pers, $path, $plugin, $action, $text)
-    {
-        if (is_numeric($path)) {
-            $this->uriBuilder->reset();
-            $this->uriBuilder->setArguments(array(
-                $plugin => array(
-                    'action' => $action,
-                    'controller' => 'Person',
-                    'token' => $pers->getToken()
-                ),
-                'id' => $path
-            ));
-            $this->uriBuilder->setCreateAbsoluteUri(1);
-            if ($_SERVER['HTTPS'] == "on") {
-                $path = "https://" . $_SERVER['HTTP_HOST'] . "/" . $this->uriBuilder->buildFrontendUri();
-            } else {
-                $path = "http://" . $_SERVER['HTTP_HOST'] . "/" . $this->uriBuilder->buildFrontendUri();
-            }
-            return "<a href='" . $path . "'>$text</a><br/>";
-        } else {
-            $checkpath = substr($path, -1);
-            if ($checkpath != "?" && $checkpath != "&") {
-                if (strpos($path, '?') !== false) {
-                    $path .= "&";
-                } else {
-                    $path .= "?";
-                }
-            }
-            return "<a href='" . $path . $plugin . urlencode("[action]") . "=" . $action . "&" . $plugin . urlencode("[controller]") . "=Person&" . $plugin . urlencode("[token]") . "=" . $pers->getToken() . "&no_cache=1'>$text</a><br/>";
-        }
-    }
-
-    protected function sendMail($empfaenger, $text, $subject)
-    {
-        $site = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["site"];
-        $mail = $GLOBALS['TSFE']->tmpl->setup["plugin."]["tx_personmanager."]["options."]["mail"];
-
-        $message = (new \TYPO3\CMS\Core\Mail\MailMessage())
-            ->setFrom(array($mail => $site))
-            ->setTo(array($empfaenger => $empfaenger))
-            ->setSubject("=?utf-8?b?" . base64_encode($subject) . "?=")
-            ->html($text);
-        $message->send();
-    }
-
-    private function _sendMail(FluidEmail $mail){
-        $mail->from(new Address($this->settings["options"]["mail"], $this->settings["options"]["site"]));
-
-        GeneralUtility::makeInstance(Mailer::class)->send($mail);
     }
 
     /**
@@ -469,22 +387,5 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     public function textAction($text)
     {
         $this->view->assign('message', $text);
-    }
-
-    public function insertLog($person = 0, $email = "", $fname = "", $lname = "", $action = "", $detail = "", $fehler = "", $success = 0)
-    {
-        $newLog = new \Personmanager\PersonManager\Domain\Model\Log();
-
-        $newLog->setPerson($person);
-        $newLog->setEmail($email);
-        $newLog->setFirstname($fname);
-        $newLog->setLastname($lname);
-        $newLog->setAction($action);
-        $newLog->setDetail($detail);
-        $newLog->setFehler($fehler);
-        $newLog->setSuccess($success);
-
-        $this->logRepository->add($newLog);
-        $this->persistenceManager->persistAll();
     }
 }

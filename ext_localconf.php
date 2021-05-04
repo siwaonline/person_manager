@@ -4,7 +4,7 @@ if (!defined('TYPO3_MODE')) {
 }
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-	'Personmanager.person_manager',
+	'Personmanager.PersonManager',
 	'Personmanagerfront',
 	[
 		'Person' => 'new, create, activate, unsubscribe,isunsubscribed,text',
@@ -18,7 +18,7 @@ if (!defined('TYPO3_MODE')) {
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-	'Personmanager.person_manager',
+	'Personmanager.PersonManager',
 	'Personmanagerunsub',
 	[
 		'Person' => 'newLeave, leave, unsubscribe, text',
@@ -32,7 +32,7 @@ if (!defined('TYPO3_MODE')) {
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-	'Personmanager.person_manager',
+	'Personmanager.PersonManager',
 	'Personmanagershort',
 	[
 		'Person' => 'newShort',

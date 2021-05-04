@@ -1,11 +1,43 @@
-$langhelp = LocalizationUtility::translate($new ? 'mail.confirmthx' : 'mail.leavethx', $this->extKey);
-$mailcontent = sprintf("$langhelp", $site) . "<br/><br/>";
-$langhelp = LocalizationUtility::translate('mail.confirmlink', $this->extKey);
-$mailcontent .= "$langhelp<br/><br/>";
-
-$langhelp = LocalizationUtility::translate($new ? 'mail.confirmreg' : 'mail.confirmleave', $this->extKey);
-$mailcontent .= $this->doBuildLinkUrl($pers, $path, $new ? 'tx_personmanager_personmanagerfront' : 'tx_personmanager_personmanagerunsub', $new ? 'activate' : 'unsubscribe', $langhelp);
-
-$langhelp = LocalizationUtility::translate('mail.ifnot', $this->extKey);
-$mailcontent .= "<br/>$langhelp";
-$mailcontent .= "<br/><br/>" . $this->getSignature();
+<f:if condition="{new}">
+    <f:then>
+        <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmthx" arguments="{0: sitename}"/>
+    </f:then>
+    <f:else>
+        <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.leavethx" arguments="{0: sitename}"/>
+    </f:else>
+</f:if>
+<br/><br/>
+<f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmlink"/>
+<br/><br/>
+<f:if condition="{new}">
+    <f:then>
+        <f:link.action
+        action="activate"
+        controller="Person"
+        pluginName="Personmanagerfront"
+        extensionName="PersonManager"
+        arguments="{token: link.token}"
+        pageUid="{link.pageUid}"
+        absolute="1"
+        >
+            <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmreg"/>
+        </f:link.action>
+    </f:then>
+    <f:else>
+        <f:link.action
+        action="unsubscribe"
+        controller="Person"
+        pluginName="Personmanagerunsub"
+        extensionName="PersonManager"
+        arguments="{token: link.token}"
+        pageUid="{link.pageUid}"
+        absolute="1"
+        >
+            <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmleav"/>    
+        </f:link.action>
+    </f:else>
+</f:if>
+<br/>
+<f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.ifnot"></f:translate>
+<br/><br/>
+<f:format.html>{signature}</f:format.html>

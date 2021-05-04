@@ -1,0 +1,23 @@
+<f:if condition="{new}">
+    <f:then>
+        <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmthx" arguments="{0: sitename}"/>
+    </f:then>
+    <f:else>
+        <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.leavethx" arguments="{0: sitename}"/>
+    </f:else>
+</f:if>
+<f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmlink"/>
+<f:if condition="{new}">
+    <f:then>
+<f:uri.action action="activate" controller="Person" pluginName="Personmanagerfront" extensionName="PersonManager" arguments="{token: link.token}" pageUid="{link.pageUid}" absolute="1">
+<f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmreg" arguments="{0: typo3.sitename}"/>
+</f:uri.action>
+    </f:then>
+    <f:else>
+<f:uri.action action="unsubscribe" controller="Person" pluginName="Personmanagerunsub" extensionName="PersonManager" arguments="{token: link.token}" pageUid="{link.pageUid}" absolute="1">
+<f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmleav" arguments="{0: typo3.sitename}"/>    
+</f:uri.action>
+    </f:else>
+</f:if>
+<f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.ifnot"></f:translate>
+<f:format.stripTags>{signature}</f:format.stripTags>
