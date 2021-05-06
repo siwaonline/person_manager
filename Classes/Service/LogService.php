@@ -4,6 +4,7 @@ namespace Personmanager\PersonManager\Service;
 
 use Personmanager\PersonManager\Domain\Repository\LogRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 class LogService
@@ -34,7 +35,19 @@ class LogService
         $this->logRepository = $logRepository;
     }
 
-
+    /**
+     * 
+     * @param int $person 
+     * @param string $email 
+     * @param string $fname 
+     * @param string $lname 
+     * @param string $action 
+     * @param string $detail 
+     * @param string $fehler 
+     * @param int $success 
+     * @return void 
+     * @throws IllegalObjectTypeException 
+     */
     public function insertLog($person = 0, $email = "", $fname = "", $lname = "", $action = "", $detail = "", $fehler = "", $success = 0)
     {
         $newLog = new \Personmanager\PersonManager\Domain\Model\Log();

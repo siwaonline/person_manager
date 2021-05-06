@@ -115,8 +115,16 @@ class PersonService
             $this->mailService->doBuildActivateMail($pers, $msgKey, $to);
         }
 
-        $langhelp = LocalizationUtility::translate($msgKey, $this->extKey);
-        $this->logService->insertLog($pers->getUid(), $pers->getEmail(), $pers->getFirstname(), $pers->getLastname(), $log, "$langhelp", "", 1);
+        $this->logService->insertLog(
+            $pers->getUid(),
+            $pers->getEmail(),
+            $pers->getFirstname(),
+            $pers->getLastname(),
+            $log,
+            LocalizationUtility::translate($msgKey, $this->extKey),
+            "",
+            1
+        );
     }
 
     /**
@@ -140,7 +148,15 @@ class PersonService
             $this->mailService->doBuildUnsubscribeMail($pers, $msgKey, $to);
         }
 
-        $langhelp = LocalizationUtility::translate($msgKey, $this->extKey);
-        $this->logService->insertLog($pers->getUid(), $pers->getEmail(), $pers->getFirstname(), $pers->getLastname(), $log, $langhelp, "", 1);
+        $this->logService->insertLog(
+            $pers->getUid(),
+            $pers->getEmail(),
+            $pers->getFirstname(),
+            $pers->getLastname(),
+            $log,
+            LocalizationUtility::translate($msgKey, $this->extKey),
+            "",
+            1
+        );
     }
 }

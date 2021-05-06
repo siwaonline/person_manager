@@ -7,30 +7,12 @@
         <f:form.select.option value="">
             <f:translate key="labels.choose" />
         </f:form.select.option>
-        <f:if condition="{anr}==1">
-            <f:then>
-                <f:form.select.option value="1" selected="true">
-                    <f:translate key="labels.mr" />
-                </f:form.select.option>
-            </f:then>
-            <f:else>
-                <f:form.select.option value="1">
-                    <f:translate key="labels.mr" />
-                </f:form.select.option>
-            </f:else>
-        </f:if>
-        <f:if condition="{anr}==2">
-            <f:then>
-                <f:form.select.option value="2" selected="true">
-                    <f:translate key="labels.mrs" />
-                </f:form.select.option>
-            </f:then>
-            <f:else>
-                <f:form.select.option value="2">
-                    <f:translate key="labels.mrs" />
-                </f:form.select.option>
-            </f:else>
-        </f:if>
+        <f:form.select.option value="1" selected="{f:if(condition: '{anr} == 1', then: '1', else: '0')}">
+            <f:translate key="labels.mr" />
+        </f:form.select.option>
+        <f:form.select.option value="2" selected="{f:if(condition: '{anr} == 2', then: '1', else: '0')}">
+            <f:translate key="labels.mrs" />
+        </f:form.select.option>
     </f:form.select>
     <br />
 </f:if>

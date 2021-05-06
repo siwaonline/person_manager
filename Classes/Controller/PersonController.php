@@ -241,23 +241,18 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     /**
      * action create
      *
+     * @param Person $newPerson
      * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\HoneyPotValidator")
      * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\TermsValidator")
      * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\Person\NameValidator")
      * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\Person\EmailValidator")
      * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\Person\EmailAgainValidator")
-     * @param Person $newPerson
      * @return void
      */
     public function createAction(Person $newPerson)
     {
         $hash = $newPerson->getEmail() . time();
         $newPerson->setToken(md5($hash));
-
-        $oldMail = $this->personRepository->findOneByEmail($newPerson->getEmail());
-        if ($oldMail instanceof Person && $oldMail->isUnsubscribed() !== 0) { // renew
-            $this->personRepository->remove($oldMail);
-        }
 
         $this->personRepository->add($newPerson);
         $this->persistenceManager->persistAll();
@@ -323,7 +318,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     {
         // Don't take the easy route - do it the hard way
         if ($mail == "") {
-            $mail = trim($this->request->getArguments()["email"]);
+            $mail = trim($this->request->getArguments()["mail"]);
         }
         if ($mail == "") {
             $mail = trim($_POST["mail"]);

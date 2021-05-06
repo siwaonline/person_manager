@@ -1,6 +1,6 @@
-{namespace siwa=Personmanager\PersonManager\ViewHelpers}
-<f:layout name="Default" /> This Template is responsible for creating a table of domain objects. If you modify this template, do not forget to change the overwrite settings in /Configuration/ExtensionBuilder/settings.yaml: Resources: Private: Templates: List.html: keep Otherwise
-your changes will be overwritten the next time you save the extension in the extension builder
+{namespace be=TYPO3\CMS\Backend\ViewHelpers}
+
+<f:layout name="Default" />
 
 <f:section name="content">
     <h1>
@@ -9,8 +9,15 @@ your changes will be overwritten the next time you save the extension in the ext
 
     <f:flashMessages />
 
-    <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{settings.storagePid}]=new" class="btn btn-success" title="{f:translate(key:'labels.newp')}"> &nbsp;<i class="fa fa-plus"></i>
-        <f:translate key="labels.create" />&nbsp; </siwa:be.editLink>
+    <be:link.newRecord
+        table="tx_personmanager_domain_model_person"
+        pid="{settings.storagePid}"
+        class="btn btn-success"
+        title="{f:translate(key:'labels.newp')}"
+    >
+    &nbsp;<i class="fa fa-plus"></i>
+    <f:translate key="labels.create" />&nbsp; 
+    </be:link.newRecord>
     <br/>
     <p>{persons -> f:count()}
         <f:if condition="{persons -> f:count()} == 1">
@@ -132,98 +139,101 @@ your changes will be overwritten the next time you save the extension in the ext
                 <tr>
                     <f:if condition="{settings.variables.salutation} == '1'">
                         <td>
-                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                            <be:link.editRecord
+                                table="tx_personmanager_domain_model_person"
+                                uid="{person.uid}"
+                            >
                                 <f:if condition="{person.salutation} == 0">
                                     <f:translate key="labels.mrmrs" /></f:if>
                                 <f:if condition="{person.salutation} == 1">
                                     <f:translate key="labels.mr" /></f:if>
                                 <f:if condition="{person.salutation} == 2">
                                     <f:translate key="labels.mrs" /></f:if>
-                            </siwa:be.editLink>
+                            </be:link.editRecord>
                         </td>
                     </f:if>
                     <f:if condition="{settings.variables.titel} == '1'">
                         <td>
-                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.titel}</siwa:be.editLink>
+                            <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">{person.titel}</be:link.editRecord>
                         </td>
                     </f:if>
                     <td>
-                        <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.firstname}</siwa:be.editLink>
+                        <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">{person.firstname}</be:link.editRecord>
                     </td>
                     <td>
-                        <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.lastname}</siwa:be.editLink>
+                        <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">{person.lastname}</be:link.editRecord>
                     </td>
                     <f:if condition="{settings.variables.nachgtitel} == '1'">
                         <td>{person.nachgtitel}</td>
                     </f:if>
                     <td>
-                        <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.email}</siwa:be.editLink>
+                        <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">{person.email}</be:link.editRecord>
                     </td>
                     <f:if condition="{settings.variables.geb} == '1'">
                         <td>
-                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.geb}</siwa:be.editLink>
+                            <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">{person.geb}</be:link.editRecord>
                         </td>
                     </f:if>
                     <f:if condition="{settings.variables.tel} == '1'">
                         <td>
-                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.tel}</siwa:be.editLink>
+                            <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">{person.tel}</be:link.editRecord>
                         </td>
                     </f:if>
                     <f:if condition="{settings.variables.company} == '1'">
                         <td>
-                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.company}</siwa:be.editLink>
+                            <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">{person.company}</be:link.editRecord>
                         </td>
                     </f:if>
                     <td>
-                        <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                        <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">
                             <f:format.date format="{f:translate(key:'dateFormat')}">{person.crdate}</f:format.date>
-                        </siwa:be.editLink>
+                        </be:link.editRecord>
                     </td>
                     <f:if condition="{person.active} == 0">
                         <td>
-                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                            <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">
                                 <f:translate key="labels.no" />
-                            </siwa:be.editLink>
+                            </be:link.editRecord>
                         </td>
                     </f:if>
                     <f:if condition="{person.active} == 1">
                         <td>
-                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                            <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">
                                 <f:translate key="labels.yes" />
-                            </siwa:be.editLink>
+                            </be:link.editRecord>
                         </td>
                     </f:if>
                     <f:if condition="{person.confirmed} == 0">
                         <td>
-                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                            <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">
                                 <f:translate key="labels.no" />
-                            </siwa:be.editLink>
+                            </be:link.editRecord>
                         </td>
                     </f:if>
                     <f:if condition="{person.confirmed} == 1">
                         <td>
-                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                            <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">
                                 <f:translate key="labels.yes" />
-                            </siwa:be.editLink>
+                            </be:link.editRecord>
                         </td>
                     </f:if>
                     <f:if condition="{person.unsubscribed} == 0">
                         <td>
-                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                            <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">
                                 <f:translate key="labels.no" />
-                            </siwa:be.editLink>
+                            </be:link.editRecord>
                         </td>
                     </f:if>
                     <f:if condition="{person.unsubscribed} == 1">
                         <td>
-                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">
+                            <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">
                                 <f:translate key="labels.yes" />
-                            </siwa:be.editLink>
+                            </be:link.editRecord>
                         </td>
                     </f:if>
                     <f:if condition="{settings.variables.category} == '1'">
                         <td>
-                            <siwa:be.editLink parameters="edit[tx_personmanager_domain_model_person][{person.uid}]=edit">{person.category.name}</siwa:be.editLink>
+                            <be:link.editRecord table="tx_personmanager_domain_model_person" uid="{person.uid}">{person.category.name}</be:link.editRecord>
                         </td>
                     </f:if>
                 </tr>

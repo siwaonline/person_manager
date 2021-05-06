@@ -51,7 +51,7 @@
 				<source>Has confirmed?</source>
 			</trans-unit>
 			<trans-unit id="tx_personmanager_domain_model_person.unsubscribed">
-				<source>Has unsubscribedt?</source>
+				<source>Has unsubscribed?</source>
 			</trans-unit>
 			<trans-unit id="tx_personmanager_domain_model_person.token">
 				<source>Token</source>
@@ -155,6 +155,18 @@
 			</trans-unit>
 			<trans-unit id="flex.abconfirm">
 				<source>Confirmation after Deregistration</source>
+			</trans-unit>
+			<trans-unit id="tabs.timeRestrictions">
+				<source>Time Restrictions</source>
+			</trans-unit>
+			<trans-unit id="tabs.language">
+				<source>Language</source>
+			</trans-unit>
+			<trans-unit id="tabs.personalData">
+				<source>Personal Data</source>
+			</trans-unit>
+			<trans-unit id="tabs.freeText">
+				<source>Free Text</source>
 			</trans-unit>
 		</body>
 	</file>

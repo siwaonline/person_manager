@@ -5,7 +5,6 @@ namespace Personmanager\PersonManager\Domain\Validator\Person;
 use Personmanager\PersonManager\Domain\Repository\PersonRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Object\ObjectManager;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 class EmailAgainValidator extends AbstractValidator
@@ -19,8 +18,9 @@ class EmailAgainValidator extends AbstractValidator
         $oldMail = $personRepository->findOneByEmail($person->getEmail());
         if ($oldMail != NULL) {
             if ($oldMail->isUnsubscribed() == 0) {
-               $langhelp = LocalizationUtility::translate('error.emailagain', 'person_manager');
-               $this->addError($langhelp, time());
+               $this->addError($this->translateErrorMessage('error.emailagain', 'person_manager'), 1620285838);
+            }else{
+                $personRepository->remove($oldMail);
             }
         }
     }
