@@ -1,0 +1,8 @@
+<f:if condition="{settings.variables.category} == '1'">
+    <f:if condition="{kats}">
+        <label for="category">
+			<f:translate key="tx_personmanager_domain_model_person.category" />
+		</label><br />
+        <f:form.select class="form-control" property="category" options="{kats}" optionValueField="uid" optionLabelField="name" /><br />
+    </f:if>
+</f:if><br />

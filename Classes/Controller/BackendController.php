@@ -28,6 +28,9 @@ namespace Personmanager\PersonManager\Controller;
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
 
+use BadFunctionCallException;
+use Exception;
+use InvalidArgumentException;
 use Personmanager\PersonManager\Domain\Repository\BlacklistRepository;
 use Personmanager\PersonManager\Domain\Repository\CategoryRepository;
 use Personmanager\PersonManager\Domain\Repository\LogRepository;
@@ -37,11 +40,18 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Personmanager\PersonManager\Phpexcel\MyReadFilter;
+use PHPExcel_Exception;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-
+use UnexpectedValueException;
+use TYPO3\CMS\Extbase\Exception as ExtbaseException;
+use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentValueException;
+use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 
 /**
+ * //TODO Refactor this Class
+ * Split Logic into Services and use Utilities
+ * 
  * BackendController
  */
 class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
@@ -91,6 +101,11 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     public $flexcheckmailleave = "";
     public $flexunsubscribe = "";
 
+    /**
+     * 
+     * @return void 
+     * @throws InvalidArgumentException 
+     */
     public function initializeAction()
     {
         $this->persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
@@ -149,6 +164,12 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->view->assign('order', $order);
     }
 
+    /**
+     * 
+     * @param mixed $isimp 
+     * @return array 
+     * @throws InvalidArgumentException 
+     */
     public function getProps($isimp)
     {
         $vars = $this->settings;
@@ -488,7 +509,6 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      */
     public function insertDataAction()
     {
-
     }
 
     /**
@@ -526,6 +546,14 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         exit();
     }
 
+    /**
+     * 
+     * @param mixed $array 
+     * @return void 
+     * @throws Exception 
+     * @throws PHPExcel_Exception 
+     * @throws InvalidArgumentException 
+     */
     function array_to_excel($array)
     {
         ini_set('display_errors', '1');
@@ -584,6 +612,13 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $objWriter->save('php://output');
     }
 
+    /**
+     * 
+     * @param mixed $array 
+     * @param mixed $delimiter 
+     * @return void 
+     * @throws InvalidArgumentException 
+     */
     function array_to_csv($array, $delimiter)
     {
         $filename = "export.csv";
@@ -769,6 +804,12 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
     }
 
+    /**
+     * 
+     * @return string 
+     * @throws BadFunctionCallException 
+     * @throws InvalidArgumentException 
+     */
     protected function doUploadFile()
     {
         $uploaddir = GeneralUtility::getFileAbsFileName(GeneralUtility::resolveBackPath(Environment::getPublicPath() . "uploads/tx_personmanager"));
@@ -787,6 +828,12 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         return $csv_datei;
     }
 
+    /**
+     * 
+     * @param mixed $csv_datei 
+     * @return mixed 
+     * @throws Exception 
+     */
     protected function doLoadExcel($csv_datei)
     {
         ini_set('display_errors', '1');
@@ -824,6 +871,16 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->doClear("tx_personmanager_domain_model_blacklist");
     }
 
+    /**
+     * 
+     * @param mixed $table 
+     * @return never 
+     * @throws InvalidArgumentException 
+     * @throws UnexpectedValueException 
+     * @throws ExtbaseException 
+     * @throws InvalidArgumentValueException 
+     * @throws StopActionException 
+     */
     protected function doClear($table)
     {
         $pid = $this->settings["storagePid"];
@@ -836,6 +893,11 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->redirect('list');
     }
 
+    /**
+     * 
+     * @param mixed $email 
+     * @return mixed 
+     */
     public function extractEmail($email)
     {
         $pattern = '/[a-z0-9_\-\+\.]+@[a-z0-9_\-\+\.]+/i';

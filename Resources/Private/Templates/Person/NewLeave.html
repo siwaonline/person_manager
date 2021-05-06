@@ -17,7 +17,11 @@ Otherwise your changes will be overwritten the next time you save the extension 
 
 <f:form action="leave">
 
-    <f:form.textfield name="mail" /><br /><br />
+    <label for="email">
+      <f:translate key="tx_personmanager_domain_model_person.email" /> *
+    </label><br />
+    <f:form.textfield class="form-control" name="mail" required="required" />
+    <br /><br />
 
 	<f:form.submit value="{f:translate(key:'labels.deregister')}" class="btn btn-primary" />
 </f:form>

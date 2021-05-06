@@ -146,6 +146,18 @@
 			<trans-unit id="flex.abconfirm">
 				<target>Bestätigung nach der Abmeldung</target>
 			</trans-unit>
+			<trans-unit id="tabs.timeRestrictions">
+				<target>Zeit Restriktionen</target>
+			</trans-unit>
+			<trans-unit id="tabs.language">
+				<target>Sprache</target>
+			</trans-unit>
+			<trans-unit id="tabs.personalData">
+				<target>Persönliche Daten</target>
+			</trans-unit>
+			<trans-unit id="tabs.freeText">
+				<target>Freitext</target>
+			</trans-unit>
 		</body>
 	</file>
 </xliff>
