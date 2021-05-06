@@ -218,22 +218,10 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     /**
      * action new
      *
-     * @param \Personmanager\PersonManager\Domain\Model\Person $newPerson
-     * @param string $error
-     * @TYPO3\CMS\Extbase\Annotation\IgnoreValidation $newPerson
      * @return void
      */
-    public function newAction(Person $newPerson = NULL, $error = "")
+    public function newAction()
     {
-        $langhelp1 = LocalizationUtility::translate('labels.mrmrs', $this->extKey);
-        $langhelp2 = LocalizationUtility::translate('labels.mr', $this->extKey);
-        $langhelp3 = LocalizationUtility::translate('labels.mrs', $this->extKey);
-        $arr = array(0 => $langhelp1, 1 => $langhelp2, 2 => $langhelp3);
-        $this->view->assign('anrarr', $arr);
-
-        $this->view->assign('newPerson', $newPerson);
-        $this->view->assign('error', $error);
-
         $kats = $this->categoryRepository->findAll();
         $this->view->assign('kats', $kats);
     }
