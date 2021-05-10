@@ -1,43 +1,49 @@
-<f:if condition="{new}">
-    <f:then>
-        <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmthx" arguments="{0: sitename}"/>
-    </f:then>
-    <f:else>
-        <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.leavethx" arguments="{0: sitename}"/>
-    </f:else>
-</f:if>
-<br/><br/>
-<f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmlink"/>
-<br/><br/>
-<f:if condition="{new}">
-    <f:then>
-        <f:link.action
-        action="activate"
-        controller="Person"
-        pluginName="Personmanagerfront"
-        extensionName="PersonManager"
-        arguments="{token: link.token}"
-        pageUid="{link.pageUid}"
-        absolute="1"
-        >
-            <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmreg"/>
-        </f:link.action>
-    </f:then>
-    <f:else>
-        <f:link.action
-        action="unsubscribe"
-        controller="Person"
-        pluginName="Personmanagerunsub"
-        extensionName="PersonManager"
-        arguments="{token: link.token}"
-        pageUid="{link.pageUid}"
-        absolute="1"
-        >
-            <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmleave"/>    
-        </f:link.action>
-    </f:else>
-</f:if>
-<br/>
-<f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.ifnot"></f:translate>
-<br/><br/>
-<f:format.html>{signature}</f:format.html>
+<f:layout name="SystemEmail" />
+<f:section name="Title"></f:section>
+<f:section name="Main">
+
+    <f:if condition="{new}">
+        <f:then>
+            <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmthx" arguments="{0: sitename}"/>
+        </f:then>
+        <f:else>
+            <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.leavethx" arguments="{0: sitename}"/>
+        </f:else>
+    </f:if>
+    <br/><br/>
+    <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmlink"/>
+    <br/><br/>
+    <f:if condition="{new}">
+        <f:then>
+            <f:link.action
+                    action="activate"
+                    controller="Person"
+                    pluginName="Personmanagerfront"
+                    extensionName="PersonManager"
+                    arguments="{token: link.token}"
+                    pageUid="{link.pageUid}"
+                    absolute="1"
+            >
+                <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmreg"/>
+            </f:link.action>
+        </f:then>
+        <f:else>
+            <f:link.action
+                    action="unsubscribe"
+                    controller="Person"
+                    pluginName="Personmanagerunsub"
+                    extensionName="PersonManager"
+                    arguments="{token: link.token}"
+                    pageUid="{link.pageUid}"
+                    absolute="1"
+            >
+                <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.confirmleave"/>
+            </f:link.action>
+        </f:else>
+    </f:if>
+    <br/>
+    <f:translate key="LLL:EXT:person_manager/Resources/Private/Language/locallang.xlf:mail.ifnot"></f:translate>
+    <br/><br/>
+    <f:format.html>{signature}</f:format.html>
+
+</f:section>

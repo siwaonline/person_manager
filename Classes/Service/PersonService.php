@@ -91,6 +91,7 @@ class PersonService
     public function setSettings(array $settings)
     {
         $this->settings = $settings;
+        $this->mailService->setSettings($settings);
     }
     
     /**

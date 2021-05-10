@@ -80,7 +80,6 @@ class MailService
 
         $this->_sendMail($mail);
 
-
         $langhelp = LocalizationUtility::translate($new ? 'log.createmail' : 'log.leavemail', $this->extKey);
         $this->logService->insertLog($person->getUid(), $person->getEmail(), $person->getFirstname(), $person->getLastname(), $new ? "create" : "leave", "$langhelp", "", 1);
     }
@@ -102,8 +101,7 @@ class MailService
             ->assign('msgKey', $msgKey)
             ->to($to);
 
-        $mail->from(new Address($this->settings["options"]["mail"], $this->settings["options"]["site"]));
-        $this->mailService->_sendMail($mail);
+        $this->_sendMail($mail);
     }
 
     /**
@@ -123,9 +121,7 @@ class MailService
             ->assign('msgKey', $msgKey)
             ->to($to);
 
-        $mail->from(new Address($this->settings["options"]["mail"], $this->settings["options"]["site"]));
-
-        $this->mailService->_sendMail($mail);
+        $this->_sendMail($mail);
     }
 
     /**
@@ -136,6 +132,7 @@ class MailService
      */
     private function _sendMail(FluidEmail $mail)
     {
+        $mail->from(new Address($this->settings["options"]["mail"], $this->settings["options"]["site"]));
         GeneralUtility::makeInstance(Mailer::class)->send($mail);
     }
 }
