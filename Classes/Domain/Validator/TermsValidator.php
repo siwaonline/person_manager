@@ -18,7 +18,7 @@ class TermsValidator extends AbstractValidator
         /* @var $configurationManager \TYPO3\CMS\Extbase\Configuration\ConfigurationManager */
         $configurationManager = $objectManager->get(ConfigurationManager::class);
         $settings = $configurationManager->getConfiguration(
-            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS,
+            ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
         );
 
         $terms = FormUtility::_GPmerged()['terms'];
