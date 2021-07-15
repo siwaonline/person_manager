@@ -117,6 +117,10 @@
 			<source>Email</source>
 			<target>Courriel</target>
 		</trans-unit>
+		<trans-unit id="tx_personmanager_domain_model_person.email_hash">
+			<source>Email</source>
+			<target>Email Hash</target>
+		</trans-unit>
 		<trans-unit id="tx_personmanager_domain_model_person.firstname" approved="yes">
 			<source>Firstname</source>
 			<target>Nom</target>

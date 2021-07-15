@@ -1,4 +1,5 @@
 <?php
+
 namespace Personmanager\PersonManager\Domain\Model;
 
 
@@ -30,7 +31,8 @@ namespace Personmanager\PersonManager\Domain\Model;
 /**
  * Person
  */
-class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
+class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
+{
 
 	/**
 	 * salutation
@@ -73,6 +75,13 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @var string
 	 */
 	protected $email = '';
+
+	/**
+	 * emailHash
+	 *
+	 * @var string
+	 */
+	protected $emailHash = '';
 
 	/**
 	 * geb
@@ -207,7 +216,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param DateTime $crdate
 	 * @return void
 	 */
-	public function setCrdate($crdate) {
+	public function setCrdate($crdate)
+	{
 		$this->crdate = $crdate;
 	}
 
@@ -216,7 +226,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $firstname
 	 */
-	public function getFirstname() {
+	public function getFirstname()
+	{
 		return $this->firstname;
 	}
 
@@ -226,7 +237,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $firstname
 	 * @return void
 	 */
-	public function setFirstname($firstname) {
+	public function setFirstname($firstname)
+	{
 		$this->firstname = $firstname;
 	}
 
@@ -235,7 +247,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $lastname
 	 */
-	public function getLastname() {
+	public function getLastname()
+	{
 		return $this->lastname;
 	}
 
@@ -245,7 +258,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $lastname
 	 * @return void
 	 */
-	public function setLastname($lastname) {
+	public function setLastname($lastname)
+	{
 		$this->lastname = $lastname;
 	}
 
@@ -254,7 +268,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $email
 	 */
-	public function getEmail() {
+	public function getEmail()
+	{
 		return $this->email;
 	}
 
@@ -264,7 +279,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $email
 	 * @return void
 	 */
-	public function setEmail($email) {
+	public function setEmail($email)
+	{
 		$this->email = $email;
 	}
 
@@ -273,7 +289,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return integer $salutation
 	 */
-	public function getSalutation() {
+	public function getSalutation()
+	{
 		return $this->salutation;
 	}
 
@@ -283,7 +300,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param integer $salutation
 	 * @return void
 	 */
-	public function setSalutation($salutation) {
+	public function setSalutation($salutation)
+	{
 		$this->salutation = $salutation;
 	}
 
@@ -292,7 +310,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $titel
 	 */
-	public function getTitel() {
+	public function getTitel()
+	{
 		return $this->titel;
 	}
 
@@ -302,7 +321,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $titel
 	 * @return void
 	 */
-	public function setTitel($titel) {
+	public function setTitel($titel)
+	{
 		$this->titel = $titel;
 	}
 
@@ -311,7 +331,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $nachgtitel
 	 */
-	public function getNachgtitel() {
+	public function getNachgtitel()
+	{
 		return $this->nachgtitel;
 	}
 
@@ -321,7 +342,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $nachgtitel
 	 * @return void
 	 */
-	public function setNachgtitel($nachgtitel) {
+	public function setNachgtitel($nachgtitel)
+	{
 		$this->nachgtitel = $nachgtitel;
 	}
 
@@ -330,7 +352,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $geb
 	 */
-	public function getGeb() {
+	public function getGeb()
+	{
 		return $this->geb;
 	}
 
@@ -340,7 +363,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $geb
 	 * @return void
 	 */
-	public function setGeb($geb) {
+	public function setGeb($geb)
+	{
 		$this->geb = $geb;
 	}
 
@@ -349,7 +373,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $tel
 	 */
-	public function getTel() {
+	public function getTel()
+	{
 		return $this->tel;
 	}
 
@@ -359,7 +384,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $tel
 	 * @return void
 	 */
-	public function setTel($tel) {
+	public function setTel($tel)
+	{
 		$this->tel = $tel;
 	}
 
@@ -368,7 +394,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $company
 	 */
-	public function getCompany() {
+	public function getCompany()
+	{
 		return $this->company;
 	}
 
@@ -378,7 +405,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $company
 	 * @return void
 	 */
-	public function setCompany($company) {
+	public function setCompany($company)
+	{
 		$this->company = $company;
 	}
 
@@ -387,7 +415,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return boolean $active
 	 */
-	public function getActive() {
+	public function getActive()
+	{
 		return $this->active;
 	}
 
@@ -397,7 +426,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param boolean $active
 	 * @return void
 	 */
-	public function setActive($active) {
+	public function setActive($active)
+	{
 		$this->active = $active;
 	}
 
@@ -406,7 +436,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return boolean
 	 */
-	public function isActive() {
+	public function isActive()
+	{
 		return $this->active;
 	}
 
@@ -415,7 +446,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return boolean $confirmed
 	 */
-	public function getConfirmed() {
+	public function getConfirmed()
+	{
 		return $this->confirmed;
 	}
 
@@ -425,7 +457,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param boolean $confirmed
 	 * @return void
 	 */
-	public function setConfirmed($confirmed) {
+	public function setConfirmed($confirmed)
+	{
 		$this->confirmed = $confirmed;
 	}
 
@@ -434,7 +467,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return boolean
 	 */
-	public function isConfirmed() {
+	public function isConfirmed()
+	{
 		return $this->confirmed;
 	}
 
@@ -443,7 +477,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return boolean $unsubscribed
 	 */
-	public function getUnsubscribed() {
+	public function getUnsubscribed()
+	{
 		return $this->unsubscribed;
 	}
 
@@ -453,7 +488,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param boolean $unsubscribed
 	 * @return void
 	 */
-	public function setUnsubscribed($unsubscribed) {
+	public function setUnsubscribed($unsubscribed)
+	{
 		$this->unsubscribed = $unsubscribed;
 	}
 
@@ -462,7 +498,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return boolean
 	 */
-	public function isUnsubscribed() {
+	public function isUnsubscribed()
+	{
 		return $this->unsubscribed;
 	}
 
@@ -471,7 +508,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $token
 	 */
-	public function getToken() {
+	public function getToken()
+	{
 		return $this->token;
 	}
 
@@ -481,7 +519,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $token
 	 * @return void
 	 */
-	public function setToken($token) {
+	public function setToken($token)
+	{
 		$this->token = $token;
 	}
 
@@ -490,7 +529,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $frtxt0
 	 */
-	public function getFrtxt0() {
+	public function getFrtxt0()
+	{
 		return $this->frtxt0;
 	}
 
@@ -500,7 +540,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $frtxt0
 	 * @return void
 	 */
-	public function setFrtxt0($frtxt0) {
+	public function setFrtxt0($frtxt0)
+	{
 		$this->frtxt0 = $frtxt0;
 	}
 
@@ -509,7 +550,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $frtxt1
 	 */
-	public function getFrtxt1() {
+	public function getFrtxt1()
+	{
 		return $this->frtxt1;
 	}
 
@@ -519,7 +561,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $frtxt1
 	 * @return void
 	 */
-	public function setFrtxt1($frtxt1) {
+	public function setFrtxt1($frtxt1)
+	{
 		$this->frtxt1 = $frtxt1;
 	}
 
@@ -528,7 +571,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $frtxt2
 	 */
-	public function getFrtxt2() {
+	public function getFrtxt2()
+	{
 		return $this->frtxt2;
 	}
 
@@ -538,7 +582,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $frtxt2
 	 * @return void
 	 */
-	public function setFrtxt2($frtxt2) {
+	public function setFrtxt2($frtxt2)
+	{
 		$this->frtxt2 = $frtxt2;
 	}
 
@@ -547,7 +592,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $frtxt3
 	 */
-	public function getFrtxt3() {
+	public function getFrtxt3()
+	{
 		return $this->frtxt3;
 	}
 
@@ -557,7 +603,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $frtxt3
 	 * @return void
 	 */
-	public function setFrtxt3($frtxt3) {
+	public function setFrtxt3($frtxt3)
+	{
 		$this->frtxt3 = $frtxt3;
 	}
 
@@ -566,7 +613,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $frtxt4
 	 */
-	public function getFrtxt4() {
+	public function getFrtxt4()
+	{
 		return $this->frtxt4;
 	}
 
@@ -576,7 +624,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $frtxt4
 	 * @return void
 	 */
-	public function setFrtxt4($frtxt4) {
+	public function setFrtxt4($frtxt4)
+	{
 		$this->frtxt4 = $frtxt4;
 	}
 
@@ -585,7 +634,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $frtxt5
 	 */
-	public function getFrtxt5() {
+	public function getFrtxt5()
+	{
 		return $this->frtxt5;
 	}
 
@@ -595,7 +645,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $frtxt5
 	 * @return void
 	 */
-	public function setFrtxt5($frtxt5) {
+	public function setFrtxt5($frtxt5)
+	{
 		$this->frtxt5 = $frtxt5;
 	}
 
@@ -604,7 +655,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $frtxt6
 	 */
-	public function getFrtxt6() {
+	public function getFrtxt6()
+	{
 		return $this->frtxt6;
 	}
 
@@ -614,7 +666,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $frtxt6
 	 * @return void
 	 */
-	public function setFrtxt6($frtxt6) {
+	public function setFrtxt6($frtxt6)
+	{
 		$this->frtxt6 = $frtxt6;
 	}
 
@@ -623,7 +676,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $frtxt7
 	 */
-	public function getFrtxt7() {
+	public function getFrtxt7()
+	{
 		return $this->frtxt7;
 	}
 
@@ -633,7 +687,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $frtxt7
 	 * @return void
 	 */
-	public function setFrtxt7($frtxt7) {
+	public function setFrtxt7($frtxt7)
+	{
 		$this->frtxt7 = $frtxt7;
 	}
 
@@ -642,7 +697,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $frtxt8
 	 */
-	public function getFrtxt8() {
+	public function getFrtxt8()
+	{
 		return $this->frtxt8;
 	}
 
@@ -652,7 +708,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $frtxt8
 	 * @return void
 	 */
-	public function setFrtxt8($frtxt8) {
+	public function setFrtxt8($frtxt8)
+	{
 		$this->frtxt8 = $frtxt8;
 	}
 
@@ -661,7 +718,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return string $frtxt9
 	 */
-	public function getFrtxt9() {
+	public function getFrtxt9()
+	{
 		return $this->frtxt9;
 	}
 
@@ -671,7 +729,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param string $frtxt9
 	 * @return void
 	 */
-	public function setFrtxt9($frtxt9) {
+	public function setFrtxt9($frtxt9)
+	{
 		$this->frtxt9 = $frtxt9;
 	}
 
@@ -680,7 +739,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return \Personmanager\PersonManager\Domain\Model\Category $category
 	 */
-	public function getCategory() {
+	public function getCategory()
+	{
 		return $this->category;
 	}
 
@@ -690,8 +750,9 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 * @param \Personmanager\PersonManager\Domain\Model\Category $category
 	 * @return void
 	 */
-	public function setCategory(\Personmanager\PersonManager\Domain\Model\Category $category = null) {
-	    if($category)$this->category = $category;
+	public function setCategory(\Personmanager\PersonManager\Domain\Model\Category $category = null)
+	{
+		if ($category) $this->category = $category;
 	}
 
 	/**
@@ -706,7 +767,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return DateTime $crdate
 	 */
-	public function getCrdate() {
+	public function getCrdate()
+	{
 		return $this->crdate;
 	}
 
@@ -715,7 +777,8 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return void
 	 */
-	public function setProperty($prop, $val){
+	public function setProperty($prop, $val)
+	{
 		$this->{$prop} = $val;
 	}
 
@@ -724,8 +787,32 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 	 *
 	 * @return mixed
 	 */
-	public function getProperty($prop){
+	public function getProperty($prop)
+	{
 		return $this->{$prop};
 	}
 
+	/**
+	 * Get emailHash
+	 *
+	 * @return  string
+	 */ 
+	public function getEmailHash()
+	{
+		return $this->emailHash;
+	}
+
+	/**
+	 * Set emailHash
+	 *
+	 * @param  string  $emailHash  emailHash
+	 *
+	 * @return  self
+	 */ 
+	public function setEmailHash(string $emailHash)
+	{
+		$this->emailHash = $emailHash;
+
+		return $this;
+	}
 }

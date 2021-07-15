@@ -32,6 +32,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Personmanager\PersonManager\Phpexcel\MyReadFilter;
+use Personmanager\PersonManager\Utility\EmailHashUtility;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 
 /**
@@ -197,6 +198,8 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $newPerson->setSalutation($anr);
         $error = "";
         $newPerson->setEmail(trim($newPerson->getEmail()));
+        
+        $newPerson->setEmailHash(EmailHashUtility::generateHash($newPerson->getEmail()));
 
         if ($honey != "" && $honey != NULL) {
             $langhelp = LocalizationUtility::translate('error.spam', $this->extKey);

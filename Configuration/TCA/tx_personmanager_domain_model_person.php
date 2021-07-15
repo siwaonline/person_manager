@@ -21,10 +21,10 @@ return array(
 		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('person_manager') . 'Resources/Public/Icons/tx_personmanager_domain_model_person.gif'
 	),
 	'interface' => array(
-		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, firstname, lastname, email, salutation, titel, nachgtitel, geb, tel, company, active, confirmed, unsubscribed, token, frtxt0, frtxt1, frtxt2, frtxt3, frtxt4, frtxt5, frtxt6, frtxt7, frtxt8, frtxt9, category',
+		'showRecordFieldList' => 'sys_language_uid, l10n_parent, l10n_diffsource, hidden, firstname, lastname, email, email_hash, salutation, titel, nachgtitel, geb, tel, company, active, confirmed, unsubscribed, token, frtxt0, frtxt1, frtxt2, frtxt3, frtxt4, frtxt5, frtxt6, frtxt7, frtxt8, frtxt9, category',
 	),
 	'types' => array(
-		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, firstname, lastname, email, salutation, titel, nachgtitel, geb, tel, company, active, confirmed, unsubscribed, token, frtxt0, frtxt1, frtxt2, frtxt3, frtxt4, frtxt5, frtxt6, frtxt7, frtxt8, frtxt9, category, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'),
+		'1' => array('showitem' => 'sys_language_uid;;;;1-1-1, l10n_parent, l10n_diffsource, hidden;;1, firstname, lastname, email, email_hash, salutation, titel, nachgtitel, geb, tel, company, active, confirmed, unsubscribed, token, frtxt0, frtxt1, frtxt2, frtxt3, frtxt4, frtxt5, frtxt6, frtxt7, frtxt8, frtxt9, category, --div--;LLL:EXT:cms/locallang_ttc.xlf:tabs.access, starttime, endtime'),
 	),
 	'palettes' => array(
 		'1' => array('showitem' => ''),
@@ -138,6 +138,15 @@ return array(
 				'type' => 'input',
 				'size' => 30,
 				'eval' => 'trim'
+			),
+		),
+		'email_hash' => array(
+			'exclude' => 1,
+			'label' => 'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager_domain_model_person.email_hash',
+			'config' => array(
+				'type' => 'input',
+				'size' => 30,
+				'readOnly' => TRUE
 			),
 		),
 		'salutation' => array(

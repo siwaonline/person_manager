@@ -9,6 +9,7 @@ CREATE TABLE tx_personmanager_domain_model_person (
 	firstname varchar(255) DEFAULT '' NOT NULL,
 	lastname varchar(255) DEFAULT '' NOT NULL,
 	email varchar(255) DEFAULT '' NOT NULL,
+	email_hash varchar(255) DEFAULT '' NOT NULL,
 	salutation int(11) DEFAULT '0' NOT NULL,
 	titel varchar(255) DEFAULT '' NOT NULL,
 	nachgtitel varchar(255) DEFAULT '' NOT NULL,

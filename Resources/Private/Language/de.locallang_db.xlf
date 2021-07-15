@@ -16,6 +16,9 @@
 			<trans-unit id="tx_personmanager_domain_model_person.email">
 				<target>Email</target>
 			</trans-unit>
+			<trans-unit id="tx_personmanager_domain_model_person.email_hash">
+				<target>Email Hash</target>
+			</trans-unit>
 			<trans-unit id="tx_personmanager_domain_model_person.salutation">
 				<target>Anrede</target>
 			</trans-unit>
