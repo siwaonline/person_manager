@@ -198,7 +198,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $newPerson->setSalutation($anr);
         $error = "";
         $newPerson->setEmail(trim($newPerson->getEmail()));
-        
+
         $newPerson->setEmailHash(EmailHashUtility::generateHash($newPerson->getEmail()));
 
         if ($honey != "" && $honey != NULL) {
@@ -218,12 +218,14 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
             $error .= "<p>$langhelp</p>";
             $failed = 1;
         }
-        if (!filter_var(idn_to_ascii($newPerson->getEmail(),0,INTL_IDNA_VARIANT_UTS46), FILTER_VALIDATE_EMAIL)) {
+        if (!filter_var(idn_to_ascii($newPerson->getEmail(), 0, INTL_IDNA_VARIANT_UTS46), FILTER_VALIDATE_EMAIL)) {
             $langhelp = LocalizationUtility::translate('error.email', $this->extKey);
             $error .= "<p>$langhelp</p>";
             $failed = 1;
         }
-        $oldMail = $this->personRepository->findOneByEmail($newPerson->getEmail());
+        
+        $oldMail = $this->personRepository->findOneByEmailHash($newPerson->getEmailHash());
+        
         if ($oldMail != NULL) {
             if ($oldMail->isUnsubscribed() == 0) {
                 $langhelp = LocalizationUtility::translate('error.emailagain', $this->extKey);
@@ -391,7 +393,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     protected function doUnsubscribe($pers, $sendOutMail, $mail, $msgKey, $log)
     {
         $pers->setUnsubscribed(TRUE);
-        if($this->settings['pseudonymize']){
+        if ($this->settings['pseudonymize']) {
             $pers->pseudonymize();
         }
         $this->personRepository->update($pers);
@@ -411,7 +413,8 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->forward('text', null, null, array('text' => $this->flexunsubscribe));
     }
 
-    protected function doBuildLinkMail($new, $site, $path, $pers){
+    protected function doBuildLinkMail($new, $site, $path, $pers)
+    {
         $langhelp = LocalizationUtility::translate('mail.confirmdata', $this->extKey);
         $subject = $site . ": $langhelp";
         $langhelp = LocalizationUtility::translate($new ? 'mail.confirmthx' : 'mail.leavethx', $this->extKey);
