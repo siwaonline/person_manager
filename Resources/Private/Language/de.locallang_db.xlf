@@ -116,6 +116,9 @@
 				<target>E-Mail</target>
 			</trans-unit>
 			<!-- ### Flexform ### -->
+			<trans-unit id="flex.pseudonymize">
+				<target>Pseudonymisieren</target>
+			</trans-unit>
 			<trans-unit id="flex.sitename">
 				<target>Absender/Website Name</target>
 			</trans-unit>

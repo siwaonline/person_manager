@@ -340,6 +340,9 @@ return array(
 				'foreign_table' => 'tx_personmanager_domain_model_category',
 				'minitems' => 0,
 				'maxitems' => 1,
+				'items' => [
+					['---', 0],
+				],
 			),
 		),
 

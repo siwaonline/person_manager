@@ -7,6 +7,14 @@
 				</TCEforms>
 				<type>array</type>
 				<el>
+					<settings.pseudonymize>
+						<TCEforms>
+							<label>LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:flex.pseudonymize</label>
+							<config>
+								<type>check</type>
+							</config>
+						</TCEforms>
+					</settings.pseudonymize>
 					<settings.flexsitename>
 						<TCEforms>
 							<label>LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:flex.sitename</label>

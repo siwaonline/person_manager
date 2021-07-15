@@ -5,6 +5,10 @@
 			<generator>LFEditor</generator>
 		</header>
 		<body>
+		<trans-unit id="flex.pseudonymize">
+			<source>Pseudonymisieren</source>
+			<target>Pseudonymisieren</target>
+		</trans-unit>
 		<trans-unit id="flex.abalready" approved="yes">
 			<source>E-Mail is already unsubscribed</source>
 			<target>Ce courriel est déjà désinscrit</target>

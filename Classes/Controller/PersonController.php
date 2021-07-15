@@ -391,6 +391,9 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     protected function doUnsubscribe($pers, $sendOutMail, $mail, $msgKey, $log)
     {
         $pers->setUnsubscribed(TRUE);
+        if($this->settings['pseudonymize']){
+            $pers->pseudonymize();
+        }
         $this->personRepository->update($pers);
         $this->persistenceManager->persistAll();
 

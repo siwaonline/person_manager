@@ -116,6 +116,9 @@
 				<source>E-Mail</source>
 			</trans-unit>
 			<!-- ### Flexform ### -->
+			<trans-unit id="flex.pseudonymize">
+				<source>Pseudonymize</source>
+			</trans-unit>
 			<trans-unit id="flex.sitename">
 				<source>Sender/Website Name</source>
 			</trans-unit>

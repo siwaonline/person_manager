@@ -815,4 +815,70 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity
 
 		return $this;
 	}
+
+	/**
+	 * pseudonymize
+	 */ 
+	public function pseudonymize()
+	{
+		$this->setSalutation(0);
+
+		if($this->getTitel()){
+			$this->setTitel('XXX');
+		}
+		if($this->getFirstname()){
+			$this->setFirstname('XXX');
+		}
+		if($this->getLastname()){
+			$this->setLastname('XXX');
+		}
+		if($this->getNachgtitel()){
+			$this->setNachgtitel('XXX');
+		}
+		if($this->getGeb()){
+			$this->setGeb('XXX');
+		}
+		if($this->getEmail()){
+			$this->setEmail('XXX');
+		}
+		if($this->getCompany()){
+			$this->setCompany('XXX');
+		}
+		if($this->getTel()){
+			$this->setTel('XXX');
+		}
+		if($this->getFrtxt0()){
+			$this->setFrtxt0('XXX');
+		}
+		if($this->getFrtxt1()){
+			$this->setFrtxt1('XXX');
+		}
+		if($this->getFrtxt2()){
+			$this->setFrtxt2('XXX');
+		}
+		if($this->getFrtxt3()){
+			$this->setFrtxt3('XXX');
+		}
+		if($this->getFrtxt4()){
+			$this->setFrtxt4('XXX');
+		}
+		if($this->getFrtxt5()){
+			$this->setFrtxt5('XXX');
+		}
+		if($this->getFrtxt6()){
+			$this->setFrtxt6('XXX');
+		}
+		if($this->getFrtxt7()){
+			$this->setFrtxt7('XXX');
+		}
+		if($this->getFrtxt8()){
+			$this->setFrtxt8('XXX');
+		}
+		if($this->getFrtxt9()){
+			$this->setFrtxt9('XXX');
+		}
+		$this->setCategory(NULL);
+			
+	}
+
 }
