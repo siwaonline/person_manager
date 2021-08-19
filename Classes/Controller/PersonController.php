@@ -248,7 +248,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->logService->insertLog($newPerson->getUid(), $newPerson->getEmail(), $newPerson->getFirstname(), $newPerson->getLastname(), "create", $langhelp, "", 1);
 
         if ($this->settings['options']["doubleOptIn"] == 1) {
-            $this->mailService->doBuildLinkMail(TRUE, $this->sitename, $this->settings['options']["path"], $newPerson);
+            $this->mailService->doBuildLinkMail(TRUE, $this->sitename, $this->settings['optinPageUid'] ? $this->settings['optinPageUid'] :  $this->settings['options']["path"], $newPerson);
             $this->forward('text', null, null, array('text' => $this->flexcheckmail));
         } else {
             $this->personService->doActivate($newPerson, $this->settings['options']["sendInMail"], $this->settings['options']["mail"], "log.createsuccess", "create");

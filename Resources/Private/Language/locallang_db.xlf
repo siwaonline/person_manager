@@ -129,6 +129,9 @@
 			<trans-unit id="flex.signature">
 				<source>Signature</source>
 			</trans-unit>
+			<trans-unit id="flex.optinPageUid">
+				<source>Page Uid Optin</source>
+			</trans-unit>
 			<trans-unit id="flex.settings">
 				<source>Settings</source>
 			</trans-unit>

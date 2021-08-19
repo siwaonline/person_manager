@@ -45,6 +45,10 @@
 			<source>Signature</source>
 			<target>Signature du mail</target>
 		</trans-unit>
+		<trans-unit id="flex.optinPageUid">
+			<source>Page Uid Optin</source>
+			<target>Page Uid Optin</target>
+		</trans-unit>
 		<trans-unit id="flex.sitename" approved="yes">
 			<source>Sender/Website Name</source>
 			<target>Nom (pour l'envoi des mails de notification)</target>
