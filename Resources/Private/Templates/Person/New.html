@@ -16,7 +16,7 @@ Otherwise your changes will be overwritten the next time you save the extension 
 
   <f:render partial="FormErrors" arguments="{_all}"></f:render>
 
-  <f:form action="create"  name="newPerson" object="{newPerson}">
+  <f:form action="create"  name="newPerson" object="{newPerson}" pageUid="{settings.submitPageUid}">
     <f:render partial="Person/FormFields" arguments="{kats : kats}"/>
 
 	<f:form.submit value="{f:translate(key:'labels.send')}" class="btn btn-primary" />

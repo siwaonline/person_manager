@@ -132,6 +132,9 @@
 			<trans-unit id="flex.optinPageUid">
 				<source>Page Uid Optin</source>
 			</trans-unit>
+			<trans-unit id="flex.submitPageUid">
+				<source>Page Uid Submit</source>
+			</trans-unit>
 			<trans-unit id="flex.settings">
 				<source>Settings</source>
 			</trans-unit>
