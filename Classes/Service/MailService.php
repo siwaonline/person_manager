@@ -125,12 +125,12 @@ class MailService
     }
 
     /**
-     * 
+     * Method is protected and not private so the MailService can be xClassed
      * @param FluidEmail $mail 
      * @return void 
      * @throws InvalidArgumentException 
      */
-    private function _sendMail(FluidEmail $mail)
+    protected function _sendMail(FluidEmail $mail)
     {
         $mail->from(new Address($this->settings["options"]["mail"], $this->settings["options"]["site"]));
         GeneralUtility::makeInstance(Mailer::class)->send($mail);
