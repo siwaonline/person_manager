@@ -15,17 +15,17 @@ $EM_CONF[$_EXTKEY] = array(
 	'description' => 'A TYPO3 extension to manage user/subscriber data. Works perfectly with the extension newsletter.',
 	'category' => 'plugin',
 	'author' => 'Philipp Parzer',
-	'author_email' => 'https://forge.typo3.org/projects/extension-person_manager',
+	'author_email' => 'p.parzer@siwa.at',
 	'author_company' => 'SIWA Online GmbH',
 	'state' => 'stable',
 	'internal' => '',
 	'uploadfolder' => '1',
 	'createDirs' => '',
 	'clearCacheOnLoad' => 0,
-	'version' => '4.0.0',
+	'version' => '5.0.0',
 	'constraints' => array(
 		'depends' => array(
-			'typo3' => '10.4.0-10.4.99',
+			'typo3' => '11.5.0-11.5.99',
 		),
 		'conflicts' => array(
 		),
