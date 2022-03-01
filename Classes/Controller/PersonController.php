@@ -85,7 +85,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     protected $mailService = NULL;
 
     /**
-     * 
+     *
      * @var PersistenceManager
      */
     protected $persistenceManager = NULL;
@@ -155,6 +155,7 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
     {
         $this->personService->setSettings($this->settings);
 
+        // @extensionScannerIgnoreLine
         $this->signature = $this->configurationManager->getContentObject()->parseFunc($this->settings['flexsignature'], array(), '< lib.parseFunc_RTE');
         $this->sitename = $this->settings['flexsitename'];
         if ($this->sitename == NULL || $this->sitename == "") {
