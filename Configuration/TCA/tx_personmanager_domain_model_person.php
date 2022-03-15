@@ -7,7 +7,8 @@ return [
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'delete' => 'deleted',
-		'enablecolumns' => [
+        'languageField' => 'sys_language_uid',
+        'enablecolumns' => [
 			'disabled' => 'hidden',
 			'starttime' => 'starttime',
 			'endtime' => 'endtime',

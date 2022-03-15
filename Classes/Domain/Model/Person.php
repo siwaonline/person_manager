@@ -729,4 +729,19 @@ class Person extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
 		return $this->{$prop};
 	}
 
+    /**
+     * @param int $_languageUid
+     * @return void
+     */
+    public function set_languageUid($_languageUid) {
+        $this->_languageUid = $_languageUid;
+    }
+
+    /**
+     * @return int
+     */
+    public function get_languageUid() {
+        return $this->_languageUid;
+    }
+
 }
