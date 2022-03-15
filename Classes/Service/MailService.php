@@ -15,7 +15,7 @@ class MailService
 {
 
     /**
-     * 
+     *
      * @var string
      */
     protected $extKey = 'person_manager';
@@ -53,14 +53,14 @@ class MailService
     }
 
     /**
-     * 
-     * @param bool $new 
-     * @param string $site 
-     * @param string $path 
-     * @param Person $person 
-     * @return void 
-     * @throws InvalidArgumentException 
-     * @throws IllegalObjectTypeException 
+     *
+     * @param bool $new
+     * @param string $site
+     * @param string $path
+     * @param Person $person
+     * @return void
+     * @throws InvalidArgumentException
+     * @throws IllegalObjectTypeException
      */
     public function doBuildLinkMail(bool $new, string $site, string $path, Person $person) {
         $mail = GeneralUtility::makeInstance(FluidEmail::class);
@@ -85,12 +85,12 @@ class MailService
     }
 
     /**
-     * 
-     * @param Person $person 
-     * @param string $msgKey 
-     * @param string $to 
-     * @return void 
-     * @throws InvalidArgumentException 
+     *
+     * @param Person $person
+     * @param string $msgKey
+     * @param string $to
+     * @return void
+     * @throws InvalidArgumentException
      */
     public function doBuildUnsubscribeMail(Person $person, string $msgKey, string $to) {
         $mail = GeneralUtility::makeInstance(FluidEmail::class);
@@ -105,12 +105,12 @@ class MailService
     }
 
     /**
-     * 
-     * @param Person $person 
-     * @param string $msgKey 
-     * @param string $to 
-     * @return void 
-     * @throws InvalidArgumentException 
+     *
+     * @param Person $person
+     * @param string $msgKey
+     * @param string $to
+     * @return void
+     * @throws InvalidArgumentException
      */
     public function doBuildActivateMail(Person $person, string $msgKey, string $to) {
         $mail = GeneralUtility::makeInstance(FluidEmail::class);
@@ -126,9 +126,9 @@ class MailService
 
     /**
      * Method is protected and not private so the MailService can be xClassed
-     * @param FluidEmail $mail 
-     * @return void 
-     * @throws InvalidArgumentException 
+     * @param FluidEmail $mail
+     * @return void
+     * @throws InvalidArgumentException
      */
     protected function _sendMail(FluidEmail $mail)
     {

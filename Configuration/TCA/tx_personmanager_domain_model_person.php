@@ -7,7 +7,8 @@ return [
 		'crdate' => 'crdate',
 		'cruser_id' => 'cruser_id',
 		'delete' => 'deleted',
-		'enablecolumns' => [
+        'languageField' => 'sys_language_uid',
+        'enablecolumns' => [
 			'disabled' => 'hidden',
 			'starttime' => 'starttime',
 			'endtime' => 'endtime',
@@ -17,7 +18,7 @@ return [
 	],
 	'types' => [
 		'1' => [
-			'showitem' => 'crdate, hidden, 
+			'showitem' => 'crdate, hidden,
 				--div--;LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tabs.personalData,
 					--palette--;;personalData,
 				--div--;LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tabs.freeText,
@@ -29,7 +30,7 @@ return [
 		]
 	],
 	'palettes' => [
-		'personalData' => [ 'showitem' => '--div--;,firstname, lastname, 
+		'personalData' => [ 'showitem' => '--div--;,firstname, lastname,
 		--linebreak--,email, salutation, titel, nachgtitel,
 		--linebreak--,geb, tel, company,
 		--linebreak--,active, confirmed, unsubscribed,
