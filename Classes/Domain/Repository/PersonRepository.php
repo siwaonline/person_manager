@@ -41,14 +41,14 @@ class PersonRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if ($active == "*" && $confirmed == "*" && $unsubscribed == "*") return $query->execute();
 
         $arr = array();
-        if ($active != "*") {
-            array_push($arr, $query->equals('active', $active));
+        if ($active !== "*") {
+            $arr[] = $query->equals('active', $active);
         }
-        if ($confirmed != "*") {
-            array_push($arr, $query->equals('confirmed', $confirmed));
+        if ($confirmed !== "*") {
+            $arr[] = $query->equals('confirmed', $confirmed);
         }
-        if ($unsubscribed != "*") {
-            array_push($arr, $query->equals('unsubscribed', $unsubscribed));
+        if ($unsubscribed !== "*") {
+            $arr[] = $query->equals('unsubscribed', $unsubscribed);
         }
         $query->matching(
             $query->logicalAnd(

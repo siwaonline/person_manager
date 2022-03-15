@@ -29,18 +29,15 @@ namespace Personmanager\PersonManager\Controller;
  ***************************************************************/
 
 use Personmanager\PersonManager\Domain\Model\Person;
-use Personmanager\PersonManager\Domain\Repository\BlacklistRepository;
 use Personmanager\PersonManager\Domain\Repository\CategoryRepository;
 use Personmanager\PersonManager\Domain\Repository\PersonRepository;
 use Personmanager\PersonManager\Service\LogService;
 use Personmanager\PersonManager\Service\MailService;
 use Personmanager\PersonManager\Service\PersonService;
-use Symfony\Component\Mime\Address;
-use TYPO3\CMS\Core\Mail\FluidEmail;
-use TYPO3\CMS\Core\Mail\Mailer;
+use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\DataHandling\DataHandler;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 
 /**
@@ -242,6 +239,22 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         $this->personRepository->add($newPerson);
         $this->persistenceManager->persistAll();
+
+
+        // Set language uid
+        /** @var Context $context */
+        $context = GeneralUtility::makeInstance(Context::class);
+        $language = $context->getPropertyFromAspect('language', 'id');
+        if(isset($language) && $language !== 0){
+            /** @var DataHandler $dataHandler */
+            $dataHandler = GeneralUtility::makeInstance(DataHandler::class);
+
+            $data['tx_personmanager_domain_model_person'][$newPerson->getUid()]['sys_language_uid'] = $language;
+
+            $dataHandler->start($data, []);
+            $dataHandler->process_datamap();
+        }
+
         $langhelp = LocalizationUtility::translate('log.create', $this->extKey);
         $this->logService->insertLog($newPerson->getUid(), $newPerson->getEmail(), $newPerson->getFirstname(), $newPerson->getLastname(), "create", $langhelp, "", 1);
 
