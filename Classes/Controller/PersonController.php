@@ -205,22 +205,21 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->view->assign('showpage', $this->settings["flexshowpage"]);
     }
 
-    protected function initializeNewAction()
-    {
-        $propertyMappingConfiguration = $this->arguments['newPerson']->getPropertyMappingConfiguration();
-        $propertyMappingConfiguration->allowAllProperties();
-        $propertyMappingConfiguration->setTypeConverterOption('TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter', \TYPO3\CMS\Extbase\Property\TypeConverter\PersistentObjectConverter::CONFIGURATION_CREATION_ALLOWED, TRUE);
-    }
-
     /**
      * action new
      *
      * @return void
      */
-    public function newAction()
+    public function newAction(Person $newPerson = null)
     {
         $kats = $this->categoryRepository->findAll();
         $this->view->assign('kats', $kats);
+
+
+        if(!($newPerson instanceof Person)){
+            $newPerson = new Person();
+        }
+        $this->view->assign('newPerson', $newPerson);
     }
 
     /**
