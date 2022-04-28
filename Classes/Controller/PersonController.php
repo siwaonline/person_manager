@@ -320,14 +320,13 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
         $opt = $this->settings["options"]["doubleOptOut"];
         $path = $this->settings["options"]["pathout"];
-        $site = $this->settings["options"]["site"];
         $sendOutMail = $this->settings["options"]["sendOutMail"];
         $mail = $this->settings["options"]["mail"];
 
         if ($pers != NULL) {
             if ($pers->isUnsubscribed() == 0) {
                 if ($opt == 1) {
-                    $this->mailService->doBuildLinkMail(FALSE, $site, $path, $pers);
+                    $this->mailService->doBuildLinkMail(FALSE, $this->sitename, $path, $pers);
                     $this->forward('text', null, null, array('text' => $this->flexcheckmailleave));
                 } else {
                     $this->personService->doUnsubscribe($pers, $sendOutMail, $mail, 'log.leavesuccess', 'leave');
