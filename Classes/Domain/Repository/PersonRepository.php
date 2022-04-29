@@ -41,13 +41,13 @@ class PersonRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         if ($active == "*" && $confirmed == "*" && $unsubscribed == "*") return $query->execute();
 
         $arr = array();
-        if ($active != "*") {
+        if ($active !== "*") {
             array_push($arr, $query->equals('active', $active));
         }
-        if ($confirmed != "*") {
+        if ($confirmed !== "*") {
             array_push($arr, $query->equals('confirmed', $confirmed));
         }
-        if ($unsubscribed != "*") {
+        if ($unsubscribed !== "*") {
             array_push($arr, $query->equals('unsubscribed', $unsubscribed));
         }
         $query->matching(
@@ -55,6 +55,10 @@ class PersonRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
                 $arr
             )
         );
+
+        $queryParser = $this->objectManager->get(\TYPO3\CMS\Extbase\Persistence\Generic\Storage\Typo3DbQueryParser::class);
+        var_dump($queryParser->convertQueryToDoctrineQueryBuilder($query)->getSQL());
+        var_dump($queryParser->convertQueryToDoctrineQueryBuilder($query)->getParameters());
 
         return $query->execute();
     }
