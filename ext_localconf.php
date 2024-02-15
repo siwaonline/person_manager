@@ -53,3 +53,6 @@ if (!defined('TYPO3')) {
 $GLOBALS['TYPO3_CONF_VARS']['MAIL']['layoutRootPaths'][500] = 'EXT:person_manager/Resources/Private/Mail/Layouts';
 $GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'][500] = 'EXT:person_manager/Resources/Private/Mail/Templates';
 $GLOBALS['TYPO3_CONF_VARS']['MAIL']['partialRootPaths'][500] = 'EXT:person_manager/Resources/Private/Mail/Partials';
+
+$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
+$iconRegistry->registerIcon('personmanager-icon', \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class, ['source' => 'EXT:person_manager/Resources/Public/Icons/Extension.svg']);

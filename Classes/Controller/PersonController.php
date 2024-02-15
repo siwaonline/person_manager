@@ -258,8 +258,6 @@ class PersonController extends ActionController
         }
         $this->personService->doActivate($newPerson, $this->settings['options']['sendInMail'], $this->settings['options']['mail'], 'log.createsuccess', 'create');
         return (new ForwardResponse('text'))->withArguments(['text' => $this->flexconfirm]);
-
-        return $this->htmlResponse();
     }
 
     /**

@@ -2,7 +2,7 @@ mod {
     wizards.newContentElement.wizardItems.plugins {
         elements {
             personmanagerfront {
-                iconIdentifier = content-plugin
+                iconIdentifier = personmanager-icon
                 title = LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager.Personmanagerfront
                 description = LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager.Personmanagerfront.description
                 tt_content_defValues {

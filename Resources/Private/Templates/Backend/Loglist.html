@@ -1,0 +1,46 @@
+
+<f:layout name="Module" />
+
+<f:section name="Content">
+<h1>Log</h1>
+
+	<br/>
+	<br/>
+	<f:link.action action="loglist" class="btn btn-default"> <f:translate key="labels.reload" /></f:link.action>
+	<br/>
+
+<f:flashMessages />
+	<br/><br/>
+	<f:render partial="Backend/Pagination" arguments="{pagination: pagination, paginator: paginator}" />
+
+	<table class="tx_personmanager table table-striped table-hover" >
+		<tr>
+			<th><f:translate key="tx_personmanager_domain_model_log.person" /></th>
+			<th><f:translate key="tx_personmanager_domain_model_log.email" /></th>
+			<th><f:translate key="tx_personmanager_domain_model_log.firstname" /></th>
+			<th><f:translate key="tx_personmanager_domain_model_log.lastname" /></th>
+			<th><f:translate key="tx_personmanager_domain_model_log.action" /></th>
+			<th><f:translate key="tx_personmanager_domain_model_log.detail" /></th>
+			<th><f:translate key="tx_personmanager_domain_model_log.fehler" /></th>
+			<th><f:translate key="tx_personmanager_domain_model_log.success" /></th>
+			<th><f:translate key="labels.time" /></th>
+		</tr>
+
+		<f:for each="{paginator.paginatedItems}" as="log">
+			<tr>
+				<td>{log.person}</td>
+				<td>{log.email}</td>
+				<td>{log.firstname}</td>
+				<td>{log.lastname}</td>
+				<td>{log.action}</td>
+				<td>{log.detail}</td>
+				<td><f:format.stripTags>{log.fehler}</f:format.stripTags></td>
+				<f:if condition="{log.success} == 0"><td><f:translate key="labels.no" /></td></f:if>
+				<f:if condition="{log.success} == 1"><td><f:translate key="labels.yes" /></td></f:if>
+				<td><f:format.date format="d.m.Y - H:i:s">{log.crdate}</f:format.date></td>
+			</tr>
+		</f:for>
+		</table>
+	<f:render partial="Backend/Pagination" arguments="{pagination: pagination, paginator: paginator}" />
+
+</f:section>

@@ -1,7 +1,7 @@
 
-<f:layout name="Default" />
+<f:layout name="Module" />
 
-<f:section name="content">
+<f:section name="Content">
   <h1><f:translate key="labels.importp" /></h1>
 
   <f:form action="import"  name="newPerson" enctype="multipart/form-data">
@@ -12,7 +12,7 @@
       <p><label>{prop.value}</label> &nbsp; {prop.name}</p>
     </f:for>
     <br />
-    <div class="err"><f:format.html>{error}</f:format.html></div>
+    <div class="err"><f:format.raw>{error}</f:format.raw></div>
     <br />
     <label>
       <f:translate key="labels.rows" />
@@ -22,7 +22,7 @@
       <f:translate key="labels.sep" />
     </label><br />
     <f:form.textfield name="trenn" value="{trenn}" size="2" class="form-control" /><br />
-    <f:render partial="Form/File" arguments="{_all}" />
+    <f:render partial="Backend/Form/File" arguments="{_all}" />
 
     <br />
     <label for="jsonobj">
@@ -34,7 +34,7 @@
   </f:form>
   <br/><br/>
   <p>{countPers} <f:translate key="labels.pindb" /></p>
-  <br/><br/>
+  <br/>
   <f:link.action action="clear" class="btn btn-danger"><f:translate key="labels.clearp" /></f:link.action>
   <br /><br />
 

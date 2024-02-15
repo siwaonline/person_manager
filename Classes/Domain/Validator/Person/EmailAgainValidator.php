@@ -5,7 +5,6 @@ namespace Personmanager\PersonManager\Domain\Validator\Person;
 use Personmanager\PersonManager\Domain\Model\Person;
 use Personmanager\PersonManager\Domain\Repository\PersonRepository;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Object\ObjectManager;
 use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 class EmailAgainValidator extends AbstractValidator
@@ -13,8 +12,7 @@ class EmailAgainValidator extends AbstractValidator
     protected function isValid($person): void
     {
         if ($person instanceof Person) {
-            $om = GeneralUtility::makeInstance(ObjectManager::class);
-            $personRepository = $om->get(PersonRepository::class);
+            $personRepository = GeneralUtility::makeInstance(PersonRepository::class);
 
             $oldMail = $personRepository->findOneByEmail($person->getEmail());
             if ($oldMail != null) {

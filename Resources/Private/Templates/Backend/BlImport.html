@@ -1,7 +1,7 @@
 
-<f:layout name="Default" />
+<f:layout name="Module" />
 
-<f:section name="content">
+<f:section name="Content">
 
   <h1>{anz} <f:translate key="labels.foundmails" /></h1>
   <h3><f:translate key="labels.checklist" /></h3>
@@ -25,7 +25,7 @@
 
   <div class="hidden_form">
   <f:form action="blImport"  name="newBlacklist" enctype="multipart/form-data">
-    <f:render partial="Form/FileCheck" arguments="{_all}" />
+    <f:render partial="Backend/Form/FileCheck" arguments="{_all}" />
     <f:form.submit value="{f:translate(key:'labels.import')}" class="btn btn-primary" />
   </f:form>
   </div>

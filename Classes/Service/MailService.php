@@ -61,6 +61,7 @@ class MailService
     public function doBuildLinkMail(bool $new, string $site, string $path, Person $person)
     {
         $mail = GeneralUtility::makeInstance(FluidEmail::class);
+        $mail->setRequest($GLOBALS['TYPO3_REQUEST']);
         $mail
             ->subject($site . ': ' . LocalizationUtility::translate('mail.confirmdata', $this->extKey))
             ->setTemplate('DoBuildLinkMail')
@@ -90,6 +91,7 @@ class MailService
     public function doBuildUnsubscribeMail(Person $person, string $msgKey, string $to)
     {
         $mail = GeneralUtility::makeInstance(FluidEmail::class);
+        $mail->setRequest($GLOBALS['TYPO3_REQUEST']);
         $mail
             ->subject(LocalizationUtility::translate('mail.deregistration', $this->extKey) . ' ' . $person->getEmail())
             ->setTemplate('DoUnsubscribe')
@@ -109,6 +111,7 @@ class MailService
     public function doBuildActivateMail(Person $person, string $msgKey, string $to)
     {
         $mail = GeneralUtility::makeInstance(FluidEmail::class);
+        $mail->setRequest($GLOBALS['TYPO3_REQUEST']);
         $mail
             ->subject(LocalizationUtility::translate('mail.registration', $this->extKey) . ' ' . $person->getEmail())
             ->setTemplate('DoActivate')

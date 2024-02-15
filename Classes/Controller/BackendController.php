@@ -26,6 +26,7 @@ namespace Personmanager\PersonManager\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 use BadFunctionCallException;
 use Exception;
 use InvalidArgumentException;
@@ -38,10 +39,16 @@ use Personmanager\PersonManager\Domain\Repository\LogRepository;
 use Personmanager\PersonManager\Domain\Repository\PersonRepository;
 use Personmanager\PersonManager\Phpexcel\MyReadFilter;
 use PHPExcel_Exception;
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Psr\Http\Message\ResponseInterface;
+use TYPO3\CMS\Backend\Routing\UriBuilder;
+use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\ConnectionPool;
 use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Imaging\Icon;
+use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Exception as ExtbaseException;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
@@ -50,6 +57,8 @@ use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentValueException;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
+use TYPO3\CMS\Core\Pagination\SimplePagination;
 use UnexpectedValueException;
 
 /**
@@ -60,35 +69,6 @@ use UnexpectedValueException;
  */
 class BackendController extends ActionController
 {
-    /**
-     * personRepository
-     *
-     * @var PersonRepository
-     */
-    protected $personRepository;
-
-    /**
-     * categoryRepository
-     *
-     * @var CategoryRepository
-     */
-    protected $categoryRepository;
-
-    /**
-     * logRepository
-     *
-     * @var LogRepository
-     */
-    protected $logRepository;
-
-    /**
-     * blacklistRepository
-     *
-     * @var BlacklistRepository
-     */
-    protected $blacklistRepository;
-
-    protected $persistenceManager;
 
     protected $extKey = 'person_manager';
 
@@ -104,41 +84,56 @@ class BackendController extends ActionController
     public $flexcheckmailleave = '';
     public $flexunsubscribe = '';
 
-    /**
-     * @throws InvalidArgumentException
-     */
-    public function initializeAction()
-    {
-        $this->persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
-    }
 
     /**
+     * @param PersistenceManager $persistenceManager
      * @param PersonRepository $personRepository
-     */
-    public function injectPersonRepository(PersonRepository $personRepository)
-    {
-        $this->personRepository = $personRepository;
-    }
-    /**
      * @param CategoryRepository $categoryRepository
-     */
-    public function injectCategoryRepository(CategoryRepository $categoryRepository)
-    {
-        $this->categoryRepository = $categoryRepository;
-    }
-    /**
-     * @param CategoryRepository $logRepository
-     */
-    public function injectLogRepository(LogRepository $logRepository)
-    {
-        $this->logRepository = $logRepository;
-    }
-    /**
+     * @param LogRepository $logRepository
      * @param BlacklistRepository $blacklistRepository
+     * @param ModuleTemplateFactory $moduleTemplateFactory ,
+     * @param IconFactory $iconFactory
+     * @param UriBuilder $backendUriBuilder
      */
-    public function injectBlacklistRepository(BlacklistRepository $blacklistRepository)
+    public function __construct(
+        protected readonly PersistenceManager    $persistenceManager,
+        protected readonly PersonRepository      $personRepository,
+        protected readonly CategoryRepository    $categoryRepository,
+        protected readonly LogRepository         $logRepository,
+        protected readonly BlacklistRepository   $blacklistRepository,
+        protected readonly ModuleTemplateFactory $moduleTemplateFactory,
+        protected readonly IconFactory           $iconFactory,
+        protected readonly UriBuilder            $backendUriBuilder,
+    )
     {
-        $this->blacklistRepository = $blacklistRepository;
+    }
+
+    private function renderModule($variables): ResponseInterface
+    {
+        $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
+        foreach ($variables as $key => $value) {
+            $moduleTemplate->assign($key, $value);
+        }
+
+        $buttonBar = $moduleTemplate->getDocHeaderComponent()->getButtonBar();
+//        if ($backButton) {
+//            $back = $buttonBar->makeLinkButton()
+//                ->setHref((string)$this->backendUriBuilder->buildUriFromRoute('web_auss', [
+//                    'action' => 'list',
+//                ]))
+//                ->setTitle('Zurück')
+//                ->setIcon($this->iconFactory->getIcon('actions-arrow-left', Icon::SIZE_SMALL));
+//            $buttonBar->addButton($back);
+//        }
+//        if ($submitButton) {
+//            $submit = $buttonBar->makeInputButton()
+//                ->setForm('form')->setShowLabelText(true)
+//                ->setTitle('Speichern')->setName('save')->setValue('1')
+//                ->setIcon($this->iconFactory->getIcon('actions-save', Icon::SIZE_SMALL));
+//            $buttonBar->addButton($submit);
+//        }
+        $moduleTemplate->makeDocHeaderModuleMenu(['id' => (int)GeneralUtility::_GP('id')]);
+        return $moduleTemplate->renderResponse(ucfirst($this->request->getControllerActionName()));
     }
 
     /**
@@ -149,7 +144,7 @@ class BackendController extends ActionController
      */
     public function listAction($order = 0, $getterm = ''): ResponseInterface
     {
-        $term = $this->request->getArguments()['search'];
+        $term = $this->request->getArguments()['search'] ?? null;
         if ($term == null || $term == '') {
             $term = $getterm;
         }
@@ -158,11 +153,12 @@ class BackendController extends ActionController
         } else {
             $persons = $this->personRepository->search($term, $order);
         }
-        $this->view->assign('persons', $persons);
-        $this->view->assign('vars', $this->settings);
-        $this->view->assign('term', $term);
-        $this->view->assign('order', $order);
-        return $this->htmlResponse();
+
+        $currentPage = $this->request->hasArgument('currentPage') ? $this->request->getArgument('currentPage') : 1;
+        $paginator = new QueryResultPaginator($persons, $currentPage, 50);
+        $pagination = new SimplePagination($paginator);
+
+        return $this->renderModule(['persons' => $persons, 'pagination' => $pagination, 'paginator' => $paginator, 'vars' => $this->settings, 'settings' => $this->settings, 'term' => $term, 'order' => $order]);
     }
 
     /**
@@ -207,10 +203,10 @@ class BackendController extends ActionController
                     }
                 } else {
                     if ($prop->getName() == 'titel' || $prop->getName() == 'nachgtitel' || $prop->getName() == 'geb' || $prop->getName() == 'tel' || $prop->getName() == 'company' || $prop->getName() == 'category' || substr(
-                        $prop->getName(),
-                        0,
-                        5
-                    ) === 'frtxt') {
+                            $prop->getName(),
+                            0,
+                            5
+                        ) === 'frtxt') {
                         if ($vars[$prop->getName()] == 1) {
                             $desc = LocalizationUtility::translate(
                                 'tx_personmanager_domain_model_person.' . $prop->getName(),
@@ -247,26 +243,21 @@ class BackendController extends ActionController
     public function newImportAction($error = '', $spalten = '', $trenn = '', $first = '', $impformat = ''): ResponseInterface
     {
         $anz = $this->personRepository->findAll()->count();
-        $this->view->assign('countPers', $anz);
 
         if ($trenn == '') {
             $trenn = ';';
         }
-        $this->view->assign('trenn', $trenn);
         if ($spalten == '') {
             $spalten = 'salutation;firstname;lastname;email';
         }
-        $this->view->assign('spalten', $spalten);
-        $this->view->assign('error', $error);
-        $this->view->assign('first', $first);
         if ($impformat == '') {
             $impformat = 'excel';
         }
-        $this->view->assign('impformat', $impformat);
 
         $props = $this->getProps(1);
-        $this->view->assign('props', $props);
-        return $this->htmlResponse();
+
+        return $this->renderModule(['countPers' => $anz, 'trenn' => $trenn, 'spalten' => $spalten, 'error' => $error, 'settings' => $this->settings, 'first' => $first, 'impformat' => $impformat, 'props' => $props]);
+
     }
 
     /**
@@ -498,16 +489,9 @@ class BackendController extends ActionController
             if ($check == '1') {
                 $this->redirect('insertData');
             }
-            $this->view->assign('personen', $personen);
-            $this->view->assign('arr', $arr);
-            $this->view->assign('anz', count($personen));
 
-            $this->view->assign('error', $error);
-            $this->view->assign('spalten', $spalten);
-            $this->view->assign('trenn', $trenn);
-            $this->view->assign('first', $first);
-            $this->view->assign('impformat', $impformat);
-            $this->view->assign('filename', $csv_datei);
+            return $this->renderModule(['personen' => $personen, 'arr' => $arr, 'anz' => count($personen), 'spalten' => $spalten, 'error' => $error, 'trenn' => $trenn, 'settings' => $this->settings, 'first' => $first, 'impformat' => $impformat, 'filename' => $csv_datei]);
+
         } else {
             return (new ForwardResponse('newImport'))->withArguments([
                 'error' => $error,
@@ -533,8 +517,8 @@ class BackendController extends ActionController
     public function newExportAction(): ResponseInterface
     {
         $anz = $this->personRepository->findAll()->count();
-        $this->view->assign('countPers', $anz);
-        return $this->htmlResponse();
+        return $this->renderModule(['countPers' => $anz]);
+
     }
 
     /**
@@ -562,7 +546,6 @@ class BackendController extends ActionController
     /**
      * @param mixed $array
      * @throws Exception
-     * @throws PHPExcel_Exception
      * @throws InvalidArgumentException
      */
     private function array_to_excel($array)
@@ -570,25 +553,26 @@ class BackendController extends ActionController
         ini_set('display_errors', '1');
         date_default_timezone_set('Europe/Vienna');
 
-        $objPHPExcel = new \PHPExcel();
+        $spreadsheet = new Spreadsheet();
+        $spreadsheet->getActiveSheet()->setTitle('Export');
+        $spreadsheet->getActiveSheetIndex(0);
+        $spreadsheet->getActiveSheet()->freezePane('A2');
+        $worksheet = $spreadsheet->getActiveSheet();
 
-        $objPHPExcel->getActiveSheet()->setTitle('Export');
-        $objPHPExcel->setActiveSheetIndex(0);
-        $objPHPExcel->getActiveSheet()->freezePane('A2');
 
         $props = $this->getProps(0);
         $row = 1;
-        $col = 'A';
+        $col = 1;
         foreach ($props as $prop) {
-            $objPHPExcel->getActiveSheet()->setCellValue($col . $row, $prop['name']);
+            $worksheet->setCellValue([$col, $row], $prop['name']);
             $col++;
         }
         $row = 2;
         foreach ($array as $pers) {
-            $col = 'A';
+            $col = 1;
             foreach ($props as $prop) {
                 if ($prop['value'] == 'category') {
-                    $objPHPExcel->getActiveSheet()->setCellValue($col . $row, $pers->getProperty($prop['value']));
+                    $worksheet->setCellValue([$col, $row], $pers->getProperty($prop['value']));
                     $help = $pers->getCategory()->getName();
                 } elseif ($prop['value'] == 'salutation' || $prop['value'] == 'salutation') {
                     if ($pers->getSalutation() == '0') {
@@ -610,17 +594,17 @@ class BackendController extends ActionController
                 } else {
                     $help = $pers->getProperty($prop['value']);
                 }
-                $objPHPExcel->getActiveSheet()->setCellValue($col . $row, $help);
+                $worksheet->setCellValue([$col, $row], $help);
                 $col++;
             }
             $row++;
         }
 
-        $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        header('Content-Type: application/vnd.ms-excel');
-        header('Content-Disposition: attachment;filename="export.xls"');
+        $writer = new Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="export.xlsx";');
         header('Cache-Control: max-age=0');
-        $objWriter->save('php://output');
+        $writer->save('php://output');
     }
 
     /**
@@ -682,8 +666,10 @@ class BackendController extends ActionController
     public function loglistAction(): ResponseInterface
     {
         $logs = $this->logRepository->findAll();
-        $this->view->assign('logs', $logs);
-        return $this->htmlResponse();
+        $currentPage = $this->request->hasArgument('currentPage') ? $this->request->getArgument('currentPage') : 1;
+        $paginator = new QueryResultPaginator($logs, $currentPage, 50);
+        $pagination = new SimplePagination($paginator);
+        return $this->renderModule(['logs' => $logs, 'pagination' => $pagination, 'paginator' => $paginator]);
     }
 
     /**
@@ -696,19 +682,13 @@ class BackendController extends ActionController
     public function blNewImportAction($error = '', $first = '', $impformat = ''): ResponseInterface
     {
         $anz = $this->blacklistRepository->findAll()->count();
-        $this->view->assign('countPers', $anz);
 
-        $this->view->assign('error', $error);
-        $this->view->assign('first', $first);
         if ($impformat == '') {
             $impformat = 'excel';
         }
-        $this->view->assign('impformat', $impformat);
 
         $props = $this->getProps(1);
-        $this->view->assign('props', $props);
-        $this->view->assign('vars', $this->settings);
-        return $this->htmlResponse();
+        return $this->renderModule(['countPers' => $anz, 'vars' => $this->settings, 'error' => $error, 'settings' => $this->settings, 'first' => $first, 'impformat' => $impformat, 'props' => $props]);
     }
 
     /**
@@ -801,13 +781,8 @@ class BackendController extends ActionController
             if ($check == '1') {
                 $this->redirect('insertData');
             }
-            $this->view->assign('blacklists', $blacklists);
-            $this->view->assign('anz', count($blacklists));
+            return $this->renderModule(['blacklists' => $blacklists, 'anz' => count($blacklists), 'error' => $error, 'settings' => $this->settings, 'first' => $first, 'impformat' => $impformat, 'filename' => $csv_datei]);
 
-            $this->view->assign('error', $error);
-            $this->view->assign('first', $first);
-            $this->view->assign('impformat', $impformat);
-            $this->view->assign('filename', $csv_datei);
         } else {
             return (new ForwardResponse('blNewImport'))->withArguments(['error' => $error, 'first' => $first, 'impformat' => $impformat]);
         }
@@ -864,8 +839,7 @@ class BackendController extends ActionController
      */
     public function clearAction(): ResponseInterface
     {
-        $this->doClear('tx_personmanager_domain_model_person');
-        return $this->htmlResponse();
+        return $this->doClear('tx_personmanager_domain_model_person');
     }
 
     /**
@@ -873,13 +847,11 @@ class BackendController extends ActionController
      */
     public function blClearAction(): ResponseInterface
     {
-        $this->doClear('tx_personmanager_domain_model_blacklist');
-        return $this->htmlResponse();
+        return $this->doClear('tx_personmanager_domain_model_blacklist');
     }
 
     /**
      * @param mixed $table
-     * @return never
      * @throws InvalidArgumentException
      * @throws UnexpectedValueException
      * @throws ExtbaseException
@@ -895,7 +867,7 @@ class BackendController extends ActionController
             ['deleted' => 1],
             ['pid' => $pid]
         );
-        $this->redirect('list');
+        return $this->redirect('list');
     }
 
     /**
