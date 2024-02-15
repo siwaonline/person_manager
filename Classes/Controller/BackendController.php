@@ -2,7 +2,6 @@
 
 namespace Personmanager\PersonManager\Controller;
 
-
 /***************************************************************
  *
  *  Copyright notice
@@ -27,88 +26,90 @@ namespace Personmanager\PersonManager\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
 use BadFunctionCallException;
 use Exception;
 use InvalidArgumentException;
+use Personmanager\PersonManager\Domain\Model\Blacklist;
+use Personmanager\PersonManager\Domain\Model\Category;
+use Personmanager\PersonManager\Domain\Model\Person;
 use Personmanager\PersonManager\Domain\Repository\BlacklistRepository;
 use Personmanager\PersonManager\Domain\Repository\CategoryRepository;
 use Personmanager\PersonManager\Domain\Repository\LogRepository;
 use Personmanager\PersonManager\Domain\Repository\PersonRepository;
-use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
-use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Core\Utility\ExtensionManagementUtility;
 use Personmanager\PersonManager\Phpexcel\MyReadFilter;
 use PHPExcel_Exception;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use UnexpectedValueException;
+use TYPO3\CMS\Core\Database\Query\QueryBuilder;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
 use TYPO3\CMS\Extbase\Exception as ExtbaseException;
+use TYPO3\CMS\Extbase\Http\ForwardResponse;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentValueException;
 use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
+use UnexpectedValueException;
 
 /**
  * //TODO Refactor this Class
  * Split Logic into Services and use Utilities
- * 
+ *
  * BackendController
  */
-class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class BackendController extends ActionController
 {
-
     /**
      * personRepository
      *
-     * @var \Personmanager\PersonManager\Domain\Repository\PersonRepository
+     * @var PersonRepository
      */
-    protected $personRepository = null;
+    protected $personRepository;
 
     /**
      * categoryRepository
      *
-     * @var \Personmanager\PersonManager\Domain\Repository\CategoryRepository
+     * @var CategoryRepository
      */
-    protected $categoryRepository = null;
+    protected $categoryRepository;
 
     /**
      * logRepository
      *
-     * @var \Personmanager\PersonManager\Domain\Repository\LogRepository
+     * @var LogRepository
      */
-    protected $logRepository = null;
+    protected $logRepository;
 
     /**
      * blacklistRepository
      *
-     * @var \Personmanager\PersonManager\Domain\Repository\BlacklistRepository
+     * @var BlacklistRepository
      */
-    protected $blacklistRepository = null;
+    protected $blacklistRepository;
 
-    protected $persistenceManager = null;
+    protected $persistenceManager;
 
     protected $extKey = 'person_manager';
 
-    public $signature = "";
-    public $sitename = "";
+    public $signature = '';
+    public $sitename = '';
 
-    public $flexcheckmail = "";
-    public $flexconfirm = "";
-    public $flexerr = "";
+    public $flexcheckmail = '';
+    public $flexconfirm = '';
+    public $flexerr = '';
 
-    public $flexleave = "";
-    public $flexisunsubscribed = "";
-    public $flexcheckmailleave = "";
-    public $flexunsubscribe = "";
+    public $flexleave = '';
+    public $flexisunsubscribed = '';
+    public $flexcheckmailleave = '';
+    public $flexunsubscribe = '';
 
     /**
-     * 
-     * @return void 
-     * @throws InvalidArgumentException 
+     * @throws InvalidArgumentException
      */
     public function initializeAction()
     {
-        $this->persistenceManager = GeneralUtility::makeInstance('TYPO3\\CMS\\Extbase\\Persistence\\Generic\\PersistenceManager');
+        $this->persistenceManager = GeneralUtility::makeInstance(PersistenceManager::class);
     }
 
     /**
@@ -143,17 +144,16 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     /**
      * action list
      *
-     * @param integer $order
+     * @param int $order
      * @param string $getterm
-     * @return void
      */
-    public function listAction($order = 0, $getterm = "")
+    public function listAction($order = 0, $getterm = ''): ResponseInterface
     {
-        $term = $this->request->getArguments()["search"];
-        if ($term == null || $term == "") {
+        $term = $this->request->getArguments()['search'];
+        if ($term == null || $term == '') {
             $term = $getterm;
         }
-        if ($term == null || $term == "") {
+        if ($term == null || $term == '') {
             $persons = $this->personRepository->getAll($order);
         } else {
             $persons = $this->personRepository->search($term, $order);
@@ -162,29 +162,31 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $this->view->assign('vars', $this->settings);
         $this->view->assign('term', $term);
         $this->view->assign('order', $order);
+        return $this->htmlResponse();
     }
 
     /**
-     * 
-     * @param mixed $isimp 
-     * @return array 
-     * @throws InvalidArgumentException 
+     * @param mixed $isimp
+     * @return array
+     * @throws InvalidArgumentException
      */
     public function getProps($isimp)
     {
         $vars = $this->settings;
 
-        $pers = new \Personmanager\PersonManager\Domain\Model\Person();
+        $pers = new Person();
         $reflect = new \ReflectionClass($pers);
         $properties = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED);
-        $props = array();
+        $props = [];
 
         foreach ($properties as $prop) {
-            $desc = "";
-            if ($prop->getName() == "salutation") {
-                if ($vars["salutation"] == 1) {
-                    $desc = LocalizationUtility::translate("tx_personmanager_domain_model_person.salutation",
-                        "PersonManager");
+            $desc = '';
+            if ($prop->getName() == 'salutation') {
+                if ($vars['salutation'] == 1) {
+                    $desc = LocalizationUtility::translate(
+                        'tx_personmanager_domain_model_person.salutation',
+                        'PersonManager'
+                    );
                     if ($isimp) {
                         $langhelp = LocalizationUtility::translate('labels.mrmrs', $this->extKey);
                         $langhelp2 = LocalizationUtility::translate('labels.mr', $this->extKey);
@@ -193,31 +195,40 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     }
                 }
             } else {
-                if ($prop->getName() == "active" || $prop->getName() == "confirmed" || $prop->getName() == "unsubscribed") {
-                    $desc = LocalizationUtility::translate("tx_personmanager_domain_model_person." . $prop->getName(),
-                        "PersonManager");
+                if ($prop->getName() == 'active' || $prop->getName() == 'confirmed' || $prop->getName() == 'unsubscribed') {
+                    $desc = LocalizationUtility::translate(
+                        'tx_personmanager_domain_model_person.' . $prop->getName(),
+                        'PersonManager'
+                    );
                     if ($isimp) {
                         $langhelp = LocalizationUtility::translate('labels.no', $this->extKey);
                         $langhelp2 = LocalizationUtility::translate('labels.yes', $this->extKey);
                         $desc .= " ($langhelp|$langhelp2) (0|1)";
                     }
                 } else {
-                    if ($prop->getName() == "titel" || $prop->getName() == "nachgtitel" || $prop->getName() == "geb" || $prop->getName() == "tel" || $prop->getName() == "company" || $prop->getName() == "category" || substr($prop->getName(),
-                            0, 5) === "frtxt") {
+                    if ($prop->getName() == 'titel' || $prop->getName() == 'nachgtitel' || $prop->getName() == 'geb' || $prop->getName() == 'tel' || $prop->getName() == 'company' || $prop->getName() == 'category' || substr(
+                        $prop->getName(),
+                        0,
+                        5
+                    ) === 'frtxt') {
                         if ($vars[$prop->getName()] == 1) {
-                            $desc = LocalizationUtility::translate("tx_personmanager_domain_model_person." . $prop->getName(),
-                                "PersonManager");
+                            $desc = LocalizationUtility::translate(
+                                'tx_personmanager_domain_model_person.' . $prop->getName(),
+                                'PersonManager'
+                            );
                         }
                     } else {
-                        if ($prop->getName() == "firstname" || $prop->getName() == "lastname" || $prop->getName() == "email") {
-                            $desc = LocalizationUtility::translate("tx_personmanager_domain_model_person." . $prop->getName(),
-                                "PersonManager");
+                        if ($prop->getName() == 'firstname' || $prop->getName() == 'lastname' || $prop->getName() == 'email') {
+                            $desc = LocalizationUtility::translate(
+                                'tx_personmanager_domain_model_person.' . $prop->getName(),
+                                'PersonManager'
+                            );
                         }
                     }
                 }
             }
-            if ($desc != "") {
-                $data = array("value" => $prop->getName(), "name" => $desc);
+            if ($desc != '') {
+                $data = ['value' => $prop->getName(), 'name' => $desc];
                 array_push($props, $data);
             }
         }
@@ -232,53 +243,57 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param string $trenn
      * @param string $first
      * @param string $impformat
-     * @return void
      */
-    public function newImportAction($error = "", $spalten = "", $trenn = "", $first = "", $impformat = "")
+    public function newImportAction($error = '', $spalten = '', $trenn = '', $first = '', $impformat = ''): ResponseInterface
     {
         $anz = $this->personRepository->findAll()->count();
         $this->view->assign('countPers', $anz);
 
-        if ($trenn == "") {
-            $trenn = ";";
+        if ($trenn == '') {
+            $trenn = ';';
         }
         $this->view->assign('trenn', $trenn);
-        if ($spalten == "") {
-            $spalten = "salutation;firstname;lastname;email";
+        if ($spalten == '') {
+            $spalten = 'salutation;firstname;lastname;email';
         }
         $this->view->assign('spalten', $spalten);
         $this->view->assign('error', $error);
         $this->view->assign('first', $first);
-        if ($impformat == "") {
-            $impformat = "excel";
+        if ($impformat == '') {
+            $impformat = 'excel';
         }
         $this->view->assign('impformat', $impformat);
 
         $props = $this->getProps(1);
         $this->view->assign('props', $props);
+        return $this->htmlResponse();
     }
 
     /**
      * action import
      *
      * @param \Personmanager\PersonManager\Domain\Model\Person $person
-     * @return void
+     */
+    /**
+     * action import
+     *
+     * @param Person $person
      */
     public function importAction()
     {
         $failed = 0;
-        $vars = $_POST["tx_personmanager_web_personmanagerpersonmanagerback"];
-        $spalten = $vars["spalten"];
-        $trenn = $vars["trenn"];
-        $first = $vars["first"];
-        $impformat = $vars["impformat"];
-        $check = $vars["check"];
-        $filen = $vars["filen"];
+        $vars = $_POST['tx_personmanager_web_personmanagerpersonmanagerback'];
+        $spalten = $vars['spalten'];
+        $trenn = $vars['trenn'];
+        $first = $vars['first'];
+        $impformat = $vars['impformat'];
+        $check = $vars['check'];
+        $filen = $vars['filen'];
         $arr = explode($trenn, $spalten);
-        $error = "";
-        $obj = new \ReflectionObject(new \Personmanager\PersonManager\Domain\Model\Person());
+        $error = '';
+        $obj = new \ReflectionObject(new Person());
 
-        if ($first == "1") {
+        if ($first == '1') {
             $startindex = 1;
         } else {
             $startindex = 2;
@@ -287,28 +302,28 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         foreach ($arr as $val) {
             if (!$obj->hasProperty($val)) {
                 $langhelp = LocalizationUtility::translate('error.nocol', $this->extKey);
-                $error .= "<p>" . sprintf("$langhelp", $val) . "</p>";
+                $error .= '<p>' . sprintf("$langhelp", $val) . '</p>';
                 $failed = 1;
             }
         }
         if ($failed == 0) {
-            $personen = array();
+            $personen = [];
 
             $feler_trenner = $trenn;
             $zeilen_trenner = (string)chr(10);
 
             $csv_datei = $this->doUploadFile();
-            if ($check == "1") {
+            if ($check == '1') {
                 $csv_datei = $filen;
             }
 
             /** @var QueryBuilder $queryBuilder */
             $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_personmanager_domain_model_person');
-            $personMails = $queryBuilder->select('email')->from('tx_personmanager_domain_model_person')->execute()->fetchAll();
+            $personMails = $queryBuilder->select('email')->from('tx_personmanager_domain_model_person')->executeQuery()->fetchAll();
             $personMails = array_map(function ($a) {
                 return $a['email'];
             }, $personMails);
-            if ($impformat == "excel") {
+            if ($impformat == 'excel') {
                 foreach ($this->doLoadExcel($csv_datei) as $worksheet) {
                     $worksheetTitle = $worksheet->getTitle();
                     $highestRow = $worksheet->getHighestRow(); // e.g. 10
@@ -338,17 +353,17 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         }
                         foreach ($arr as $key => $value) {
                             $cell = $worksheet->getCellByColumnAndRow($key, $row);
-                            if ($value == "category") {
+                            if ($value == 'category') {
                                 $newKat = $this->categoryRepository->findOneByName($cell->getValue());
                                 if ($newKat == null) {
-                                    $newKat = new \Personmanager\PersonManager\Domain\Model\Category();
+                                    $newKat = new Category();
                                     $newKat->setName($cell->getValue());
                                     $this->categoryRepository->add($newKat);
                                     $this->persistenceManager->persistAll();
                                 }
                                 $person['category'] = $newKat->getUid();
                             } else {
-                                if ($value == "salutation") {
+                                if ($value == 'salutation') {
                                     if (strtolower(trim($cell->getValue())) == 'herr' || strtolower(trim($cell->getValue())) == 'herrn' || strtolower(trim($cell->getValue())) == 'sir' || strtolower(trim($cell->getValue())) == 'mr') {
                                         $cell->setValue(1);
                                     }
@@ -359,7 +374,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                                         $cell->setValue(0);
                                     }
                                 }
-                                if ($value == "active" || $value == "confirmed" || $value == "unsubscribed") {
+                                if ($value == 'active' || $value == 'confirmed' || $value == 'unsubscribed') {
                                     if (strtolower(trim($cell->getValue())) == 'nein' || strtolower(trim($cell->getValue())) == 'no') {
                                         $cell->setValue(0);
                                     }
@@ -367,7 +382,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                                         $cell->setValue(1);
                                     }
                                 }
-                                if ($value == "email") {
+                                if ($value == 'email') {
                                     $cell->setValue($this->extractEmail($cell->getValue()));
                                 }
                                 $person[$value] = $cell->getValue();
@@ -377,8 +392,8 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                         $hash = $person['email'] . $tstmp;
                         $person['token'] = md5($hash);
 
-                        if ($person['email'] != "" && $person['email'] != null) {
-                            if ($check == "1") {
+                        if ($person['email'] != '' && $person['email'] != null) {
+                            if ($check == '1') {
                                 if ($newPerson) {
                                     $newRecords[] = $person;
                                 } else {
@@ -393,8 +408,10 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 }
                 if (count($updateRecords) > 0) {
                     foreach ($updateRecords as $updateRecord) {
-                        $updateQuery = $queryBuilder->update("tx_personmanager_domain_model_person")->where($queryBuilder->expr()->eq('email',
-                            $queryBuilder->createNamedParameter($updateRecord['email'])));
+                        $updateQuery = $queryBuilder->update('tx_personmanager_domain_model_person')->where($queryBuilder->expr()->eq(
+                            'email',
+                            $queryBuilder->createNamedParameter($updateRecord['email'])
+                        ));
                         foreach ($updateRecord as $key => $value) {
                             $updateQuery->set($key, $value);
                         }
@@ -403,7 +420,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 }
                 if (count($newRecords) > 0) {
                     $columns = array_keys($newRecords[0]);
-                    $queryBuilder->getConnection()->bulkInsert("tx_personmanager_domain_model_person", $newRecords, $columns);
+                    $queryBuilder->getConnection()->bulkInsert('tx_personmanager_domain_model_person', $newRecords, $columns);
                 }
                 //$this->persistenceManager->persistAll();
             } else {
@@ -413,7 +430,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
                 if (is_array($zeilen) == true) {
                     foreach ($zeilen as $key => $zeile) {
-                        if ($zeile !== null && $zeile !== "" && $key > ($startindex - 2)) {
+                        if ($zeile !== null && $zeile !== '' && $key > ($startindex - 2)) {
                             $felder = explode($feler_trenner, $zeile);
 
                             $emailKey = array_search('email', $arr);
@@ -421,23 +438,23 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                                 $newPerson = $this->personRepository->findOneByEmail($this->extractEmail($felder[$emailKey]));
                             }
                             if (!$newPerson) {
-                                $newPerson = new \Personmanager\PersonManager\Domain\Model\Person();
+                                $newPerson = new Person();
                                 $newPerson->setActive(1);
                                 $newPerson->setConfirmed(1);
                             }
                             foreach ($arr as $key => $value) {
                                 $cell = $felder[$key];
-                                if ($value == "category") {
+                                if ($value == 'category') {
                                     $newKat = $this->categoryRepository->findOneByName($cell);
                                     if ($newKat == null) {
-                                        $newKat = new \Personmanager\PersonManager\Domain\Model\Category();
+                                        $newKat = new Category();
                                         $newKat->setName($cell);
                                         $this->categoryRepository->add($newKat);
                                         $this->persistenceManager->persistAll();
                                     }
                                     $newPerson->setCategory($newKat);
                                 } else {
-                                    if ($value == "salutation" || $value == "salutation") {
+                                    if ($value == 'salutation' || $value == 'salutation') {
                                         if (strtolower(trim($cell)) == 'herr' || strtolower(trim($cell)) == 'herrn' || strtolower(trim($cell)) == 'sir' || strtolower(trim($cell)) == 'mr') {
                                             $cell = 1;
                                         }
@@ -448,7 +465,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                                             $cell = 0;
                                         }
                                     }
-                                    if ($value == "active" || $value == "confirmed" || $value == "unsubscribed") {
+                                    if ($value == 'active' || $value == 'confirmed' || $value == 'unsubscribed') {
                                         if (strtolower(trim($cell)) == 'nein' || strtolower(trim($cell)) == 'no') {
                                             $cell = 0;
                                         }
@@ -456,7 +473,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                                             $cell = 1;
                                         }
                                     }
-                                    if ($value == "email") {
+                                    if ($value == 'email') {
                                         $cell = $this->extractEmail($cell);
                                     }
                                     $newPerson->setProperty($value, $cell);
@@ -466,8 +483,8 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                             $hash = $newPerson->getEmail() . $tstmp;
                             $newPerson->setToken(md5($hash));
 
-                            if ($newPerson->getEmail() != "" && $newPerson->getEmail() != null) {
-                                if ($check == "1") {
+                            if ($newPerson->getEmail() != '' && $newPerson->getEmail() != null) {
+                                if ($check == '1') {
                                     $this->personRepository->add($newPerson);
                                 } else {
                                     array_push($personen, $newPerson);
@@ -478,7 +495,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 }
                 $this->persistenceManager->persistAll();
             }
-            if ($check == "1") {
+            if ($check == '1') {
                 $this->redirect('insertData');
             }
             $this->view->assign('personen', $personen);
@@ -492,52 +509,48 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $this->view->assign('impformat', $impformat);
             $this->view->assign('filename', $csv_datei);
         } else {
-            $this->forward('newImport', null, null, array(
+            return (new ForwardResponse('newImport'))->withArguments([
                 'error' => $error,
                 'spalten' => $spalten,
                 'trenn' => $trenn,
                 'first' => $first,
-                'impformat' => $impformat
-            ));
+                'impformat' => $impformat,
+            ]);
         }
     }
 
     /**
      * action insertData
-     *
-     * @return void
      */
-    public function insertDataAction()
+    public function insertDataAction(): ResponseInterface
     {
+        return $this->htmlResponse();
     }
 
     /**
      * action newExport
-     *
-     * @return void
      */
-    public function newExportAction()
+    public function newExportAction(): ResponseInterface
     {
         $anz = $this->personRepository->findAll()->count();
         $this->view->assign('countPers', $anz);
+        return $this->htmlResponse();
     }
 
     /**
      * action export
-     *
-     * @return void
      */
     public function exportAction()
     {
-        $active = $_POST["active"];
-        $confirmed = $_POST["confirmed"];
-        $unsubscribed = $_POST["unsubscribed"];
-        $expformat = $_POST["expformat"];
-        $trenn = $_POST["trenn"];
+        $active = $_POST['active'];
+        $confirmed = $_POST['confirmed'];
+        $unsubscribed = $_POST['unsubscribed'];
+        $expformat = $_POST['expformat'];
+        $trenn = $_POST['trenn'];
 
         $array = $this->personRepository->findExp($active, $confirmed, $unsubscribed);
 
-        if ($expformat == "csv") {
+        if ($expformat == 'csv') {
             $this->array_to_csv($array, $trenn);
         } else {
             $this->array_to_excel($array);
@@ -547,14 +560,12 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     /**
-     * 
-     * @param mixed $array 
-     * @return void 
-     * @throws Exception 
-     * @throws PHPExcel_Exception 
-     * @throws InvalidArgumentException 
+     * @param mixed $array
+     * @throws Exception
+     * @throws PHPExcel_Exception
+     * @throws InvalidArgumentException
      */
-    function array_to_excel($array)
+    private function array_to_excel($array)
     {
         ini_set('display_errors', '1');
         date_default_timezone_set('Europe/Vienna');
@@ -569,35 +580,35 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $row = 1;
         $col = 'A';
         foreach ($props as $prop) {
-            $objPHPExcel->getActiveSheet()->setCellValue($col . $row, $prop["name"]);
+            $objPHPExcel->getActiveSheet()->setCellValue($col . $row, $prop['name']);
             $col++;
         }
         $row = 2;
         foreach ($array as $pers) {
             $col = 'A';
             foreach ($props as $prop) {
-                if ($prop["value"] == "category") {
-                    $objPHPExcel->getActiveSheet()->setCellValue($col . $row, $pers->getProperty($prop["value"]));
+                if ($prop['value'] == 'category') {
+                    $objPHPExcel->getActiveSheet()->setCellValue($col . $row, $pers->getProperty($prop['value']));
                     $help = $pers->getCategory()->getName();
-                } elseif ($prop["value"] == "salutation" || $prop["value"] == "salutation") {
-                    if ($pers->getSalutation() == "0") {
+                } elseif ($prop['value'] == 'salutation' || $prop['value'] == 'salutation') {
+                    if ($pers->getSalutation() == '0') {
                         $help = LocalizationUtility::translate('labels.mrmrs', $this->extKey);
                     }
-                    if ($pers->getSalutation() == "1") {
+                    if ($pers->getSalutation() == '1') {
                         $help = LocalizationUtility::translate('labels.mr', $this->extKey);
                     }
-                    if ($pers->getSalutation() == "2") {
+                    if ($pers->getSalutation() == '2') {
                         $help = LocalizationUtility::translate('labels.mrs', $this->extKey);
                     }
-                } elseif ($prop["value"] == "active" || $prop["value"] == "confirmed" || $prop["value"] == "unsubscribed") {
-                    if ($pers->getProperty($prop["value"]) == "0") {
+                } elseif ($prop['value'] == 'active' || $prop['value'] == 'confirmed' || $prop['value'] == 'unsubscribed') {
+                    if ($pers->getProperty($prop['value']) == '0') {
                         $help = LocalizationUtility::translate('labels.no', $this->extKey);
                     }
-                    if ($pers->getProperty($prop["value"]) == "1") {
+                    if ($pers->getProperty($prop['value']) == '1') {
                         $help = LocalizationUtility::translate('labels.yes', $this->extKey);
                     }
                 } else {
-                    $help = $pers->getProperty($prop["value"]);
+                    $help = $pers->getProperty($prop['value']);
                 }
                 $objPHPExcel->getActiveSheet()->setCellValue($col . $row, $help);
                 $col++;
@@ -606,22 +617,20 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         }
 
         $objWriter = \PHPExcel_IOFactory::createWriter($objPHPExcel, 'Excel5');
-        \header('Content-Type: application/vnd.ms-excel');
-        \header('Content-Disposition: attachment;filename="export.xls"');
-        \header('Cache-Control: max-age=0');
+        header('Content-Type: application/vnd.ms-excel');
+        header('Content-Disposition: attachment;filename="export.xls"');
+        header('Cache-Control: max-age=0');
         $objWriter->save('php://output');
     }
 
     /**
-     * 
-     * @param mixed $array 
-     * @param mixed $delimiter 
-     * @return void 
-     * @throws InvalidArgumentException 
+     * @param mixed $array
+     * @param mixed $delimiter
+     * @throws InvalidArgumentException
      */
-    function array_to_csv($array, $delimiter)
+    private function array_to_csv($array, $delimiter)
     {
-        $filename = "export.csv";
+        $filename = 'export.csv';
         $props = $this->getProps(0);
 
         //header('Content-Type: application/csv charset=ISO-8859-1');
@@ -631,35 +640,35 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
         $f = fopen('php://output', 'w');
 
         foreach ($props as $prop) {
-            echo utf8_decode($prop["name"]) . $delimiter;
+            echo utf8_decode($prop['name']) . $delimiter;
         }
         echo PHP_EOL;
 
         foreach ($array as $pers) {
             foreach ($props as $prop) {
-                if ($prop["value"] == "category") {
+                if ($prop['value'] == 'category') {
                     echo utf8_decode($pers->getCategory()->getName()) . $delimiter;
-                } elseif ($prop["value"] == "salutation" || $prop["value"] == "salutation") {
-                    if ($pers->getSalutation() == "0") {
+                } elseif ($prop['value'] == 'salutation' || $prop['value'] == 'salutation') {
+                    if ($pers->getSalutation() == '0') {
                         $langhelp = LocalizationUtility::translate('labels.mrmrs', $this->extKey);
                     }
-                    if ($pers->getSalutation() == "1") {
+                    if ($pers->getSalutation() == '1') {
                         $langhelp = LocalizationUtility::translate('labels.mr', $this->extKey);
                     }
-                    if ($pers->getSalutation() == "2") {
+                    if ($pers->getSalutation() == '2') {
                         $langhelp = LocalizationUtility::translate('labels.mrs', $this->extKey);
                     }
                     echo $langhelp . $delimiter;
-                } elseif ($prop["value"] == "active" || $prop["value"] == "confirmed" || $prop["value"] == "unsubscribed") {
-                    if ($pers->getProperty($prop["value"]) == "0") {
+                } elseif ($prop['value'] == 'active' || $prop['value'] == 'confirmed' || $prop['value'] == 'unsubscribed') {
+                    if ($pers->getProperty($prop['value']) == '0') {
                         $langhelp = LocalizationUtility::translate('labels.no', $this->extKey);
                     }
-                    if ($pers->getProperty($prop["value"]) == "1") {
+                    if ($pers->getProperty($prop['value']) == '1') {
                         $langhelp = LocalizationUtility::translate('labels.yes', $this->extKey);
                     }
                     echo $langhelp . $delimiter;
                 } else {
-                    echo utf8_decode($pers->getProperty($prop["value"])) . $delimiter;
+                    echo utf8_decode($pers->getProperty($prop['value'])) . $delimiter;
                 }
             }
             echo PHP_EOL;
@@ -669,13 +678,12 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     /**
      * action loglist
-     *
-     * @return void
      */
-    public function loglistAction()
+    public function loglistAction(): ResponseInterface
     {
         $logs = $this->logRepository->findAll();
         $this->view->assign('logs', $logs);
+        return $this->htmlResponse();
     }
 
     /**
@@ -684,59 +692,63 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
      * @param string $error
      * @param string $first
      * @param string $impformat
-     * @return void
      */
-    public function blNewImportAction($error = "", $first = "", $impformat = "")
+    public function blNewImportAction($error = '', $first = '', $impformat = ''): ResponseInterface
     {
         $anz = $this->blacklistRepository->findAll()->count();
         $this->view->assign('countPers', $anz);
 
         $this->view->assign('error', $error);
         $this->view->assign('first', $first);
-        if ($impformat == "") {
-            $impformat = "excel";
+        if ($impformat == '') {
+            $impformat = 'excel';
         }
         $this->view->assign('impformat', $impformat);
 
         $props = $this->getProps(1);
         $this->view->assign('props', $props);
         $this->view->assign('vars', $this->settings);
+        return $this->htmlResponse();
     }
 
     /**
      * action blImport
      *
      * @param \Personmanager\PersonManager\Domain\Model\Person $person
-     * @return void
+     */
+    /**
+     * action blImport
+     *
+     * @param Person $person
      */
     public function blImportAction()
     {
         $failed = 0;
-        $vars = $_POST["tx_personmanager_web_personmanagerpersonmanagerback"];
-        $first = $vars["first"];
-        $impformat = $vars["impformat"];
-        $check = $vars["check"];
-        $filen = $vars["filen"];
-        $error = "";
-        $obj = new \ReflectionObject(new \Personmanager\PersonManager\Domain\Model\Person());
+        $vars = $_POST['tx_personmanager_web_personmanagerpersonmanagerback'];
+        $first = $vars['first'];
+        $impformat = $vars['impformat'];
+        $check = $vars['check'];
+        $filen = $vars['filen'];
+        $error = '';
+        $obj = new \ReflectionObject(new Person());
 
-        if ($first == "1") {
+        if ($first == '1') {
             $startindex = 1;
         } else {
             $startindex = 2;
         }
 
         if ($failed == 0) {
-            $blacklists = array();
+            $blacklists = [];
 
-            $feler_trenner = ";";
+            $feler_trenner = ';';
             $zeilen_trenner = (string)chr(10);
 
             $csv_datei = $this->doUploadFile();
-            if ($check == "1") {
+            if ($check == '1') {
                 $csv_datei = $filen;
             }
-            if ($impformat == "excel") {
+            if ($impformat == 'excel') {
                 foreach ($this->doLoadExcel($csv_datei) as $worksheet) {
                     $worksheetTitle = $worksheet->getTitle();
                     $highestRow = $worksheet->getHighestRow(); // e.g. 10
@@ -744,14 +756,13 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
                     $nrColumns = ord($highestColumn) - 64;
 
-
                     for ($row = $startindex; $row <= $highestRow; ++$row) {
-                        $newBlacklist = new \Personmanager\PersonManager\Domain\Model\Blacklist();
+                        $newBlacklist = new Blacklist();
                         $cell = $worksheet->getCellByColumnAndRow(0, $row);
                         $newBlacklist->setEmail(trim($cell->getValue()));
 
-                        if ($newBlacklist->getEmail() != "" && $newBlacklist->getEmail() != null) {
-                            if ($check == "1") {
+                        if ($newBlacklist->getEmail() != '' && $newBlacklist->getEmail() != null) {
+                            if ($check == '1') {
                                 $this->blacklistRepository->add($newBlacklist);
                                 $this->persistenceManager->persistAll();
                             } else {
@@ -759,7 +770,6 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                             }
                         }
                     }
-
                 }
             } else {
                 $datei_inhalt = @file_get_contents($csv_datei);
@@ -768,16 +778,16 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
                 if (is_array($zeilen) == true) {
                     foreach ($zeilen as $key => $zeile) {
-                        if ($zeile !== null && $zeile !== "" && $key > ($startindex - 2)) {
+                        if ($zeile !== null && $zeile !== '' && $key > ($startindex - 2)) {
                             $felder = explode($feler_trenner, $zeile);
 
-                            $newBlacklist = new \Personmanager\PersonManager\Domain\Model\Blacklist();
+                            $newBlacklist = new Blacklist();
                             $cell = $felder[0];
-                            $help = explode(",", $cell);
+                            $help = explode(',', $cell);
                             $newBlacklist->setEmail(trim($help[0]));
 
-                            if ($newBlacklist->getEmail() != "" && $newBlacklist->getEmail() != null) {
-                                if ($check == "1") {
+                            if ($newBlacklist->getEmail() != '' && $newBlacklist->getEmail() != null) {
+                                if ($check == '1') {
                                     $this->blacklistRepository->add($newBlacklist);
                                     $this->persistenceManager->persistAll();
                                 } else {
@@ -788,7 +798,7 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                     }
                 }
             }
-            if ($check == "1") {
+            if ($check == '1') {
                 $this->redirect('insertData');
             }
             $this->view->assign('blacklists', $blacklists);
@@ -799,47 +809,45 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
             $this->view->assign('impformat', $impformat);
             $this->view->assign('filename', $csv_datei);
         } else {
-            $this->forward('blNewImport', null, null,
-                array('error' => $error, 'first' => $first, 'impformat' => $impformat));
+            return (new ForwardResponse('blNewImport'))->withArguments(['error' => $error, 'first' => $first, 'impformat' => $impformat]);
         }
     }
 
     /**
-     * 
-     * @return string 
-     * @throws BadFunctionCallException 
-     * @throws InvalidArgumentException 
+     * @return string
+     * @throws BadFunctionCallException
+     * @throws InvalidArgumentException
      */
     protected function doUploadFile()
     {
-        $uploaddir = GeneralUtility::getFileAbsFileName(GeneralUtility::resolveBackPath(Environment::getPublicPath() . "uploads/tx_personmanager"));
+        $uploaddir = GeneralUtility::getFileAbsFileName(GeneralUtility::resolveBackPath(Environment::getPublicPath() . 'uploads/tx_personmanager'));
         $uploadfile = basename($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['name']['jsonobj']);
-        $csv_datei = $uploaddir . "/" . $uploadfile;
-        if (move_uploaded_file($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['tmp_name']['jsonobj'],
-            $csv_datei)) {
+        $csv_datei = $uploaddir . '/' . $uploadfile;
+        if (move_uploaded_file(
+            $_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['tmp_name']['jsonobj'],
+            $csv_datei
+        )) {
             if (@file_exists($csv_datei) == false) {
                 $langhelp = LocalizationUtility::translate('error.nofile', $this->extKey);
                 echo sprintf($langhelp, $csv_datei);
                 exit;
-            } else {
-                $filename = basename($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['name']['jsonobj']);
             }
+            $filename = basename($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['name']['jsonobj']);
         }
         return $csv_datei;
     }
 
     /**
-     * 
-     * @param mixed $csv_datei 
-     * @return mixed 
-     * @throws Exception 
+     * @param mixed $csv_datei
+     * @return mixed
+     * @throws Exception
      */
     protected function doLoadExcel($csv_datei)
     {
         ini_set('display_errors', '1');
 
         $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
-        $cacheSettings = array(' memoryCacheSize ' => '4MB');
+        $cacheSettings = [' memoryCacheSize ' => '4MB'];
         \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
 
         $inputFileType = \PHPExcel_IOFactory::identify($csv_datei);
@@ -853,37 +861,34 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
 
     /**
      * action clear
-     *
-     * @return void
      */
-    public function clearAction()
+    public function clearAction(): ResponseInterface
     {
-        $this->doClear("tx_personmanager_domain_model_person");
+        $this->doClear('tx_personmanager_domain_model_person');
+        return $this->htmlResponse();
     }
 
     /**
      * action blClear
-     *
-     * @return void
      */
-    public function blClearAction()
+    public function blClearAction(): ResponseInterface
     {
-        $this->doClear("tx_personmanager_domain_model_blacklist");
+        $this->doClear('tx_personmanager_domain_model_blacklist');
+        return $this->htmlResponse();
     }
 
     /**
-     * 
-     * @param mixed $table 
-     * @return never 
-     * @throws InvalidArgumentException 
-     * @throws UnexpectedValueException 
-     * @throws ExtbaseException 
-     * @throws InvalidArgumentValueException 
-     * @throws StopActionException 
+     * @param mixed $table
+     * @return never
+     * @throws InvalidArgumentException
+     * @throws UnexpectedValueException
+     * @throws ExtbaseException
+     * @throws InvalidArgumentValueException
+     * @throws StopActionException
      */
     protected function doClear($table)
     {
-        $pid = $this->settings["storagePid"];
+        $pid = $this->settings['storagePid'];
         $databaseConnection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
         $databaseConnection->update(
             $table,
@@ -894,9 +899,8 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
     }
 
     /**
-     * 
-     * @param mixed $email 
-     * @return mixed 
+     * @param mixed $email
+     * @return mixed
      */
     public function extractEmail($email)
     {
@@ -911,7 +915,6 @@ class BackendController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControll
                 return $email;
             }
         }
-        return "";
+        return '';
     }
-
 }

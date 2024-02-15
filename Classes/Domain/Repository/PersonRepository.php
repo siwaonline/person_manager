@@ -2,6 +2,8 @@
 
 namespace Personmanager\PersonManager\Domain\Repository;
 
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /***************************************************************
  *
@@ -27,27 +29,28 @@ namespace Personmanager\PersonManager\Domain\Repository;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
 /**
  * The repository for Persons
  */
-class PersonRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class PersonRepository extends Repository
 {
     public function findExp($active, $confirmed, $unsubscribed)
     {
         $query = $this->createQuery();
-        $query->setOrderings(array('lastname' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING, 'firstname' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+        $query->setOrderings(['lastname' => QueryInterface::ORDER_ASCENDING, 'firstname' => QueryInterface::ORDER_ASCENDING]);
 
-        if ($active == "*" && $confirmed == "*" && $unsubscribed == "*") return $query->execute();
+        if ($active == '*' && $confirmed == '*' && $unsubscribed == '*') {
+            return $query->execute();
+        }
 
-        $arr = array();
-        if ($active !== "*") {
+        $arr = [];
+        if ($active !== '*') {
             $arr[] = $query->equals('active', $active);
         }
-        if ($confirmed !== "*") {
+        if ($confirmed !== '*') {
             $arr[] = $query->equals('confirmed', $confirmed);
         }
-        if ($unsubscribed !== "*") {
+        if ($unsubscribed !== '*') {
             $arr[] = $query->equals('unsubscribed', $unsubscribed);
         }
         $query->matching(
@@ -64,40 +67,40 @@ class PersonRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
         //$query->setOrderings(array('lastname' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING, 'firstname' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
         if ($order == 0) {
-            $query->setOrderings(array('uid' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+            $query->setOrderings(['uid' => QueryInterface::ORDER_ASCENDING]);
         } elseif ($order == 1) {
-            $query->setOrderings(array('firstname' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+            $query->setOrderings(['firstname' => QueryInterface::ORDER_ASCENDING]);
         } elseif ($order == 2) {
-            $query->setOrderings(array('firstname' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING));
+            $query->setOrderings(['firstname' => QueryInterface::ORDER_DESCENDING]);
         } elseif ($order == 3) {
-            $query->setOrderings(array('lastname' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+            $query->setOrderings(['lastname' => QueryInterface::ORDER_ASCENDING]);
         } elseif ($order == 4) {
-            $query->setOrderings(array('lastname' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING));
+            $query->setOrderings(['lastname' => QueryInterface::ORDER_DESCENDING]);
         } elseif ($order == 5) {
-            $query->setOrderings(array('email' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+            $query->setOrderings(['email' => QueryInterface::ORDER_ASCENDING]);
         } elseif ($order == 6) {
-            $query->setOrderings(array('email' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING));
+            $query->setOrderings(['email' => QueryInterface::ORDER_DESCENDING]);
         } elseif ($order == 7) {
-            $query->setOrderings(array('company' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+            $query->setOrderings(['company' => QueryInterface::ORDER_ASCENDING]);
         } elseif ($order == 8) {
-            $query->setOrderings(array('company' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING));
+            $query->setOrderings(['company' => QueryInterface::ORDER_DESCENDING]);
         }
 
-        $arr = array();
-        array_push($arr, $query->like('firstname', "%" . $term . "%"));
-        array_push($arr, $query->like('lastname', "%" . $term . "%"));
-        array_push($arr, $query->like('email', "%" . $term . "%"));
-        array_push($arr, $query->like('company', "%" . $term . "%"));
-        array_push($arr, $query->like('frtxt0', "%" . $term . "%"));
-        array_push($arr, $query->like('frtxt1', "%" . $term . "%"));
-        array_push($arr, $query->like('frtxt2', "%" . $term . "%"));
-        array_push($arr, $query->like('frtxt3', "%" . $term . "%"));
-        array_push($arr, $query->like('frtxt4', "%" . $term . "%"));
-        array_push($arr, $query->like('frtxt5', "%" . $term . "%"));
-        array_push($arr, $query->like('frtxt6', "%" . $term . "%"));
-        array_push($arr, $query->like('frtxt7', "%" . $term . "%"));
-        array_push($arr, $query->like('frtxt8', "%" . $term . "%"));
-        array_push($arr, $query->like('frtxt9', "%" . $term . "%"));
+        $arr = [];
+        array_push($arr, $query->like('firstname', '%' . $term . '%'));
+        array_push($arr, $query->like('lastname', '%' . $term . '%'));
+        array_push($arr, $query->like('email', '%' . $term . '%'));
+        array_push($arr, $query->like('company', '%' . $term . '%'));
+        array_push($arr, $query->like('frtxt0', '%' . $term . '%'));
+        array_push($arr, $query->like('frtxt1', '%' . $term . '%'));
+        array_push($arr, $query->like('frtxt2', '%' . $term . '%'));
+        array_push($arr, $query->like('frtxt3', '%' . $term . '%'));
+        array_push($arr, $query->like('frtxt4', '%' . $term . '%'));
+        array_push($arr, $query->like('frtxt5', '%' . $term . '%'));
+        array_push($arr, $query->like('frtxt6', '%' . $term . '%'));
+        array_push($arr, $query->like('frtxt7', '%' . $term . '%'));
+        array_push($arr, $query->like('frtxt8', '%' . $term . '%'));
+        array_push($arr, $query->like('frtxt9', '%' . $term . '%'));
 
         $query->matching(
             $query->logicalOr(
@@ -113,26 +116,25 @@ class PersonRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
         $query = $this->createQuery();
 
         if ($order == 0) {
-            $query->setOrderings(array('uid' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+            $query->setOrderings(['uid' => QueryInterface::ORDER_ASCENDING]);
         } elseif ($order == 1) {
-            $query->setOrderings(array('firstname' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+            $query->setOrderings(['firstname' => QueryInterface::ORDER_ASCENDING]);
         } elseif ($order == 2) {
-            $query->setOrderings(array('firstname' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING));
+            $query->setOrderings(['firstname' => QueryInterface::ORDER_DESCENDING]);
         } elseif ($order == 3) {
-            $query->setOrderings(array('lastname' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+            $query->setOrderings(['lastname' => QueryInterface::ORDER_ASCENDING]);
         } elseif ($order == 4) {
-            $query->setOrderings(array('lastname' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING));
+            $query->setOrderings(['lastname' => QueryInterface::ORDER_DESCENDING]);
         } elseif ($order == 5) {
-            $query->setOrderings(array('email' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+            $query->setOrderings(['email' => QueryInterface::ORDER_ASCENDING]);
         } elseif ($order == 6) {
-            $query->setOrderings(array('email' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING));
+            $query->setOrderings(['email' => QueryInterface::ORDER_DESCENDING]);
         } elseif ($order == 7) {
-            $query->setOrderings(array('company' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_ASCENDING));
+            $query->setOrderings(['company' => QueryInterface::ORDER_ASCENDING]);
         } elseif ($order == 8) {
-            $query->setOrderings(array('company' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING));
+            $query->setOrderings(['company' => QueryInterface::ORDER_DESCENDING]);
         }
 
         return $query->execute();
     }
-
 }

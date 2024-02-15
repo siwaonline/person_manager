@@ -10,27 +10,23 @@
  * "version" and "dependencies" must not be touched!
  ***************************************************************/
 
-$EM_CONF[$_EXTKEY] = array(
-	'title' => 'Person Manager',
-	'description' => 'A TYPO3 extension to manage user/subscriber data. Works perfectly with the extension newsletter.',
-	'category' => 'plugin',
-	'author' => 'Philipp Parzer',
-	'author_email' => 'p.parzer@siwa.at',
-	'author_company' => 'SIWA Online GmbH',
-	'state' => 'stable',
-	'internal' => '',
-	'uploadfolder' => '1',
-	'createDirs' => '',
-	'clearCacheOnLoad' => 0,
-	'version' => '5.0.0',
-	'constraints' => array(
-		'depends' => array(
-			'typo3' => '11.5.0-11.5.99',
-		),
-		'conflicts' => array(
-		),
-		'suggests' => array(
-			'newsletter' => ''
-		),
-	),
-);
+$EM_CONF[$_EXTKEY] = [
+    'title' => 'Person Manager',
+    'description' => 'A TYPO3 extension to manage user/subscriber data. Works perfectly with the extension newsletter.',
+    'category' => 'plugin',
+    'author' => 'Philipp Parzer',
+    'author_email' => 'p.parzer@siwa.at',
+    'author_company' => 'SIWA Online GmbH',
+    'state' => 'stable',
+    'version' => '6.0.0',
+    'constraints' => [
+        'depends' => [
+            'typo3' => '12.4.0-12.4.99',
+        ],
+        'conflicts' => [
+        ],
+        'suggests' => [
+            'newsletter' => '',
+        ],
+    ],
+];

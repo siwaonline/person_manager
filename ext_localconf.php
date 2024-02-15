@@ -1,53 +1,53 @@
 <?php
-if (!defined('TYPO3_MODE')) {
-	die('Access denied.');
+
+if (!defined('TYPO3')) {
+    die('Access denied.');
 }
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-	'Personmanager.PersonManager',
-	'Personmanagerfront',
-	[
-		'Person' => 'new, create, activate, unsubscribe,isunsubscribed,text',
+    'PersonManager',
+    'Personmanagerfront',
+    [
+        \Personmanager\PersonManager\Controller\PersonController::class => 'new, create, activate, unsubscribe,isunsubscribed,text',
 
-	],
-	// non-cacheable actions
-	[
-		'Person' => 'new, create, activate, unsubscribe,isunsubscribed,text',
+    ],
+    // non-cacheable actions
+    [
+        \Personmanager\PersonManager\Controller\PersonController::class => 'new, create, activate, unsubscribe,isunsubscribed,text',
 
-	]
+    ]
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-	'Personmanager.PersonManager',
-	'Personmanagerunsub',
-	[
-		'Person' => 'newLeave, leave, unsubscribe, text',
+    'PersonManager',
+    'Personmanagerunsub',
+    [
+        \Personmanager\PersonManager\Controller\PersonController::class => 'newLeave, leave, unsubscribe, text',
 
-	],
-	// non-cacheable actions
-	[
-		'Person' => 'newLeave, leave, unsubscribe, text',
+    ],
+    // non-cacheable actions
+    [
+        \Personmanager\PersonManager\Controller\PersonController::class => 'newLeave, leave, unsubscribe, text',
 
-	]
+    ]
 );
 
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
-	'Personmanager.PersonManager',
-	'Personmanagershort',
-	[
-		'Person' => 'newShort',
+    'PersonManager',
+    'Personmanagershort',
+    [
+        \Personmanager\PersonManager\Controller\PersonController::class => 'newShort',
 
-	],
-	// non-cacheable actions
-	[
-		'Person' => 'newShort',
+    ],
+    // non-cacheable actions
+    [
+        \Personmanager\PersonManager\Controller\PersonController::class => 'newShort',
 
-	]
+    ]
 );
 
 // wizards
 \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig("@import 'EXT:person_manager/Configuration/PageTS/*.typoscript'");
-
 
 // Mail API
 $GLOBALS['TYPO3_CONF_VARS']['MAIL']['layoutRootPaths'][500] = 'EXT:person_manager/Resources/Private/Mail/Layouts';

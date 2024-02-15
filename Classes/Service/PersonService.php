@@ -12,7 +12,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 class PersonService
 {
     /**
-     * 
      * @var string
      */
     protected $extKey = 'person_manager';
@@ -23,33 +22,32 @@ class PersonService
      * @var array
      */
     protected $settings = [];
-    
+
     /**
      * logService
      *
      * @var LogService
      */
-    protected $logService = NULL;
-    
+    protected $logService;
+
     /**
      * mailService
      *
      * @var MailService
      */
-    protected $mailService = NULL;
+    protected $mailService;
 
     /**
-     * 
      * @var PersistenceManager
      */
-    protected $persistenceManager = NULL;
+    protected $persistenceManager;
 
     /**
      * personRepository
      *
      * @var PersonRepository
      */
-    protected $personRepository = NULL;
+    protected $personRepository;
 
     /**
      * @param LogService $logService
@@ -87,28 +85,26 @@ class PersonService
      * Set settings
      *
      * @param  array  $settings  settings
-     */ 
+     */
     public function setSettings(array $settings)
     {
         $this->settings = $settings;
         $this->mailService->setSettings($settings);
     }
-    
+
     /**
-     * 
-     * @param Person $pers 
-     * @param mixed $sendInMail 
-     * @param string $to 
-     * @param string $msgKey 
-     * @param string $log 
-     * @return void 
-     * @throws InvalidArgumentException 
-     * @throws IllegalObjectTypeException 
+     * @param Person $pers
+     * @param mixed $sendInMail
+     * @param string $to
+     * @param string $msgKey
+     * @param string $log
+     * @throws InvalidArgumentException
+     * @throws IllegalObjectTypeException
      */
     public function doActivate(Person $pers, $sendInMail, string $to, string $msgKey, string $log)
     {
-        $pers->setConfirmed(TRUE);
-        $pers->setActive(TRUE);
+        $pers->setConfirmed(true);
+        $pers->setActive(true);
         $this->personRepository->update($pers);
         $this->persistenceManager->persistAll();
 
@@ -123,25 +119,23 @@ class PersonService
             $pers->getLastname(),
             $log,
             LocalizationUtility::translate($msgKey, $this->extKey),
-            "",
+            '',
             1
         );
     }
 
     /**
-     * 
-     * @param Person $pers 
-     * @param mixed $sendOutMail 
-     * @param string $to 
-     * @param string $msgKey 
-     * @param string $log 
-     * @return void 
-     * @throws InvalidArgumentException 
-     * @throws IllegalObjectTypeException 
+     * @param Person $pers
+     * @param mixed $sendOutMail
+     * @param string $to
+     * @param string $msgKey
+     * @param string $log
+     * @throws InvalidArgumentException
+     * @throws IllegalObjectTypeException
      */
     public function doUnsubscribe(Person $pers, $sendOutMail, string $to, string $msgKey, string $log)
     {
-        $pers->setUnsubscribed(TRUE);
+        $pers->setUnsubscribed(true);
         $this->personRepository->update($pers);
         $this->persistenceManager->persistAll();
 
@@ -156,7 +150,7 @@ class PersonService
             $pers->getLastname(),
             $log,
             LocalizationUtility::translate($msgKey, $this->extKey),
-            "",
+            '',
             1
         );
     }

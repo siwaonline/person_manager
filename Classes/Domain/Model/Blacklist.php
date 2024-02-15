@@ -1,6 +1,8 @@
 <?php
+
 namespace Personmanager\PersonManager\Domain\Model;
 
+use TYPO3\CMS\Extbase\DomainObject\AbstractEntity;
 
 /***************************************************************
  *
@@ -26,36 +28,35 @@ namespace Personmanager\PersonManager\Domain\Model;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
 /**
  * Blacklist
  */
-class Blacklist extends \TYPO3\CMS\Extbase\DomainObject\AbstractEntity {
+class Blacklist extends AbstractEntity
+{
+    /**
+     * email
+     *
+     * @var string
+     */
+    protected $email = '';
 
-	/**
-	 * email
-	 *
-	 * @var string
-	 */
-	protected $email = '';
+    /**
+     * Returns the email
+     *
+     * @return string $email
+     */
+    public function getEmail()
+    {
+        return $this->email;
+    }
 
-	/**
-	 * Returns the email
-	 *
-	 * @return string $email
-	 */
-	public function getEmail() {
-		return $this->email;
-	}
-
-	/**
-	 * Sets the email
-	 *
-	 * @param string $email
-	 * @return void
-	 */
-	public function setEmail($email) {
-		$this->email = $email;
-	}
-
+    /**
+     * Sets the email
+     *
+     * @param string $email
+     */
+    public function setEmail($email)
+    {
+        $this->email = $email;
+    }
 }

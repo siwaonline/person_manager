@@ -1,20 +1,19 @@
 <?php
 
-
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-	'PersonManager',
-	'Personmanagerfront',
-	'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager.Personmanagerfront'
+    'PersonManager',
+    'Personmanagerfront',
+    'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager.Personmanagerfront'
 );
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-	'PersonManager',
-	'Personmanagerunsub',
-	'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager.Personmanagerunsub'
+    'PersonManager',
+    'Personmanagerunsub',
+    'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager.Personmanagerunsub'
 );
 \TYPO3\CMS\Extbase\Utility\ExtensionUtility::registerPlugin(
-	'PersonManager',
-	'Personmanagershort',
-	'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager.Personmanagershort'
+    'PersonManager',
+    'Personmanagershort',
+    'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager.Personmanagershort'
 );
 
 $pluginSignature = str_replace('_', '', 'person_manager') . '_personmanagerfront';

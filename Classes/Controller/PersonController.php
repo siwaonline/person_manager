@@ -2,7 +2,6 @@
 
 namespace Personmanager\PersonManager\Controller;
 
-
 /***************************************************************
  *
  *  Copyright notice
@@ -27,79 +26,84 @@ namespace Personmanager\PersonManager\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
 use Personmanager\PersonManager\Domain\Model\Person;
 use Personmanager\PersonManager\Domain\Repository\CategoryRepository;
 use Personmanager\PersonManager\Domain\Repository\PersonRepository;
+use Personmanager\PersonManager\Domain\Validator\HoneyPotValidator;
+use Personmanager\PersonManager\Domain\Validator\Person\EmailAgainValidator;
+use Personmanager\PersonManager\Domain\Validator\Person\EmailValidator;
+use Personmanager\PersonManager\Domain\Validator\Person\NameValidator;
+use Personmanager\PersonManager\Domain\Validator\TermsValidator;
 use Personmanager\PersonManager\Service\LogService;
 use Personmanager\PersonManager\Service\MailService;
 use Personmanager\PersonManager\Service\PersonService;
+use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Context\Context;
-use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Annotation as Extbase;
+use TYPO3\CMS\Extbase\Http\ForwardResponse;
+use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
+use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
+use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 /**
  * PersonController
  */
-class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionController
+class PersonController extends ActionController
 {
-
     /**
      * categoryRepository
      *
      * @var CategoryRepository
      */
-    protected $categoryRepository = NULL;
+    protected $categoryRepository;
 
     /**
      * personRepository
      *
      * @var PersonRepository
      */
-    protected $personRepository = NULL;
+    protected $personRepository;
 
     /**
      * logService
      *
      * @var LogService
      */
-    protected $logService = NULL;
+    protected $logService;
 
     /**
      * personService
      *
      * @var PersonService
      */
-    protected $personService = NULL;
+    protected $personService;
 
     /**
      * mailService
      *
      * @var MailService
      */
-    protected $mailService = NULL;
+    protected $mailService;
 
     /**
-     *
      * @var PersistenceManager
      */
-    protected $persistenceManager = NULL;
+    protected $persistenceManager;
 
     protected $extKey = 'person_manager';
 
-    public $signature = "";
-    public $sitename = "";
+    public $signature = '';
+    public $sitename = '';
 
-    public $flexcheckmail = "";
-    public $flexconfirm = "";
-    public $flexerr = "";
+    public $flexcheckmail = '';
+    public $flexconfirm = '';
+    public $flexerr = '';
 
-    public $flexleave = "";
-    public $flexisunsubscribed = "";
-    public $flexcheckmailleave = "";
-    public $flexunsubscribe = "";
+    public $flexleave = '';
+    public $flexisunsubscribed = '';
+    public $flexcheckmailleave = '';
+    public $flexunsubscribe = '';
 
     /**
      * @param LogService $logService
@@ -153,40 +157,40 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         $this->personService->setSettings($this->settings);
 
         // @extensionScannerIgnoreLine
-        $this->signature = $this->configurationManager->getContentObject()->parseFunc($this->settings['flexsignature'], array(), '< lib.parseFunc_RTE');
+        $this->signature = $this->configurationManager->getContentObject()->parseFunc($this->settings['flexsignature'], [], '< lib.parseFunc_RTE');
         $this->sitename = $this->settings['flexsitename'];
-        if ($this->sitename == NULL || $this->sitename == "") {
-            $this->sitename = $this->settings["options"]["site"];
+        if ($this->sitename == null || $this->sitename == '') {
+            $this->sitename = $this->settings['options']['site'];
         }
 
         $this->flexcheckmail = $this->settings['flexcheckmail'];
-        if ($this->flexcheckmail == NULL || $this->flexcheckmail == "") {
-            $this->flexcheckmail = "<h1>" . LocalizationUtility::translate('msg.thx', $this->extKey) . "</h1><h3>" . LocalizationUtility::translate('msg.ancheckmail', $this->extKey) . "</h3>";
+        if ($this->flexcheckmail == null || $this->flexcheckmail == '') {
+            $this->flexcheckmail = '<h1>' . LocalizationUtility::translate('msg.thx', $this->extKey) . '</h1><h3>' . LocalizationUtility::translate('msg.ancheckmail', $this->extKey) . '</h3>';
         }
         $this->flexconfirm = $this->settings['flexconfirm'];
-        if ($this->flexconfirm == NULL || $this->flexconfirm == "") {
-            $this->flexconfirm = "<h1>" . LocalizationUtility::translate('msg.thx', $this->extKey) . "</h1><h3>" . LocalizationUtility::translate('msg.anconfirm', $this->extKey) . "</h3>";
+        if ($this->flexconfirm == null || $this->flexconfirm == '') {
+            $this->flexconfirm = '<h1>' . LocalizationUtility::translate('msg.thx', $this->extKey) . '</h1><h3>' . LocalizationUtility::translate('msg.anconfirm', $this->extKey) . '</h3>';
         }
         $this->flexerr = $this->settings['flexerr'];
-        if ($this->flexerr == NULL || $this->flexerr == "") {
-            $this->flexerr = "<h1>" . LocalizationUtility::translate('msg.error', $this->extKey) . "</h1><h3>" . LocalizationUtility::translate('msg.anerror', $this->extKey) . "</h3>";
+        if ($this->flexerr == null || $this->flexerr == '') {
+            $this->flexerr = '<h1>' . LocalizationUtility::translate('msg.error', $this->extKey) . '</h1><h3>' . LocalizationUtility::translate('msg.anerror', $this->extKey) . '</h3>';
         }
 
         $this->flexcheckmailleave = $this->settings['flexcheckmailleave'];
-        if ($this->flexcheckmailleave == NULL || $this->flexcheckmailleave == "") {
-            $this->flexcheckmailleave = "<h1>" . LocalizationUtility::translate('msg.thx', $this->extKey) . "</h1><h3>" . LocalizationUtility::translate('msg.abcheckmail', $this->extKey) . "</h3>";
+        if ($this->flexcheckmailleave == null || $this->flexcheckmailleave == '') {
+            $this->flexcheckmailleave = '<h1>' . LocalizationUtility::translate('msg.thx', $this->extKey) . '</h1><h3>' . LocalizationUtility::translate('msg.abcheckmail', $this->extKey) . '</h3>';
         }
         $this->flexisunsubscribed = $this->settings['flexisunsubscribed'];
-        if ($this->flexisunsubscribed == NULL || $this->flexisunsubscribed == "") {
-            $this->flexisunsubscribed = "<h1>" . LocalizationUtility::translate('msg.error', $this->extKey) . "</h1><h3>" . LocalizationUtility::translate('msg.abalready', $this->extKey) . "</h3>";
+        if ($this->flexisunsubscribed == null || $this->flexisunsubscribed == '') {
+            $this->flexisunsubscribed = '<h1>' . LocalizationUtility::translate('msg.error', $this->extKey) . '</h1><h3>' . LocalizationUtility::translate('msg.abalready', $this->extKey) . '</h3>';
         }
         $this->flexleave = $this->settings['flexleave'];
-        if ($this->flexleave == NULL || $this->flexleave == "") {
-            $this->flexleave = "<h1>" . LocalizationUtility::translate('msg.error', $this->extKey) . "</h1><h3>" . LocalizationUtility::translate('msg.abnomail', $this->extKey) . "</h3>";
+        if ($this->flexleave == null || $this->flexleave == '') {
+            $this->flexleave = '<h1>' . LocalizationUtility::translate('msg.error', $this->extKey) . '</h1><h3>' . LocalizationUtility::translate('msg.abnomail', $this->extKey) . '</h3>';
         }
         $this->flexunsubscribe = $this->settings['flexunsubscribe'];
-        if ($this->flexunsubscribe == NULL || $this->flexunsubscribe == "") {
-            $this->flexunsubscribe = "<h1>" . LocalizationUtility::translate('msg.thx', $this->extKey) . "</h1><h3>" . LocalizationUtility::translate('msg.abconfirm', $this->extKey) . "</h3>";
+        if ($this->flexunsubscribe == null || $this->flexunsubscribe == '') {
+            $this->flexunsubscribe = '<h1>' . LocalizationUtility::translate('msg.thx', $this->extKey) . '</h1><h3>' . LocalizationUtility::translate('msg.abconfirm', $this->extKey) . '</h3>';
         }
     }
 
@@ -198,41 +202,39 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
 
     /**
      * action newShort
-     *
-     * @return void
      */
-    public function newShortAction()
+    public function newShortAction(): ResponseInterface
     {
-        $this->view->assign('showpage', $this->settings["flexshowpage"]);
+        $this->view->assign('showpage', $this->settings['flexshowpage']);
+        return $this->htmlResponse();
     }
 
     /**
      * @param Person|null $newPerson
-     * @return void
      */
-    public function newAction(Person $newPerson = null)
+    public function newAction(Person $newPerson = null): ResponseInterface
     {
         $kats = $this->categoryRepository->findAll();
         $this->view->assign('kats', $kats);
 
-        if(!($newPerson instanceof Person)){
+        if (!($newPerson instanceof Person)) {
             $newPerson = new Person();
         }
         $this->view->assign('newPerson', $newPerson);
+        return $this->htmlResponse();
     }
 
     /**
      * action create
      *
      * @param Person $newPerson
-     * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\HoneyPotValidator")
-     * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\TermsValidator")
-     * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\Person\NameValidator")
-     * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\Person\EmailValidator")
-     * @Extbase\Validate(param="newPerson", validator="Personmanager\PersonManager\Domain\Validator\Person\EmailAgainValidator")
-     * @return void
      */
-    public function createAction(Person $newPerson)
+    #[Extbase\Validate(['param' => 'newPerson', 'validator' => HoneyPotValidator::class])]
+    #[Extbase\Validate(['param' => 'newPerson', 'validator' => TermsValidator::class])]
+    #[Extbase\Validate(['param' => 'newPerson', 'validator' => NameValidator::class])]
+    #[Extbase\Validate(['param' => 'newPerson', 'validator' => EmailValidator::class])]
+    #[Extbase\Validate(['param' => 'newPerson', 'validator' => EmailAgainValidator::class])]
+    public function createAction(Person $newPerson): ResponseInterface
     {
         $hash = $newPerson->getEmail() . time();
         $newPerson->setToken(md5($hash));
@@ -241,138 +243,132 @@ class PersonController extends \TYPO3\CMS\Extbase\Mvc\Controller\ActionControlle
         /** @var Context $context */
         $context = GeneralUtility::makeInstance(Context::class);
         $language = $context->getPropertyFromAspect('language', 'id');
-        if(isset($language) && $language !== 0){
+        if (isset($language) && $language !== 0) {
             $newPerson->set_languageUid($language);
         }
         $this->personRepository->add($newPerson);
         $this->persistenceManager->persistAll();
 
-
         $langhelp = LocalizationUtility::translate('log.create', $this->extKey);
-        $this->logService->insertLog($newPerson->getUid(), $newPerson->getEmail(), $newPerson->getFirstname(), $newPerson->getLastname(), "create", $langhelp, "", 1);
+        $this->logService->insertLog($newPerson->getUid(), $newPerson->getEmail(), $newPerson->getFirstname(), $newPerson->getLastname(), 'create', $langhelp, '', 1);
 
-        if ($this->settings['options']["doubleOptIn"] == 1) {
-            $this->mailService->doBuildLinkMail(TRUE, $this->sitename, $this->settings['optinPageUid'] ? $this->settings['optinPageUid'] :  $this->settings['options']["path"], $newPerson);
-            $this->forward('text', null, null, array('text' => $this->flexcheckmail));
-        } else {
-            $this->personService->doActivate($newPerson, $this->settings['options']["sendInMail"], $this->settings['options']["mail"], "log.createsuccess", "create");
-            $this->forward('text', null, null, array('text' => $this->flexconfirm));
+        if ($this->settings['options']['doubleOptIn'] == 1) {
+            $this->mailService->doBuildLinkMail(true, $this->sitename, $this->settings['optinPageUid'] ? $this->settings['optinPageUid'] : $this->settings['options']['path'], $newPerson);
+            return (new ForwardResponse('text'))->withArguments(['text' => $this->flexcheckmail]);
         }
+        $this->personService->doActivate($newPerson, $this->settings['options']['sendInMail'], $this->settings['options']['mail'], 'log.createsuccess', 'create');
+        return (new ForwardResponse('text'))->withArguments(['text' => $this->flexconfirm]);
+
+        return $this->htmlResponse();
     }
 
     /**
      * action activate
-     *
-     * @return void
      */
-    public function activateAction()
+    public function activateAction(): ResponseInterface
     {
         $vars = $this->request->getArguments();
         $pers = $this->personRepository->findOneByToken($vars['token']);
-        if ($pers != NULL) {
-            $this->personService->doActivate($pers, $this->settings["options"]["sendInMail"], $this->settings["options"]["mail"], "log.activate", "activate");
-            $this->forward('text', null, null, array('text' => $this->flexconfirm));
-        } else {
-            $this->logService->insertLog(
-                0,
-                "-",
-                 "-",
-                 "-",
-                 "activate",
-                 LocalizationUtility::translate('log.activate', $this->extKey),
-                 LocalizationUtility::translate('log.activatefail', $this->extKey),
-                 0
-            );
-            $this->forward('text', null, null, array('text' => $this->flexerr));
+        if ($pers != null) {
+            $this->personService->doActivate($pers, $this->settings['options']['sendInMail'], $this->settings['options']['mail'], 'log.activate', 'activate');
+            return (new ForwardResponse('text'))->withArguments(['text' => $this->flexconfirm]);
         }
+        $this->logService->insertLog(
+            0,
+            '-',
+            '-',
+            '-',
+            'activate',
+            LocalizationUtility::translate('log.activate', $this->extKey),
+            LocalizationUtility::translate('log.activatefail', $this->extKey),
+            0
+        );
+        return (new ForwardResponse('text'))->withArguments(['text' => $this->flexerr]);
+
+        return $this->htmlResponse();
     }
 
     /**
      * action newLeave
-     *
-     * @return void
      */
-    public function newLeaveAction()
+    public function newLeaveAction(): ResponseInterface
     {
-        $mail = trim($_GET["mail"]);
-        if ($mail != NULL && $mail != "") {
-            $this->forward('leave', null, null, array('mail' => $mail));
+        $mail = trim($_GET['mail']);
+        if ($mail != null && $mail != '') {
+            return (new ForwardResponse('leave'))->withArguments(['mail' => $mail]);
         }
+        return $this->htmlResponse();
     }
 
     /**
      * action leave
      *
      * @param string $mail
-     * @return void
      */
-    public function leaveAction($mail = "")
+    public function leaveAction($mail = '')
     {
         // Don't take the easy route - do it the hard way
-        if ($mail == "") {
-            $mail = trim($this->request->getArguments()["mail"]);
+        if ($mail == '') {
+            $mail = trim($this->request->getArguments()['mail']);
         }
-        if ($mail == "") {
-            $mail = trim($_POST["mail"]);
+        if ($mail == '') {
+            $mail = trim($_POST['mail']);
         }
 
         $pers = $this->personRepository->findOneByEmail($mail);
 
-        $opt = $this->settings["options"]["doubleOptOut"];
-        $path = $this->settings["options"]["pathout"];
-        $site = $this->settings["options"]["site"];
-        $sendOutMail = $this->settings["options"]["sendOutMail"];
-        $mail = $this->settings["options"]["mail"];
+        $opt = $this->settings['options']['doubleOptOut'];
+        $path = $this->settings['options']['pathout'];
+        $site = $this->settings['options']['site'];
+        $sendOutMail = $this->settings['options']['sendOutMail'];
+        $mail = $this->settings['options']['mail'];
 
-        if ($pers != NULL) {
+        if ($pers != null) {
             if ($pers->isUnsubscribed() == 0) {
                 if ($opt == 1) {
-                    $this->mailService->doBuildLinkMail(FALSE, $site, $path, $pers);
-                    $this->forward('text', null, null, array('text' => $this->flexcheckmailleave));
-                } else {
-                    $this->personService->doUnsubscribe($pers, $sendOutMail, $mail, 'log.leavesuccess', 'leave');
-                    $this->forward('text', null, null, array('text' => $this->flexunsubscribe));
+                    $this->mailService->doBuildLinkMail(false, $site, $path, $pers);
+                    return (new ForwardResponse('text'))->withArguments(['text' => $this->flexcheckmailleave]);
                 }
-            } else {
-                $langhelp = LocalizationUtility::translate('log.leavewant', $this->extKey);
-                $langhelp2 = LocalizationUtility::translate('log.leavealready', $this->extKey);
-                $this->logService->insertLog($pers->getUid(), $pers->getEmail(), $pers->getFirstname(), $pers->getLastname(), "leave", "$langhelp", "$langhelp2", 0);
-                $this->forward('text', null, null, array('text' => $this->flexisunsubscribed));
+                $this->personService->doUnsubscribe($pers, $sendOutMail, $mail, 'log.leavesuccess', 'leave');
+                return (new ForwardResponse('text'))->withArguments(['text' => $this->flexunsubscribe]);
             }
+            $langhelp = LocalizationUtility::translate('log.leavewant', $this->extKey);
+            $langhelp2 = LocalizationUtility::translate('log.leavealready', $this->extKey);
+            $this->logService->insertLog($pers->getUid(), $pers->getEmail(), $pers->getFirstname(), $pers->getLastname(), 'leave', "$langhelp", "$langhelp2", 0);
+            return (new ForwardResponse('text'))->withArguments(['text' => $this->flexisunsubscribed]);
         }
         $langhelp = LocalizationUtility::translate('log.leavewant', $this->extKey);
         $langhelp2 = LocalizationUtility::translate('log.leavenot', $this->extKey);
-        $this->logService->insertLog(0, $mail, "-", "-", "leave", "$langhelp", "$langhelp2", 0);
-        $this->forward('text', null, null, array('text' => $this->flexleave));
+        $this->logService->insertLog(0, $mail, '-', '-', 'leave', "$langhelp", "$langhelp2", 0);
+        return (new ForwardResponse('text'))->withArguments(['text' => $this->flexleave]);
     }
 
     /**
      * action unsubscribe
-     *
-     * @return void
      */
-    public function unsubscribeAction()
+    public function unsubscribeAction(): ResponseInterface
     {
-        $sendOutMail = $this->settings["options"]["sendOutMail"];
-        $mail = $this->settings["options"]["mail"];
+        $sendOutMail = $this->settings['options']['sendOutMail'];
+        $mail = $this->settings['options']['mail'];
         $vars = $this->request->getArguments();
         $pers = $this->personRepository->findOneByToken($vars['token']);
-        if ($pers != NULL) {
+        if ($pers != null) {
             $this->personService->doUnsubscribe($pers, $sendOutMail, $mail, 'log.unsubscribe', 'unsubscribe');
-            $this->forward('text', null, null, array('text' => $this->flexunsubscribe));
-        } else {
-            $this->forward('leave', null, null, array('mail' => ""));
+            return (new ForwardResponse('text'))->withArguments(['text' => $this->flexunsubscribe]);
         }
+        return (new ForwardResponse('leave'))->withArguments(['mail' => '']);
+
+        return $this->htmlResponse();
     }
 
     /**
      * action text
      *
      * @param string $text
-     * @return void
      */
-    public function textAction($text)
+    public function textAction($text): ResponseInterface
     {
         $this->view->assign('message', $text);
+        return $this->htmlResponse();
     }
 }

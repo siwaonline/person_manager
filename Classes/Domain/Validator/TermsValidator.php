@@ -11,7 +11,7 @@ use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 class TermsValidator extends AbstractValidator
 {
-    protected function isValid($value)
+    protected function isValid($value): void
     {
         /* @var $objectManager \TYPO3\CMS\Extbase\Object\ObjectManager */
         $objectManager = GeneralUtility::makeInstance(ObjectManager::class);
@@ -23,10 +23,10 @@ class TermsValidator extends AbstractValidator
 
         $terms = FormUtility::_GPmerged()['terms'];
 
-        $termVar = $settings["variables."]["terms"];
+        $termVar = $settings['variables.']['terms'];
 
         if ($termVar) {
-            if ($terms != "1" || $terms != 1) {
+            if ($terms != '1' || $terms != 1) {
                 $this->addError($this->translateErrorMessage('error.terms', 'person_manager'), 1620285834);
             }
         }

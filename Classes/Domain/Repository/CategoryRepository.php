@@ -2,6 +2,7 @@
 
 namespace Personmanager\PersonManager\Domain\Repository;
 
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /***************************************************************
  *
@@ -27,12 +28,7 @@ namespace Personmanager\PersonManager\Domain\Repository;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
 /**
  * The repository for Categorys
  */
-class CategoryRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
-{
-
-
-}
+class CategoryRepository extends Repository {}

@@ -7,12 +7,12 @@ use TYPO3\CMS\Extbase\Validation\Validator\AbstractValidator;
 
 class HoneyPotValidator extends AbstractValidator
 {
-   protected function isValid($value)
-   {
-       $honey = FormUtility::_GPmerged()['__hp'];
+    protected function isValid(mixed $value): void
+    {
+        $honey = FormUtility::_GPmerged()['__hp'];
 
-       if ($honey != "" && $honey != NULL) {
-        $this->addError($this->translateErrorMessage('error.spam', 'person_manager'), 1620285835);
+        if ($honey != '' && $honey != null) {
+            $this->addError($this->translateErrorMessage('error.spam', 'person_manager'), 1620285835);
+        }
     }
-   }
 }

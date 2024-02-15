@@ -1,35 +1,35 @@
 <?php
+
 return [
-	'ctrl' => [
-		'title'	=> 'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager_domain_model_category',
-		'label' => 'name',
-		'tstamp' => 'tstamp',
-		'crdate' => 'crdate',
-		'cruser_id' => 'cruser_id',
-		'delete' => 'deleted',
-		'enablecolumns' => [
-			'disabled' => 'hidden',
-			'starttime' => 'starttime',
-			'endtime' => 'endtime',
-		],
-		'searchFields' => 'name',
-		'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath("person_manager") . 'Resources/Public/Icons/tx_personmanager_domain_model_category.gif',
-	],
-	'types' => [
-		'1' => [
-			'showitem' => 'crdate, hidden, name,
+    'ctrl' => [
+        'title'	=> 'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager_domain_model_category',
+        'label' => 'name',
+        'tstamp' => 'tstamp',
+        'crdate' => 'crdate',
+        'delete' => 'deleted',
+        'enablecolumns' => [
+            'disabled' => 'hidden',
+            'starttime' => 'starttime',
+            'endtime' => 'endtime',
+        ],
+        'searchFields' => 'name',
+        'iconfile' => \TYPO3\CMS\Core\Utility\ExtensionManagementUtility::extPath('person_manager') . 'Resources/Public/Icons/tx_personmanager_domain_model_category.gif',
+    ],
+    'types' => [
+        '1' => [
+            'showitem' => 'crdate, hidden, name,
 			--div--;LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tabs.language,
 				--palette--;;language,
 			--div--;LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tabs.timeRestrictions,
 				--palette--;;timeRestrictions
-		'],
-	],
-	'palettes' => [
-		'timeRestrictions' => [ 'showitem' => 'starttime, endtime'],
-		'language' => [ 'showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource']
-	],
-	'columns' => [
-		'sys_language_uid' => [
+		', ],
+    ],
+    'palettes' => [
+        'timeRestrictions' => [ 'showitem' => 'starttime, endtime'],
+        'language' => [ 'showitem' => 'sys_language_uid, l10n_parent, l10n_diffsource'],
+    ],
+    'columns' => [
+        'sys_language_uid' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.language',
             'config' => [
@@ -38,13 +38,13 @@ return [
                 'special' => 'languages',
                 'items' => [
                     [
-                        'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
-                        -1,
-                        'flags-multiple'
+                        'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.allLanguages',
+                        'value' => -1,
+                        'icon' => 'flags-multiple',
                     ],
                 ],
                 'default' => 0,
-            ]
+            ],
         ],
         'l10n_parent' => [
             'displayCond' => 'FIELD:sys_language_uid:>:0',
@@ -53,7 +53,7 @@ return [
                 'type' => 'select',
                 'renderType' => 'selectSingle',
                 'items' => [
-                    ['', 0],
+                    ['label' => '', 'value' => 0],
                 ],
                 'foreign_table' => 'tx_personmanager_domain_model_category',
                 'foreign_table_where' => 'AND tx_personmanager_domain_model_category.pid=###CURRENT_PID### AND tx_personmanager_domain_model_category.sys_language_uid IN (-1,0)',
@@ -65,11 +65,11 @@ return [
                 'type' => 'passthrough',
             ],
         ],
-		'crdate' => [
-			'config' => [
-				'type' => 'passthrough',
-			],
-		],
+        'crdate' => [
+            'config' => [
+                'type' => 'passthrough',
+            ],
+        ],
         'hidden' => [
             'exclude' => true,
             'label' => 'LLL:EXT:core/Resources/Private/Language/locallang_general.xlf:LGL.hidden',
@@ -79,9 +79,9 @@ return [
                 'default' => 0,
                 'items' => [
                     [
-                        0 => '',
+                        'label' => '',
                         1 => '',
-                    ]
+                    ],
                 ],
             ],
         ],
@@ -113,14 +113,14 @@ return [
                 ],
             ],
         ],
-		'name' => [
-			'exclude' => 1,
-			'label' => 'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager_domain_model_category.name',
-			'config' => [
-				'type' => 'input',
-				'size' => 30,
-				'eval' => 'trim'
-			],
-		],
-	],
+        'name' => [
+            'exclude' => 1,
+            'label' => 'LLL:EXT:person_manager/Resources/Private/Language/locallang_db.xlf:tx_personmanager_domain_model_category.name',
+            'config' => [
+                'type' => 'input',
+                'size' => 30,
+                'eval' => 'trim',
+            ],
+        ],
+    ],
 ];

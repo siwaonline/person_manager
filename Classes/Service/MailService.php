@@ -13,9 +13,7 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 
 class MailService
 {
-
     /**
-     *
      * @var string
      */
     protected $extKey = 'person_manager';
@@ -32,7 +30,7 @@ class MailService
      *
      * @var LogService
      */
-    protected $logService = NULL;
+    protected $logService;
 
     /**
      * @param LogService $logService
@@ -53,19 +51,18 @@ class MailService
     }
 
     /**
-     *
      * @param bool $new
      * @param string $site
      * @param string $path
      * @param Person $person
-     * @return void
      * @throws InvalidArgumentException
      * @throws IllegalObjectTypeException
      */
-    public function doBuildLinkMail(bool $new, string $site, string $path, Person $person) {
+    public function doBuildLinkMail(bool $new, string $site, string $path, Person $person)
+    {
         $mail = GeneralUtility::makeInstance(FluidEmail::class);
         $mail
-            ->subject($site . ": " . LocalizationUtility::translate('mail.confirmdata', $this->extKey))
+            ->subject($site . ': ' . LocalizationUtility::translate('mail.confirmdata', $this->extKey))
             ->setTemplate('DoBuildLinkMail')
             ->assignMultiple([
                 'sitename' => $site,
@@ -74,28 +71,27 @@ class MailService
                 'link' => [
                     'pageUid' => $path,
                     'token' => $person->getToken(),
-                ]
+                ],
             ])
             ->to($person->getEmail());
 
         $this->_sendMail($mail);
 
         $langhelp = LocalizationUtility::translate($new ? 'log.createmail' : 'log.leavemail', $this->extKey);
-        $this->logService->insertLog($person->getUid(), $person->getEmail(), $person->getFirstname(), $person->getLastname(), $new ? "create" : "leave", "$langhelp", "", 1);
+        $this->logService->insertLog($person->getUid(), $person->getEmail(), $person->getFirstname(), $person->getLastname(), $new ? 'create' : 'leave', "$langhelp", '', 1);
     }
 
     /**
-     *
      * @param Person $person
      * @param string $msgKey
      * @param string $to
-     * @return void
      * @throws InvalidArgumentException
      */
-    public function doBuildUnsubscribeMail(Person $person, string $msgKey, string $to) {
+    public function doBuildUnsubscribeMail(Person $person, string $msgKey, string $to)
+    {
         $mail = GeneralUtility::makeInstance(FluidEmail::class);
         $mail
-            ->subject(LocalizationUtility::translate('mail.deregistration', $this->extKey) . " " . $person->getEmail())
+            ->subject(LocalizationUtility::translate('mail.deregistration', $this->extKey) . ' ' . $person->getEmail())
             ->setTemplate('DoUnsubscribe')
             ->assign('user', $person)
             ->assign('msgKey', $msgKey)
@@ -105,17 +101,16 @@ class MailService
     }
 
     /**
-     *
      * @param Person $person
      * @param string $msgKey
      * @param string $to
-     * @return void
      * @throws InvalidArgumentException
      */
-    public function doBuildActivateMail(Person $person, string $msgKey, string $to) {
+    public function doBuildActivateMail(Person $person, string $msgKey, string $to)
+    {
         $mail = GeneralUtility::makeInstance(FluidEmail::class);
         $mail
-            ->subject(LocalizationUtility::translate('mail.registration', $this->extKey) . " " . $person->getEmail())
+            ->subject(LocalizationUtility::translate('mail.registration', $this->extKey) . ' ' . $person->getEmail())
             ->setTemplate('DoActivate')
             ->assign('user', $person)
             ->assign('msgKey', $msgKey)
@@ -127,12 +122,11 @@ class MailService
     /**
      * Method is protected and not private so the MailService can be xClassed
      * @param FluidEmail $mail
-     * @return void
      * @throws InvalidArgumentException
      */
     protected function _sendMail(FluidEmail $mail)
     {
-        $mail->from(new Address($this->settings["options"]["mail"], $this->settings["options"]["site"]));
+        $mail->from(new Address($this->settings['options']['mail'], $this->settings['options']['site']));
         GeneralUtility::makeInstance(Mailer::class)->send($mail);
     }
 }

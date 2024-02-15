@@ -2,6 +2,8 @@
 
 namespace Personmanager\PersonManager\Domain\Repository;
 
+use TYPO3\CMS\Extbase\Persistence\QueryInterface;
+use TYPO3\CMS\Extbase\Persistence\Repository;
 
 /***************************************************************
  *
@@ -27,14 +29,12 @@ namespace Personmanager\PersonManager\Domain\Repository;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
-
 /**
  * The repository for Logs
  */
-class LogRepository extends \TYPO3\CMS\Extbase\Persistence\Repository
+class LogRepository extends Repository
 {
-    protected $defaultOrderings = array(
-        'uid' => \TYPO3\CMS\Extbase\Persistence\QueryInterface::ORDER_DESCENDING,
-    );
-
+    protected $defaultOrderings = [
+        'uid' => QueryInterface::ORDER_DESCENDING,
+    ];
 }
