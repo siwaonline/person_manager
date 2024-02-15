@@ -67,7 +67,7 @@ class MailService
             ->setTemplate('DoBuildLinkMail')
             ->assignMultiple([
                 'sitename' => $site,
-                'signature' => $this->signature,
+                'signature' => $this->signature??'',
                 'new' => $new,
                 'link' => [
                     'pageUid' => $path,

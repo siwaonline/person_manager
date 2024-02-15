@@ -26,6 +26,7 @@ namespace Personmanager\PersonManager\Controller;
  *
  *  This copyright notice MUST APPEAR in all copies of the script!
  ***************************************************************/
+
 use Personmanager\PersonManager\Domain\Model\Person;
 use Personmanager\PersonManager\Domain\Repository\CategoryRepository;
 use Personmanager\PersonManager\Domain\Repository\PersonRepository;
@@ -128,6 +129,7 @@ class PersonController extends ActionController
     {
         $this->mailService = $mailService;
     }
+
     /**
      * @param CategoryRepository $categoryRepository
      */
@@ -158,37 +160,37 @@ class PersonController extends ActionController
 
         // @extensionScannerIgnoreLine
         $this->signature = $this->configurationManager->getContentObject()->parseFunc($this->settings['flexsignature'], [], '< lib.parseFunc_RTE');
-        $this->sitename = $this->settings['flexsitename'];
+        $this->sitename = $this->settings['flexsitename'] ?? null;
         if ($this->sitename == null || $this->sitename == '') {
-            $this->sitename = $this->settings['options']['site'];
+            $this->sitename = $this->settings['options']['site'] ?? '';
         }
 
-        $this->flexcheckmail = $this->settings['flexcheckmail'];
+        $this->flexcheckmail = $this->settings['flexcheckmail'] ?? null;
         if ($this->flexcheckmail == null || $this->flexcheckmail == '') {
             $this->flexcheckmail = '<h1>' . LocalizationUtility::translate('msg.thx', $this->extKey) . '</h1><h3>' . LocalizationUtility::translate('msg.ancheckmail', $this->extKey) . '</h3>';
         }
-        $this->flexconfirm = $this->settings['flexconfirm'];
+        $this->flexconfirm = $this->settings['flexconfirm'] ?? null;
         if ($this->flexconfirm == null || $this->flexconfirm == '') {
             $this->flexconfirm = '<h1>' . LocalizationUtility::translate('msg.thx', $this->extKey) . '</h1><h3>' . LocalizationUtility::translate('msg.anconfirm', $this->extKey) . '</h3>';
         }
-        $this->flexerr = $this->settings['flexerr'];
+        $this->flexerr = $this->settings['flexerr'] ?? null;
         if ($this->flexerr == null || $this->flexerr == '') {
             $this->flexerr = '<h1>' . LocalizationUtility::translate('msg.error', $this->extKey) . '</h1><h3>' . LocalizationUtility::translate('msg.anerror', $this->extKey) . '</h3>';
         }
 
-        $this->flexcheckmailleave = $this->settings['flexcheckmailleave'];
+        $this->flexcheckmailleave = $this->settings['flexcheckmailleave'] ?? null;
         if ($this->flexcheckmailleave == null || $this->flexcheckmailleave == '') {
             $this->flexcheckmailleave = '<h1>' . LocalizationUtility::translate('msg.thx', $this->extKey) . '</h1><h3>' . LocalizationUtility::translate('msg.abcheckmail', $this->extKey) . '</h3>';
         }
-        $this->flexisunsubscribed = $this->settings['flexisunsubscribed'];
+        $this->flexisunsubscribed = $this->settings['flexisunsubscribed'] ?? null;
         if ($this->flexisunsubscribed == null || $this->flexisunsubscribed == '') {
             $this->flexisunsubscribed = '<h1>' . LocalizationUtility::translate('msg.error', $this->extKey) . '</h1><h3>' . LocalizationUtility::translate('msg.abalready', $this->extKey) . '</h3>';
         }
-        $this->flexleave = $this->settings['flexleave'];
+        $this->flexleave = $this->settings['flexleave'] ?? null;
         if ($this->flexleave == null || $this->flexleave == '') {
             $this->flexleave = '<h1>' . LocalizationUtility::translate('msg.error', $this->extKey) . '</h1><h3>' . LocalizationUtility::translate('msg.abnomail', $this->extKey) . '</h3>';
         }
-        $this->flexunsubscribe = $this->settings['flexunsubscribe'];
+        $this->flexunsubscribe = $this->settings['flexunsubscribe'] ?? null;
         if ($this->flexunsubscribe == null || $this->flexunsubscribe == '') {
             $this->flexunsubscribe = '<h1>' . LocalizationUtility::translate('msg.thx', $this->extKey) . '</h1><h3>' . LocalizationUtility::translate('msg.abconfirm', $this->extKey) . '</h3>';
         }
