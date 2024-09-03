@@ -55,7 +55,7 @@ class PersonRepository extends Repository
         }
         $query->matching(
             $query->logicalAnd(
-                $arr
+                ...$arr
             )
         );
 
@@ -104,7 +104,7 @@ class PersonRepository extends Repository
 
         $query->matching(
             $query->logicalOr(
-                $arr
+                ...$arr
             )
         );
 

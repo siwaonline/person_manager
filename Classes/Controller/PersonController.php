@@ -293,7 +293,7 @@ class PersonController extends ActionController
      */
     public function newLeaveAction(): ResponseInterface
     {
-        $mail = trim($_GET['mail']);
+        $mail = trim($_GET['mail'] ?? '');
         if ($mail != null && $mail != '') {
             return (new ForwardResponse('leave'))->withArguments(['mail' => $mail]);
         }
