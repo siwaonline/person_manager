@@ -154,7 +154,7 @@ class PersonController extends ActionController
         $this->persistenceManager = $persistenceManager;
     }
 
-    public function initializeAction()
+    protected function initializeAction(): void
     {
         $this->personService->setSettings($this->settings);
 
