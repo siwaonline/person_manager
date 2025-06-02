@@ -9,7 +9,7 @@ class HoneyPotValidator extends AbstractValidator
 {
     protected function isValid(mixed $value): void
     {
-        $honey = FormUtility::_GPmerged()['__hp'];
+        $honey = $this->request->getParsedBody()['__hp'];
 
         if ($honey != '' && $honey != null) {
             $this->addError($this->translateErrorMessage('error.spam', 'person_manager'), 1620285835);

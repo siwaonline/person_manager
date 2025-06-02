@@ -40,8 +40,8 @@ use Personmanager\PersonManager\Service\MailService;
 use Personmanager\PersonManager\Service\PersonService;
 use Psr\Http\Message\ResponseInterface;
 use TYPO3\CMS\Core\Context\Context;
+use TYPO3\CMS\Core\Routing\PageArguments;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Annotation as Extbase;
 use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
@@ -52,45 +52,6 @@ use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
  */
 class PersonController extends ActionController
 {
-    /**
-     * categoryRepository
-     *
-     * @var CategoryRepository
-     */
-    protected $categoryRepository;
-
-    /**
-     * personRepository
-     *
-     * @var PersonRepository
-     */
-    protected $personRepository;
-
-    /**
-     * logService
-     *
-     * @var LogService
-     */
-    protected $logService;
-
-    /**
-     * personService
-     *
-     * @var PersonService
-     */
-    protected $personService;
-
-    /**
-     * mailService
-     *
-     * @var MailService
-     */
-    protected $mailService;
-
-    /**
-     * @var PersistenceManager
-     */
-    protected $persistenceManager;
 
     protected $extKey = 'person_manager';
 
@@ -107,59 +68,29 @@ class PersonController extends ActionController
     public $flexunsubscribe = '';
 
     /**
-     * @param LogService $logService
-     */
-    public function injectLogService(LogService $logService)
-    {
-        $this->logService = $logService;
-    }
-
-    /**
-     * @param PersonService $personService
-     */
-    public function injectPersonService(PersonService $personService)
-    {
-        $this->personService = $personService;
-    }
-
-    /**
-     * @param MailService $mailService
-     */
-    public function injectMailService(MailService $mailService)
-    {
-        $this->mailService = $mailService;
-    }
-
-    /**
      * @param CategoryRepository $categoryRepository
-     */
-    public function injectCategoryRepository(CategoryRepository $categoryRepository)
-    {
-        $this->categoryRepository = $categoryRepository;
-    }
-
-    /**
+     * @param PersonRepository $personRepository
+     * @param LogService $logService
      * @param PersonService $personService
-     */
-    public function injectPersonRepository(PersonRepository $personRepository)
-    {
-        $this->personRepository = $personRepository;
-    }
-
-    /**
+     * @param MailService $mailService
      * @param PersistenceManager $persistenceManager
      */
-    public function injectPersistenceManager(PersistenceManager $persistenceManager)
+    public function __construct(
+        private readonly CategoryRepository $categoryRepository,
+        private readonly PersonRepository $personRepository,
+        private readonly LogService $logService,
+        private readonly PersonService $personService,
+        private readonly MailService $mailService,
+        private readonly PersistenceManager $persistenceManager
+    )
     {
-        $this->persistenceManager = $persistenceManager;
     }
 
     protected function initializeAction(): void
     {
         $this->personService->setSettings($this->settings);
 
-        // @extensionScannerIgnoreLine
-        $this->signature = $this->configurationManager->getContentObject()->parseFunc($this->settings['flexsignature'], [], '< lib.parseFunc_RTE');
+        $this->signature = $this->settings['flexsignature'];
         $this->sitename = $this->settings['flexsitename'] ?? null;
         if ($this->sitename == null || $this->sitename == '') {
             $this->sitename = $this->settings['options']['site'] ?? '';
@@ -231,11 +162,11 @@ class PersonController extends ActionController
      *
      * @param Person $newPerson
      */
-    #[Extbase\Validate(['param' => 'newPerson', 'validator' => HoneyPotValidator::class])]
-    #[Extbase\Validate(['param' => 'newPerson', 'validator' => TermsValidator::class])]
-    #[Extbase\Validate(['param' => 'newPerson', 'validator' => NameValidator::class])]
-    #[Extbase\Validate(['param' => 'newPerson', 'validator' => EmailValidator::class])]
-    #[Extbase\Validate(['param' => 'newPerson', 'validator' => EmailAgainValidator::class])]
+    #[TYPO3\CMS\Extbase\Annotation\Validate(['param' => 'newPerson', 'validator' => HoneyPotValidator::class])]
+    #[TYPO3\CMS\Extbase\Annotation\Validate(['param' => 'newPerson', 'validator' => TermsValidator::class])]
+    #[TYPO3\CMS\Extbase\Annotation\Validate(['param' => 'newPerson', 'validator' => NameValidator::class])]
+    #[TYPO3\CMS\Extbase\Annotation\Validate(['param' => 'newPerson', 'validator' => EmailValidator::class])]
+    #[TYPO3\CMS\Extbase\Annotation\Validate(['param' => 'newPerson', 'validator' => EmailAgainValidator::class])]
     public function createAction(Person $newPerson): ResponseInterface
     {
         $hash = $newPerson->getEmail() . time();
@@ -255,7 +186,13 @@ class PersonController extends ActionController
         $this->logService->insertLog($newPerson->getUid(), $newPerson->getEmail(), $newPerson->getFirstname(), $newPerson->getLastname(), 'create', $langhelp, '', 1);
 
         if ($this->settings['options']['doubleOptIn'] == 1) {
-            $this->mailService->doBuildLinkMail(true, $this->sitename, $this->settings['optinPageUid'] ? $this->settings['optinPageUid'] : $this->settings['options']['path'], $newPerson);
+            $pageUid = $this->settings['optinPageUid'] ?: $this->settings['options']['path'];
+            if(!$pageUid){
+                /** @var PageArguments $site */
+                $routing = $this->request->getAttribute('routing');
+                $pageUid = $routing->getPageId();
+            }
+            $this->mailService->doBuildLinkMail(true, $this->sitename, $pageUid, $newPerson);
             return (new ForwardResponse('text'))->withArguments(['text' => $this->flexcheckmail]);
         }
         $this->personService->doActivate($newPerson, $this->settings['options']['sendInMail'], $this->settings['options']['mail'], 'log.createsuccess', 'create');

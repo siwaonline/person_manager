@@ -38,10 +38,17 @@ use Personmanager\PersonManager\Domain\Repository\CategoryRepository;
 use Personmanager\PersonManager\Domain\Repository\LogRepository;
 use Personmanager\PersonManager\Domain\Repository\PersonRepository;
 use Personmanager\PersonManager\Phpexcel\MyReadFilter;
+use PHPExcel_CachedObjectStorageFactory;
+use PHPExcel_Cell;
 use PHPExcel_Exception;
+use PHPExcel_IOFactory;
+use PHPExcel_Settings;
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionClass;
+use ReflectionObject;
+use ReflectionProperty;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Core\Environment;
@@ -115,24 +122,8 @@ class BackendController extends ActionController
             $moduleTemplate->assign($key, $value);
         }
 
-        $buttonBar = $moduleTemplate->getDocHeaderComponent()->getButtonBar();
-//        if ($backButton) {
-//            $back = $buttonBar->makeLinkButton()
-//                ->setHref((string)$this->backendUriBuilder->buildUriFromRoute('web_auss', [
-//                    'action' => 'list',
-//                ]))
-//                ->setTitle('Zurück')
-//                ->setIcon($this->iconFactory->getIcon('actions-arrow-left', Icon::SIZE_SMALL));
-//            $buttonBar->addButton($back);
-//        }
-//        if ($submitButton) {
-//            $submit = $buttonBar->makeInputButton()
-//                ->setForm('form')->setShowLabelText(true)
-//                ->setTitle('Speichern')->setName('save')->setValue('1')
-//                ->setIcon($this->iconFactory->getIcon('actions-save', Icon::SIZE_SMALL));
-//            $buttonBar->addButton($submit);
-//        }
-        $moduleTemplate->makeDocHeaderModuleMenu(['id' => (int)GeneralUtility::_GP('id')]);
+        $id = $this->request->getParsedBody()['id'];
+        $moduleTemplate->makeDocHeaderModuleMenu(['id' => (int)$id]);
         return $moduleTemplate->renderResponse(ucfirst($this->request->getControllerActionName()));
     }
 
@@ -171,8 +162,8 @@ class BackendController extends ActionController
         $vars = $this->settings;
 
         $pers = new Person();
-        $reflect = new \ReflectionClass($pers);
-        $properties = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED);
+        $reflect = new ReflectionClass($pers);
+        $properties = $reflect->getProperties(ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED);
         $props = [];
 
         foreach ($properties as $prop) {
@@ -263,7 +254,7 @@ class BackendController extends ActionController
     /**
      * action import
      *
-     * @param \Personmanager\PersonManager\Domain\Model\Person $person
+     * @param Person $person
      */
     /**
      * action import
@@ -282,7 +273,7 @@ class BackendController extends ActionController
         $filen = $vars['filen'];
         $arr = explode($trenn, $spalten);
         $error = '';
-        $obj = new \ReflectionObject(new Person());
+        $obj = new ReflectionObject(new Person());
 
         if ($first == '1') {
             $startindex = 1;
@@ -319,7 +310,7 @@ class BackendController extends ActionController
                     $worksheetTitle = $worksheet->getTitle();
                     $highestRow = $worksheet->getHighestRow(); // e.g. 10
                     $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
-                    $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
+                    $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
                     $nrColumns = ord($highestColumn) - 64;
 
                     $updateRecords = [];
@@ -694,7 +685,7 @@ class BackendController extends ActionController
     /**
      * action blImport
      *
-     * @param \Personmanager\PersonManager\Domain\Model\Person $person
+     * @param Person $person
      */
     /**
      * action blImport
@@ -710,7 +701,7 @@ class BackendController extends ActionController
         $check = $vars['check'];
         $filen = $vars['filen'];
         $error = '';
-        $obj = new \ReflectionObject(new Person());
+        $obj = new ReflectionObject(new Person());
 
         if ($first == '1') {
             $startindex = 1;
@@ -733,7 +724,7 @@ class BackendController extends ActionController
                     $worksheetTitle = $worksheet->getTitle();
                     $highestRow = $worksheet->getHighestRow(); // e.g. 10
                     $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
-                    $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
+                    $highestColumnIndex = PHPExcel_Cell::columnIndexFromString($highestColumn);
                     $nrColumns = ord($highestColumn) - 64;
 
                     for ($row = $startindex; $row <= $highestRow; ++$row) {
@@ -821,12 +812,12 @@ class BackendController extends ActionController
     {
         ini_set('display_errors', '1');
 
-        $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
+        $cacheMethod = PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
         $cacheSettings = [' memoryCacheSize ' => '4MB'];
-        \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
+        PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
 
-        $inputFileType = \PHPExcel_IOFactory::identify($csv_datei);
-        $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
+        $inputFileType = PHPExcel_IOFactory::identify($csv_datei);
+        $objReader = PHPExcel_IOFactory::createReader($inputFileType);
         $objReader->setReadDataOnly(true);
         $objReader->setReadFilter(new MyReadFilter());
         $objPHPExcel = $objReader->load($csv_datei);
