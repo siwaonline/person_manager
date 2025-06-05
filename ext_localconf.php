@@ -1,58 +1,64 @@
 <?php
 
+use Personmanager\PersonManager\Controller\PersonController;
+use TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider;
+use TYPO3\CMS\Core\Imaging\IconRegistry;
+use TYPO3\CMS\Core\Utility\GeneralUtility;
+use TYPO3\CMS\Extbase\Utility\ExtensionUtility;
+
 if (!defined('TYPO3')) {
     die('Access denied.');
 }
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+ExtensionUtility::configurePlugin(
     'PersonManager',
     'Personmanagerfront',
     [
-        \Personmanager\PersonManager\Controller\PersonController::class => 'new, create, activate, unsubscribe,isunsubscribed,text',
+        PersonController::class => 'new, create, activate, unsubscribe,isunsubscribed,text',
 
     ],
     // non-cacheable actions
     [
-        \Personmanager\PersonManager\Controller\PersonController::class => 'new, create, activate, unsubscribe,isunsubscribed,text',
+        PersonController::class => 'new, create, activate, unsubscribe,isunsubscribed,text',
 
-    ]
+    ],
+    ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+ExtensionUtility::configurePlugin(
     'PersonManager',
     'Personmanagerunsub',
     [
-        \Personmanager\PersonManager\Controller\PersonController::class => 'newLeave, leave, unsubscribe, text',
+        PersonController::class => 'newLeave, leave, unsubscribe, text',
 
     ],
     // non-cacheable actions
     [
-        \Personmanager\PersonManager\Controller\PersonController::class => 'newLeave, leave, unsubscribe, text',
+        PersonController::class => 'newLeave, leave, unsubscribe, text',
 
-    ]
+    ],
+    ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
 
-\TYPO3\CMS\Extbase\Utility\ExtensionUtility::configurePlugin(
+ExtensionUtility::configurePlugin(
     'PersonManager',
     'Personmanagershort',
     [
-        \Personmanager\PersonManager\Controller\PersonController::class => 'newShort',
+        PersonController::class => 'newShort',
 
     ],
     // non-cacheable actions
     [
-        \Personmanager\PersonManager\Controller\PersonController::class => 'newShort',
+        PersonController::class => 'newShort',
 
-    ]
+    ],
+    ExtensionUtility::PLUGIN_TYPE_CONTENT_ELEMENT
 );
-
-// wizards
-\TYPO3\CMS\Core\Utility\ExtensionManagementUtility::addPageTSConfig("@import 'EXT:person_manager/Configuration/PageTS/*.typoscript'");
 
 // Mail API
 $GLOBALS['TYPO3_CONF_VARS']['MAIL']['layoutRootPaths'][500] = 'EXT:person_manager/Resources/Private/Mail/Layouts';
 $GLOBALS['TYPO3_CONF_VARS']['MAIL']['templateRootPaths'][500] = 'EXT:person_manager/Resources/Private/Mail/Templates';
 $GLOBALS['TYPO3_CONF_VARS']['MAIL']['partialRootPaths'][500] = 'EXT:person_manager/Resources/Private/Mail/Partials';
 
-$iconRegistry = \TYPO3\CMS\Core\Utility\GeneralUtility::makeInstance(\TYPO3\CMS\Core\Imaging\IconRegistry::class);
-$iconRegistry->registerIcon('personmanager-icon', \TYPO3\CMS\Core\Imaging\IconProvider\SvgIconProvider::class, ['source' => 'EXT:person_manager/Resources/Public/Icons/Extension.svg']);
+$iconRegistry = GeneralUtility::makeInstance(IconRegistry::class);
+$iconRegistry->registerIcon('personmanager-icon', SvgIconProvider::class, ['source' => 'EXT:person_manager/Resources/Public/Icons/Extension.svg']);

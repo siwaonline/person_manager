@@ -17,7 +17,7 @@ class TermsValidator extends AbstractValidator
             ConfigurationManagerInterface::CONFIGURATION_TYPE_SETTINGS
         );
 
-        $terms = FormUtility::_GPmerged()['terms'] ?? '';
+        $terms = $this->request->getParsedBody()['terms'] ?? '';
 
         $termVar = $settings['variables.']['terms'] ?? '';
 

@@ -98,7 +98,7 @@ Here you can add, search, show, edit or delete single Persons.
 Import
 -----------------------------------------------------------------------------
 
-Here you can import excel or csv files of Persons.
+Here you can import csv files of Persons.
 
 First insert the columns you want to import.
 
@@ -111,7 +111,7 @@ Check your data and finish by clicking ``Import`` again.
 Export
 -----------------------------------------------------------------------------
 
-Here you can export excel or csv files of Persons.
+Here you can export csv files of Persons.
 
 Log
 -----------------------------------------------------------------------------

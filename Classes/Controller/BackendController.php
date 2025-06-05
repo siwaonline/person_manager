@@ -37,29 +37,23 @@ use Personmanager\PersonManager\Domain\Repository\BlacklistRepository;
 use Personmanager\PersonManager\Domain\Repository\CategoryRepository;
 use Personmanager\PersonManager\Domain\Repository\LogRepository;
 use Personmanager\PersonManager\Domain\Repository\PersonRepository;
-use Personmanager\PersonManager\Phpexcel\MyReadFilter;
-use PHPExcel_Exception;
-use PhpOffice\PhpSpreadsheet\Spreadsheet;
-use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use Psr\Http\Message\ResponseInterface;
+use ReflectionClass;
+use ReflectionObject;
+use ReflectionProperty;
+use TYPO3\CMS\Backend\Attribute\AsController;
 use TYPO3\CMS\Backend\Routing\UriBuilder;
 use TYPO3\CMS\Backend\Template\ModuleTemplateFactory;
 use TYPO3\CMS\Core\Core\Environment;
 use TYPO3\CMS\Core\Database\ConnectionPool;
-use TYPO3\CMS\Core\Database\Query\QueryBuilder;
-use TYPO3\CMS\Core\Imaging\Icon;
 use TYPO3\CMS\Core\Imaging\IconFactory;
 use TYPO3\CMS\Core\Utility\GeneralUtility;
-use TYPO3\CMS\Extbase\Exception as ExtbaseException;
-use TYPO3\CMS\Extbase\Http\ForwardResponse;
 use TYPO3\CMS\Extbase\Mvc\Controller\ActionController;
-use TYPO3\CMS\Extbase\Mvc\Exception\InvalidArgumentValueException;
-use TYPO3\CMS\Extbase\Mvc\Exception\StopActionException;
+use TYPO3\CMS\Extbase\Persistence\Exception\IllegalObjectTypeException;
 use TYPO3\CMS\Extbase\Persistence\Generic\PersistenceManager;
 use TYPO3\CMS\Extbase\Utility\LocalizationUtility;
 use TYPO3\CMS\Extbase\Pagination\QueryResultPaginator;
 use TYPO3\CMS\Core\Pagination\SimplePagination;
-use UnexpectedValueException;
 
 /**
  * //TODO Refactor this Class
@@ -67,22 +61,23 @@ use UnexpectedValueException;
  *
  * BackendController
  */
+#[AsController]
 class BackendController extends ActionController
 {
 
-    protected $extKey = 'person_manager';
+    protected string $extKey = 'person_manager';
 
-    public $signature = '';
-    public $sitename = '';
+    public string $signature = '';
+    public string $sitename = '';
 
-    public $flexcheckmail = '';
-    public $flexconfirm = '';
-    public $flexerr = '';
+    public string $flexcheckmail = '';
+    public string $flexconfirm = '';
+    public string $flexerr = '';
 
-    public $flexleave = '';
-    public $flexisunsubscribed = '';
-    public $flexcheckmailleave = '';
-    public $flexunsubscribe = '';
+    public string $flexleave = '';
+    public string $flexisunsubscribed = '';
+    public string $flexcheckmailleave = '';
+    public string $flexunsubscribe = '';
 
 
     /**
@@ -108,6 +103,22 @@ class BackendController extends ActionController
     {
     }
 
+    public function initializeAction(): void
+    {
+        $pid = $this->request->getQueryParams()['id'] ?? null;
+
+        $qS = $this->personRepository->createQuery()->getQuerySettings();
+        if ($pid === null) {
+            $qS->setRespectStoragePage(false);
+        } else {
+            $qS->setStoragePageIds([$pid]);
+        }
+
+        $this->personRepository->setDefaultQuerySettings($qS);
+        $this->logRepository->setDefaultQuerySettings($qS);
+        $this->blacklistRepository->setDefaultQuerySettings($qS);
+    }
+
     private function renderModule($variables): ResponseInterface
     {
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
@@ -115,25 +126,9 @@ class BackendController extends ActionController
             $moduleTemplate->assign($key, $value);
         }
 
-        $buttonBar = $moduleTemplate->getDocHeaderComponent()->getButtonBar();
-//        if ($backButton) {
-//            $back = $buttonBar->makeLinkButton()
-//                ->setHref((string)$this->backendUriBuilder->buildUriFromRoute('web_auss', [
-//                    'action' => 'list',
-//                ]))
-//                ->setTitle('Zurück')
-//                ->setIcon($this->iconFactory->getIcon('actions-arrow-left', Icon::SIZE_SMALL));
-//            $buttonBar->addButton($back);
-//        }
-//        if ($submitButton) {
-//            $submit = $buttonBar->makeInputButton()
-//                ->setForm('form')->setShowLabelText(true)
-//                ->setTitle('Speichern')->setName('save')->setValue('1')
-//                ->setIcon($this->iconFactory->getIcon('actions-save', Icon::SIZE_SMALL));
-//            $buttonBar->addButton($submit);
-//        }
-        $moduleTemplate->makeDocHeaderModuleMenu(['id' => (int)GeneralUtility::_GP('id')]);
-        return $moduleTemplate->renderResponse(ucfirst($this->request->getControllerActionName()));
+        $id = $this->request->getParsedBody()['id'] ?? $this->request->getQueryParams()['id'] ?? 0;
+        $moduleTemplate->makeDocHeaderModuleMenu(['id' => (int)$id]);
+        return $moduleTemplate->renderResponse('Backend/' . ucfirst($this->request->getControllerActionName()));
     }
 
     /**
@@ -141,8 +136,9 @@ class BackendController extends ActionController
      *
      * @param int $order
      * @param string $getterm
+     * @return ResponseInterface
      */
-    public function listAction($order = 0, $getterm = ''): ResponseInterface
+    public function listAction(int $order = 0, string $getterm = ''): ResponseInterface
     {
         $term = $this->request->getArguments()['search'] ?? null;
         if ($term == null || $term == '') {
@@ -162,17 +158,17 @@ class BackendController extends ActionController
     }
 
     /**
-     * @param mixed $isimp
+     * @param int $isimp
      * @return array
      * @throws InvalidArgumentException
      */
-    public function getProps($isimp)
+    public function getProps(int $isimp): array
     {
         $vars = $this->settings;
 
         $pers = new Person();
-        $reflect = new \ReflectionClass($pers);
-        $properties = $reflect->getProperties(\ReflectionProperty::IS_PUBLIC | \ReflectionProperty::IS_PROTECTED);
+        $reflect = new ReflectionClass($pers);
+        $properties = $reflect->getProperties(ReflectionProperty::IS_PUBLIC | ReflectionProperty::IS_PROTECTED);
         $props = [];
 
         foreach ($properties as $prop) {
@@ -202,11 +198,7 @@ class BackendController extends ActionController
                         $desc .= " ($langhelp|$langhelp2) (0|1)";
                     }
                 } else {
-                    if ($prop->getName() == 'titel' || $prop->getName() == 'nachgtitel' || $prop->getName() == 'geb' || $prop->getName() == 'tel' || $prop->getName() == 'company' || $prop->getName() == 'category' || substr(
-                            $prop->getName(),
-                            0,
-                            5
-                        ) === 'frtxt') {
+                    if ($prop->getName() == 'titel' || $prop->getName() == 'nachgtitel' || $prop->getName() == 'geb' || $prop->getName() == 'tel' || $prop->getName() == 'company' || $prop->getName() == 'category' || str_starts_with($prop->getName(), 'frtxt')) {
                         if ($vars[$prop->getName()] == 1) {
                             $desc = LocalizationUtility::translate(
                                 'tx_personmanager_domain_model_person.' . $prop->getName(),
@@ -225,7 +217,7 @@ class BackendController extends ActionController
             }
             if ($desc != '') {
                 $data = ['value' => $prop->getName(), 'name' => $desc];
-                array_push($props, $data);
+                $props[] = $data;
             }
         }
         return $props;
@@ -238,51 +230,36 @@ class BackendController extends ActionController
      * @param string $spalten
      * @param string $trenn
      * @param string $first
-     * @param string $impformat
+     * @return ResponseInterface
      */
-    public function newImportAction($error = '', $spalten = '', $trenn = '', $first = '', $impformat = ''): ResponseInterface
+    public function newImportAction(string $error = ''): ResponseInterface
     {
         $anz = $this->personRepository->findAll()->count();
-
-        if ($trenn == '') {
-            $trenn = ';';
-        }
-        if ($spalten == '') {
-            $spalten = 'salutation;firstname;lastname;email';
-        }
-        if ($impformat == '') {
-            $impformat = 'excel';
-        }
+        $trenn = ';';
+        $spalten = 'salutation;firstname;lastname;email';
 
         $props = $this->getProps(1);
 
-        return $this->renderModule(['countPers' => $anz, 'trenn' => $trenn, 'spalten' => $spalten, 'error' => $error, 'settings' => $this->settings, 'first' => $first, 'impformat' => $impformat, 'props' => $props]);
+        return $this->renderModule(['countPers' => $anz, 'trenn' => $trenn, 'spalten' => $spalten, 'error' => $error, 'settings' => $this->settings, 'first' => '', 'props' => $props]);
 
     }
 
     /**
-     * action import
-     *
-     * @param \Personmanager\PersonManager\Domain\Model\Person $person
+     * @return ResponseInterface
+     * @throws IllegalObjectTypeException
+     * @throws Exception
      */
-    /**
-     * action import
-     *
-     * @param Person $person
-     */
-    public function importAction()
+    public function importAction(): ResponseInterface
     {
-        $failed = 0;
-        $vars = $_POST['tx_personmanager_web_personmanagerpersonmanagerback'];
+        $vars = $_POST;
         $spalten = $vars['spalten'];
         $trenn = $vars['trenn'];
         $first = $vars['first'];
-        $impformat = $vars['impformat'];
-        $check = $vars['check'];
-        $filen = $vars['filen'];
+        $check = $vars['check'] ?? '0';
+        $filen = $vars['filen'] ?? 0;
         $arr = explode($trenn, $spalten);
         $error = '';
-        $obj = new \ReflectionObject(new Person());
+        $obj = new ReflectionObject(new Person());
 
         if ($first == '1') {
             $startindex = 1;
@@ -293,214 +270,96 @@ class BackendController extends ActionController
         foreach ($arr as $val) {
             if (!$obj->hasProperty($val)) {
                 $langhelp = LocalizationUtility::translate('error.nocol', $this->extKey);
-                $error .= '<p>' . sprintf("$langhelp", $val) . '</p>';
-                $failed = 1;
+                $error .= '<p>' . sprintf($langhelp, $val) . '</p>';
             }
         }
-        if ($failed == 0) {
-            $personen = [];
 
-            $feler_trenner = $trenn;
-            $zeilen_trenner = (string)chr(10);
+        $personen = [];
 
-            $csv_datei = $this->doUploadFile();
-            if ($check == '1') {
-                $csv_datei = $filen;
-            }
+        $feler_trenner = $trenn;
+        $zeilen_trenner = chr(10);
 
-            /** @var QueryBuilder $queryBuilder */
-            $queryBuilder = GeneralUtility::makeInstance(ConnectionPool::class)->getQueryBuilderForTable('tx_personmanager_domain_model_person');
-            $personMails = $queryBuilder->select('email')->from('tx_personmanager_domain_model_person')->executeQuery()->fetchAll();
-            $personMails = array_map(function ($a) {
-                return $a['email'];
-            }, $personMails);
-            if ($impformat == 'excel') {
-                foreach ($this->doLoadExcel($csv_datei) as $worksheet) {
-                    $worksheetTitle = $worksheet->getTitle();
-                    $highestRow = $worksheet->getHighestRow(); // e.g. 10
-                    $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
-                    $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
-                    $nrColumns = ord($highestColumn) - 64;
-
-                    $updateRecords = [];
-                    $newRecords = [];
-                    $querySettings = $this->personRepository->createQuery()->getQuerySettings();
-                    $pid = $querySettings->getStoragePageIds()[0];
-                    for ($row = $startindex; $row <= $highestRow; ++$row) {
-                        $emailKey = array_search('email', $arr);
-                        if ($emailKey !== false) {
-                            $cell = $worksheet->getCellByColumnAndRow($emailKey, $row);
-                            if (in_array($this->extractEmail($cell->getValue()), $personMails)) {
-                                $newPerson = false;
-                            } else {
-                                $newPerson = true;
-                            }
-                        }
-                        $person = [];
-                        if ($newPerson) {
-                            $person['pid'] = $pid;
-                            $person['active'] = 1;
-                            $person['confirmed'] = 1;
-                        }
-                        foreach ($arr as $key => $value) {
-                            $cell = $worksheet->getCellByColumnAndRow($key, $row);
-                            if ($value == 'category') {
-                                $newKat = $this->categoryRepository->findOneByName($cell->getValue());
-                                if ($newKat == null) {
-                                    $newKat = new Category();
-                                    $newKat->setName($cell->getValue());
-                                    $this->categoryRepository->add($newKat);
-                                    $this->persistenceManager->persistAll();
-                                }
-                                $person['category'] = $newKat->getUid();
-                            } else {
-                                if ($value == 'salutation') {
-                                    if (strtolower(trim($cell->getValue())) == 'herr' || strtolower(trim($cell->getValue())) == 'herrn' || strtolower(trim($cell->getValue())) == 'sir' || strtolower(trim($cell->getValue())) == 'mr') {
-                                        $cell->setValue(1);
-                                    }
-                                    if (strtolower(trim($cell->getValue())) == 'frau' || strtolower(trim($cell->getValue())) == 'madame' || strtolower(trim($cell->getValue())) == 'mrs') {
-                                        $cell->setValue(2);
-                                    }
-                                    if ($cell->getValue() != 1 && $cell->getValue() != 2) {
-                                        $cell->setValue(0);
-                                    }
-                                }
-                                if ($value == 'active' || $value == 'confirmed' || $value == 'unsubscribed') {
-                                    if (strtolower(trim($cell->getValue())) == 'nein' || strtolower(trim($cell->getValue())) == 'no') {
-                                        $cell->setValue(0);
-                                    }
-                                    if (strtolower(trim($cell->getValue())) == 'ja' || strtolower(trim($cell->getValue())) == 'yes') {
-                                        $cell->setValue(1);
-                                    }
-                                }
-                                if ($value == 'email') {
-                                    $cell->setValue($this->extractEmail($cell->getValue()));
-                                }
-                                $person[$value] = $cell->getValue();
-                            }
-                        }
-                        $tstmp = time();
-                        $hash = $person['email'] . $tstmp;
-                        $person['token'] = md5($hash);
-
-                        if ($person['email'] != '' && $person['email'] != null) {
-                            if ($check == '1') {
-                                if ($newPerson) {
-                                    $newRecords[] = $person;
-                                } else {
-                                    $updateRecords[] = $person;
-                                }
-                                //$this->personRepository->add($newPerson);
-                            } else {
-                                array_push($personen, $person);
-                            }
-                        }
-                    }
-                }
-                if (count($updateRecords) > 0) {
-                    foreach ($updateRecords as $updateRecord) {
-                        $updateQuery = $queryBuilder->update('tx_personmanager_domain_model_person')->where($queryBuilder->expr()->eq(
-                            'email',
-                            $queryBuilder->createNamedParameter($updateRecord['email'])
-                        ));
-                        foreach ($updateRecord as $key => $value) {
-                            $updateQuery->set($key, $value);
-                        }
-                        $updateQuery->execute();
-                    }
-                }
-                if (count($newRecords) > 0) {
-                    $columns = array_keys($newRecords[0]);
-                    $queryBuilder->getConnection()->bulkInsert('tx_personmanager_domain_model_person', $newRecords, $columns);
-                }
-                //$this->persistenceManager->persistAll();
-            } else {
-                $datei_inhalt = @file_get_contents($csv_datei);
-                $zeilen = explode($zeilen_trenner, $datei_inhalt);
-                $anzahl_zeilen = count($zeilen);
-
-                if (is_array($zeilen) == true) {
-                    foreach ($zeilen as $key => $zeile) {
-                        if ($zeile !== null && $zeile !== '' && $key > ($startindex - 2)) {
-                            $felder = explode($feler_trenner, $zeile);
-
-                            $emailKey = array_search('email', $arr);
-                            if ($emailKey !== false) {
-                                $newPerson = $this->personRepository->findOneByEmail($this->extractEmail($felder[$emailKey]));
-                            }
-                            if (!$newPerson) {
-                                $newPerson = new Person();
-                                $newPerson->setActive(1);
-                                $newPerson->setConfirmed(1);
-                            }
-                            foreach ($arr as $key => $value) {
-                                $cell = $felder[$key];
-                                if ($value == 'category') {
-                                    $newKat = $this->categoryRepository->findOneByName($cell);
-                                    if ($newKat == null) {
-                                        $newKat = new Category();
-                                        $newKat->setName($cell);
-                                        $this->categoryRepository->add($newKat);
-                                        $this->persistenceManager->persistAll();
-                                    }
-                                    $newPerson->setCategory($newKat);
-                                } else {
-                                    if ($value == 'salutation' || $value == 'salutation') {
-                                        if (strtolower(trim($cell)) == 'herr' || strtolower(trim($cell)) == 'herrn' || strtolower(trim($cell)) == 'sir' || strtolower(trim($cell)) == 'mr') {
-                                            $cell = 1;
-                                        }
-                                        if (strtolower(trim($cell)) == 'frau' || strtolower(trim($cell)) == 'madame' || strtolower(trim($cell)) == 'mrs') {
-                                            $cell = 2;
-                                        }
-                                        if ($cell != 1 && $cell != 2) {
-                                            $cell = 0;
-                                        }
-                                    }
-                                    if ($value == 'active' || $value == 'confirmed' || $value == 'unsubscribed') {
-                                        if (strtolower(trim($cell)) == 'nein' || strtolower(trim($cell)) == 'no') {
-                                            $cell = 0;
-                                        }
-                                        if (strtolower(trim($cell)) == 'ja' || strtolower(trim($cell)) == 'yes') {
-                                            $cell = 1;
-                                        }
-                                    }
-                                    if ($value == 'email') {
-                                        $cell = $this->extractEmail($cell);
-                                    }
-                                    $newPerson->setProperty($value, $cell);
-                                }
-                            }
-                            $tstmp = time();
-                            $hash = $newPerson->getEmail() . $tstmp;
-                            $newPerson->setToken(md5($hash));
-
-                            if ($newPerson->getEmail() != '' && $newPerson->getEmail() != null) {
-                                if ($check == '1') {
-                                    $this->personRepository->add($newPerson);
-                                } else {
-                                    array_push($personen, $newPerson);
-                                }
-                            }
-                        }
-                    }
-                }
-                $this->persistenceManager->persistAll();
-            }
-            if ($check == '1') {
-                $this->redirect('insertData');
-            }
-
-            return $this->renderModule(['personen' => $personen, 'arr' => $arr, 'anz' => count($personen), 'spalten' => $spalten, 'error' => $error, 'trenn' => $trenn, 'settings' => $this->settings, 'first' => $first, 'impformat' => $impformat, 'filename' => $csv_datei]);
-
-        } else {
-            return (new ForwardResponse('newImport'))->withArguments([
-                'error' => $error,
-                'spalten' => $spalten,
-                'trenn' => $trenn,
-                'first' => $first,
-                'impformat' => $impformat,
-            ]);
+        $csv_datei = $this->doUploadFile();
+        if ($check == '1') {
+            $csv_datei = $filen;
         }
+
+        $datei_inhalt = @file_get_contents($csv_datei);
+        $zeilen = explode($zeilen_trenner, $datei_inhalt);
+
+        if (is_array($zeilen)) {
+            foreach ($zeilen as $key => $zeile) {
+                if ($zeile !== null && $zeile !== '' && $key > ($startindex - 2)) {
+                    $felder = explode($feler_trenner, $zeile);
+
+                    $emailKey = array_search('email', $arr);
+                    $newPerson = null;
+                    if ($emailKey !== false) {
+                        $newPerson = $this->personRepository->findOneBy(['email' => $this->extractEmail($felder[$emailKey])]);
+                    }
+                    if (!($newPerson instanceof Person)) {
+                        $newPerson = new Person();
+                        $newPerson->setActive(1);
+                        $newPerson->setConfirmed(1);
+                    }
+                    foreach ($arr as $innerKey => $value) {
+                        $cell = $felder[$innerKey];
+                        if ($value == 'category') {
+                            $newKat = $this->categoryRepository->findOneBy(['name' => $cell]);
+                            if ($newKat == null) {
+                                $newKat = new Category();
+                                $newKat->setName($cell);
+                                $this->categoryRepository->add($newKat);
+                                $this->persistenceManager->persistAll();
+                            }
+                            $newPerson->setCategory($newKat);
+                        } else {
+                            if ($value == 'salutation') {
+                                if (strtolower(trim($cell)) == 'herr' || strtolower(trim($cell)) == 'herrn' || strtolower(trim($cell)) == 'sir' || strtolower(trim($cell)) == 'mr') {
+                                    $cell = 1;
+                                }
+                                if (strtolower(trim($cell)) == 'frau' || strtolower(trim($cell)) == 'madame' || strtolower(trim($cell)) == 'mrs') {
+                                    $cell = 2;
+                                }
+                                if ($cell != 1 && $cell != 2) {
+                                    $cell = 0;
+                                }
+                            }
+                            if ($value == 'active' || $value == 'confirmed' || $value == 'unsubscribed') {
+                                if (strtolower(trim($cell)) == 'nein' || strtolower(trim($cell)) == 'no') {
+                                    $cell = 0;
+                                }
+                                if (strtolower(trim($cell)) == 'ja' || strtolower(trim($cell)) == 'yes') {
+                                    $cell = 1;
+                                }
+                            }
+                            if ($value == 'email') {
+                                $cell = $this->extractEmail($cell);
+                            }
+                            $newPerson->setProperty($value, $cell);
+                        }
+                    }
+                    $tstmp = time();
+                    $hash = $newPerson->getEmail() . $tstmp;
+                    $newPerson->setToken(md5($hash));
+
+                    if ($newPerson->getEmail() != '' && $newPerson->getEmail() != null) {
+                        if ($check == '1') {
+                            $this->personRepository->add($newPerson);
+                        } else {
+                            $personen[] = $newPerson;
+                        }
+                    }
+                }
+            }
+        }
+        $this->persistenceManager->persistAll();
+
+        if ($check == '1') {
+            $this->redirect('insertData');
+        }
+
+        return $this->renderModule(['personen' => $personen, 'arr' => $arr, 'anz' => count($personen), 'spalten' => $spalten, 'error' => $error, 'trenn' => $trenn, 'settings' => $this->settings, 'first' => $first, 'filename' => $csv_datei]);
     }
 
     /**
@@ -523,96 +382,28 @@ class BackendController extends ActionController
 
     /**
      * action export
+     * @throws Exception
      */
-    public function exportAction()
+    public function exportAction(): void
     {
         $active = $_POST['active'];
         $confirmed = $_POST['confirmed'];
         $unsubscribed = $_POST['unsubscribed'];
-        $expformat = $_POST['expformat'];
         $trenn = $_POST['trenn'];
 
-        $array = $this->personRepository->findExp($active, $confirmed, $unsubscribed);
+        $array = $this->personRepository->findExp($active, $confirmed, $unsubscribed)->toArray();
 
-        if ($expformat == 'csv') {
-            $this->array_to_csv($array, $trenn);
-        } else {
-            $this->array_to_excel($array);
-        }
+        $this->array_to_csv($array, $trenn);
 
-        exit();
+        exit;
     }
 
     /**
-     * @param mixed $array
-     * @throws Exception
+     * @param array $array
+     * @param string $delimiter
      * @throws InvalidArgumentException
      */
-    private function array_to_excel($array)
-    {
-        ini_set('display_errors', '1');
-        date_default_timezone_set('Europe/Vienna');
-
-        $spreadsheet = new Spreadsheet();
-        $spreadsheet->getActiveSheet()->setTitle('Export');
-        $spreadsheet->getActiveSheetIndex(0);
-        $spreadsheet->getActiveSheet()->freezePane('A2');
-        $worksheet = $spreadsheet->getActiveSheet();
-
-
-        $props = $this->getProps(0);
-        $row = 1;
-        $col = 1;
-        foreach ($props as $prop) {
-            $worksheet->setCellValue([$col, $row], $prop['name']);
-            $col++;
-        }
-        $row = 2;
-        foreach ($array as $pers) {
-            $col = 1;
-            foreach ($props as $prop) {
-                if ($prop['value'] == 'category') {
-                    $worksheet->setCellValue([$col, $row], $pers->getProperty($prop['value']));
-                    $help = $pers->getCategory()->getName();
-                } elseif ($prop['value'] == 'salutation' || $prop['value'] == 'salutation') {
-                    if ($pers->getSalutation() == '0') {
-                        $help = LocalizationUtility::translate('labels.mrmrs', $this->extKey);
-                    }
-                    if ($pers->getSalutation() == '1') {
-                        $help = LocalizationUtility::translate('labels.mr', $this->extKey);
-                    }
-                    if ($pers->getSalutation() == '2') {
-                        $help = LocalizationUtility::translate('labels.mrs', $this->extKey);
-                    }
-                } elseif ($prop['value'] == 'active' || $prop['value'] == 'confirmed' || $prop['value'] == 'unsubscribed') {
-                    if ($pers->getProperty($prop['value']) == '0') {
-                        $help = LocalizationUtility::translate('labels.no', $this->extKey);
-                    }
-                    if ($pers->getProperty($prop['value']) == '1') {
-                        $help = LocalizationUtility::translate('labels.yes', $this->extKey);
-                    }
-                } else {
-                    $help = $pers->getProperty($prop['value']);
-                }
-                $worksheet->setCellValue([$col, $row], $help);
-                $col++;
-            }
-            $row++;
-        }
-
-        $writer = new Xlsx($spreadsheet);
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="export.xlsx";');
-        header('Cache-Control: max-age=0');
-        $writer->save('php://output');
-    }
-
-    /**
-     * @param mixed $array
-     * @param mixed $delimiter
-     * @throws InvalidArgumentException
-     */
-    private function array_to_csv($array, $delimiter)
+    private function array_to_csv(array $array, string $delimiter): void
     {
         $filename = 'export.csv';
         $props = $this->getProps(0);
@@ -624,15 +415,16 @@ class BackendController extends ActionController
         $f = fopen('php://output', 'w');
 
         foreach ($props as $prop) {
-            echo utf8_decode($prop['name']) . $delimiter;
+            echo mb_convert_encoding($prop['name'], 'ISO-8859-1', 'UTF-8') . $delimiter;
         }
         echo PHP_EOL;
 
         foreach ($array as $pers) {
             foreach ($props as $prop) {
+                $langhelp = '';
                 if ($prop['value'] == 'category') {
-                    echo utf8_decode($pers->getCategory()->getName()) . $delimiter;
-                } elseif ($prop['value'] == 'salutation' || $prop['value'] == 'salutation') {
+                    echo mb_convert_encoding($pers->getCategory()->getName(), 'ISO-8859-1', 'UTF-8') . $delimiter;
+                } elseif ($prop['value'] == 'salutation') {
                     if ($pers->getSalutation() == '0') {
                         $langhelp = LocalizationUtility::translate('labels.mrmrs', $this->extKey);
                     }
@@ -652,7 +444,7 @@ class BackendController extends ActionController
                     }
                     echo $langhelp . $delimiter;
                 } else {
-                    echo utf8_decode($pers->getProperty($prop['value'])) . $delimiter;
+                    echo mb_convert_encoding($pers->getProperty($prop['value']), 'ISO-8859-1', 'UTF-8') . $delimiter;
                 }
             }
             echo PHP_EOL;
@@ -677,40 +469,28 @@ class BackendController extends ActionController
      *
      * @param string $error
      * @param string $first
-     * @param string $impformat
+     * @return ResponseInterface
      */
-    public function blNewImportAction($error = '', $first = '', $impformat = ''): ResponseInterface
+    public function blNewImportAction(string $error = '', string $first = ''): ResponseInterface
     {
         $anz = $this->blacklistRepository->findAll()->count();
 
-        if ($impformat == '') {
-            $impformat = 'excel';
-        }
-
         $props = $this->getProps(1);
-        return $this->renderModule(['countPers' => $anz, 'vars' => $this->settings, 'error' => $error, 'settings' => $this->settings, 'first' => $first, 'impformat' => $impformat, 'props' => $props]);
+        return $this->renderModule(['countPers' => $anz, 'vars' => $this->settings, 'error' => $error, 'settings' => $this->settings, 'first' => $first, 'props' => $props]);
     }
 
     /**
-     * action blImport
-     *
-     * @param \Personmanager\PersonManager\Domain\Model\Person $person
+     * @return ResponseInterface
+     * @throws IllegalObjectTypeException
+     * @throws Exception
      */
-    /**
-     * action blImport
-     *
-     * @param Person $person
-     */
-    public function blImportAction()
+    public function blImportAction(): ResponseInterface
     {
-        $failed = 0;
         $vars = $_POST['tx_personmanager_web_personmanagerpersonmanagerback'];
         $first = $vars['first'];
-        $impformat = $vars['impformat'];
         $check = $vars['check'];
         $filen = $vars['filen'];
         $error = '';
-        $obj = new \ReflectionObject(new Person());
 
         if ($first == '1') {
             $startindex = 1;
@@ -718,74 +498,44 @@ class BackendController extends ActionController
             $startindex = 2;
         }
 
-        if ($failed == 0) {
-            $blacklists = [];
+        $blacklists = [];
 
-            $feler_trenner = ';';
-            $zeilen_trenner = (string)chr(10);
+        $feler_trenner = ';';
+        $zeilen_trenner = chr(10);
 
-            $csv_datei = $this->doUploadFile();
-            if ($check == '1') {
-                $csv_datei = $filen;
-            }
-            if ($impformat == 'excel') {
-                foreach ($this->doLoadExcel($csv_datei) as $worksheet) {
-                    $worksheetTitle = $worksheet->getTitle();
-                    $highestRow = $worksheet->getHighestRow(); // e.g. 10
-                    $highestColumn = $worksheet->getHighestColumn(); // e.g 'F'
-                    $highestColumnIndex = \PHPExcel_Cell::columnIndexFromString($highestColumn);
-                    $nrColumns = ord($highestColumn) - 64;
-
-                    for ($row = $startindex; $row <= $highestRow; ++$row) {
-                        $newBlacklist = new Blacklist();
-                        $cell = $worksheet->getCellByColumnAndRow(0, $row);
-                        $newBlacklist->setEmail(trim($cell->getValue()));
-
-                        if ($newBlacklist->getEmail() != '' && $newBlacklist->getEmail() != null) {
-                            if ($check == '1') {
-                                $this->blacklistRepository->add($newBlacklist);
-                                $this->persistenceManager->persistAll();
-                            } else {
-                                array_push($blacklists, $newBlacklist);
-                            }
-                        }
-                    }
-                }
-            } else {
-                $datei_inhalt = @file_get_contents($csv_datei);
-                $zeilen = explode($zeilen_trenner, $datei_inhalt);
-                $anzahl_zeilen = count($zeilen);
-
-                if (is_array($zeilen) == true) {
-                    foreach ($zeilen as $key => $zeile) {
-                        if ($zeile !== null && $zeile !== '' && $key > ($startindex - 2)) {
-                            $felder = explode($feler_trenner, $zeile);
-
-                            $newBlacklist = new Blacklist();
-                            $cell = $felder[0];
-                            $help = explode(',', $cell);
-                            $newBlacklist->setEmail(trim($help[0]));
-
-                            if ($newBlacklist->getEmail() != '' && $newBlacklist->getEmail() != null) {
-                                if ($check == '1') {
-                                    $this->blacklistRepository->add($newBlacklist);
-                                    $this->persistenceManager->persistAll();
-                                } else {
-                                    array_push($blacklists, $newBlacklist);
-                                }
-                            }
-                        }
-                    }
-                }
-            }
-            if ($check == '1') {
-                $this->redirect('insertData');
-            }
-            return $this->renderModule(['blacklists' => $blacklists, 'anz' => count($blacklists), 'error' => $error, 'settings' => $this->settings, 'first' => $first, 'impformat' => $impformat, 'filename' => $csv_datei]);
-
-        } else {
-            return (new ForwardResponse('blNewImport'))->withArguments(['error' => $error, 'first' => $first, 'impformat' => $impformat]);
+        $csv_datei = $this->doUploadFile();
+        if ($check == '1') {
+            $csv_datei = $filen;
         }
+
+        $datei_inhalt = @file_get_contents($csv_datei);
+        $zeilen = explode($zeilen_trenner, $datei_inhalt);
+
+        if (is_array($zeilen)) {
+            foreach ($zeilen as $key => $zeile) {
+                if ($zeile !== null && $zeile !== '' && $key > ($startindex - 2)) {
+                    $felder = explode($feler_trenner, $zeile);
+
+                    $newBlacklist = new Blacklist();
+                    $cell = $felder[0];
+                    $help = explode(',', $cell);
+                    $newBlacklist->setEmail(trim($help[0]));
+
+                    if ($newBlacklist->getEmail() != '' && $newBlacklist->getEmail() != null) {
+                        if ($check == '1') {
+                            $this->blacklistRepository->add($newBlacklist);
+                            $this->persistenceManager->persistAll();
+                        } else {
+                            $blacklists[] = $newBlacklist;
+                        }
+                    }
+                }
+            }
+        }
+        if ($check == '1') {
+            $this->redirect('insertData');
+        }
+        return $this->renderModule(['blacklists' => $blacklists, 'anz' => count($blacklists), 'error' => $error, 'settings' => $this->settings, 'first' => $first, 'filename' => $csv_datei]);
     }
 
     /**
@@ -793,45 +543,26 @@ class BackendController extends ActionController
      * @throws BadFunctionCallException
      * @throws InvalidArgumentException
      */
-    protected function doUploadFile()
+    protected function doUploadFile(): string
     {
-        $uploaddir = GeneralUtility::getFileAbsFileName(GeneralUtility::resolveBackPath(Environment::getPublicPath() . 'uploads/tx_personmanager'));
-        $uploadfile = basename($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['name']['jsonobj']);
+        if (!isset($_FILES['jsonobj']['name'])) {
+            return '';
+        }
+
+        $uploaddir = GeneralUtility::getFileAbsFileName(GeneralUtility::resolveBackPath(rtrim(Environment::getPublicPath(), '/') . '/uploads/tx_personmanager'));
+        $uploadfile = basename($_FILES['jsonobj']['name']);
         $csv_datei = $uploaddir . '/' . $uploadfile;
         if (move_uploaded_file(
-            $_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['tmp_name']['jsonobj'],
+            $_FILES['jsonobj']['tmp_name'],
             $csv_datei
         )) {
-            if (@file_exists($csv_datei) == false) {
+            if (!@file_exists($csv_datei)) {
                 $langhelp = LocalizationUtility::translate('error.nofile', $this->extKey);
                 echo sprintf($langhelp, $csv_datei);
                 exit;
             }
-            $filename = basename($_FILES['tx_personmanager_web_personmanagerpersonmanagerback']['name']['jsonobj']);
         }
         return $csv_datei;
-    }
-
-    /**
-     * @param mixed $csv_datei
-     * @return mixed
-     * @throws Exception
-     */
-    protected function doLoadExcel($csv_datei)
-    {
-        ini_set('display_errors', '1');
-
-        $cacheMethod = \PHPExcel_CachedObjectStorageFactory::cache_to_phpTemp;
-        $cacheSettings = [' memoryCacheSize ' => '4MB'];
-        \PHPExcel_Settings::setCacheStorageMethod($cacheMethod, $cacheSettings);
-
-        $inputFileType = \PHPExcel_IOFactory::identify($csv_datei);
-        $objReader = \PHPExcel_IOFactory::createReader($inputFileType);
-        $objReader->setReadDataOnly(true);
-        $objReader->setReadFilter(new MyReadFilter());
-        $objPHPExcel = $objReader->load($csv_datei);
-
-        return $objPHPExcel->getWorksheetIterator();
     }
 
     /**
@@ -851,14 +582,10 @@ class BackendController extends ActionController
     }
 
     /**
-     * @param mixed $table
-     * @throws InvalidArgumentException
-     * @throws UnexpectedValueException
-     * @throws ExtbaseException
-     * @throws InvalidArgumentValueException
-     * @throws StopActionException
+     * @param string $table
+     * @return ResponseInterface
      */
-    protected function doClear($table)
+    protected function doClear(string $table): ResponseInterface
     {
         $pid = $this->settings['storagePid'];
         $databaseConnection = GeneralUtility::makeInstance(ConnectionPool::class)->getConnectionForTable($table);
@@ -871,14 +598,14 @@ class BackendController extends ActionController
     }
 
     /**
-     * @param mixed $email
-     * @return mixed
+     * @param string $email
+     * @return string
      */
-    public function extractEmail($email)
+    public function extractEmail(string $email): string
     {
         $pattern = '/[a-z0-9_\-\+\.]+@[a-z0-9_\-\+\.]+/i';
         preg_match_all($pattern, $email, $matches);
-        if (is_array($matches[0])) {
+        if (is_array($matches[0]) && count($matches[0])) {
             if (filter_var($matches[0][0], FILTER_VALIDATE_EMAIL)) {
                 return $matches[0][0];
             }

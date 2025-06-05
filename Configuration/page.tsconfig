@@ -1,0 +1,3 @@
+mod.wizards.newContentElement.wizardItems {
+  PersonManager.header = LLL:EXT:person_manager/Resources/Private/Language/locallang_personmanagerback.xlf:mlang_tabs_tab
+}
