@@ -103,6 +103,22 @@ class BackendController extends ActionController
     {
     }
 
+    public function initializeAction(): void
+    {
+        $pid = $this->request->getQueryParams()['id'] ?? null;
+
+        $qS = $this->personRepository->createQuery()->getQuerySettings();
+        if ($pid === null) {
+            $qS->setRespectStoragePage(false);
+        } else {
+            $qS->setStoragePageIds([$pid]);
+        }
+
+        $this->personRepository->setDefaultQuerySettings($qS);
+        $this->logRepository->setDefaultQuerySettings($qS);
+        $this->blacklistRepository->setDefaultQuerySettings($qS);
+    }
+
     private function renderModule($variables): ResponseInterface
     {
         $moduleTemplate = $this->moduleTemplateFactory->create($this->request);
@@ -529,7 +545,7 @@ class BackendController extends ActionController
      */
     protected function doUploadFile(): string
     {
-        if(!isset($_FILES['jsonobj']['name'])){
+        if (!isset($_FILES['jsonobj']['name'])) {
             return '';
         }
 
