@@ -252,7 +252,10 @@ class PersonController extends ActionController
             $mail = trim($_POST['mail']);
         }
 
-        $pers = $this->personRepository->findOneByEmail($mail);
+        $pers = $this->personRepository->findOneBy([
+            'email' => $mail,
+            'unsubscribed' => 0,
+        ]);
 
         $opt = $this->settings['options']['doubleOptOut'];
         $path = $this->settings['options']['pathout'];
