@@ -256,14 +256,13 @@ class PersonController extends ActionController
 
         $opt = $this->settings['options']['doubleOptOut'];
         $path = $this->settings['options']['pathout'];
-        $site = $this->settings['options']['site'];
         $sendOutMail = $this->settings['options']['sendOutMail'];
         $mail = $this->settings['options']['mail'];
 
         if ($pers != null) {
             if ($pers->isUnsubscribed() == 0) {
                 if ($opt == 1) {
-                    $this->mailService->doBuildLinkMail(false, $site, $path, $pers);
+                    $this->mailService->doBuildLinkMail(false, $this->sitename, $path, $pers);
                     return (new ForwardResponse('text'))->withArguments(['text' => $this->flexcheckmailleave]);
                 }
                 $this->personService->doUnsubscribe($pers, $sendOutMail, $mail, 'log.leavesuccess', 'leave');
