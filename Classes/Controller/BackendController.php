@@ -356,7 +356,7 @@ class BackendController extends ActionController
         $this->persistenceManager->persistAll();
 
         if ($check == '1') {
-            $this->redirect('insertData');
+            return $this->redirect('insertData');
         }
 
         return $this->renderModule(['personen' => $personen, 'arr' => $arr, 'anz' => count($personen), 'spalten' => $spalten, 'error' => $error, 'trenn' => $trenn, 'settings' => $this->settings, 'first' => $first, 'filename' => $csv_datei]);
@@ -533,7 +533,7 @@ class BackendController extends ActionController
             }
         }
         if ($check == '1') {
-            $this->redirect('insertData');
+            return $this->redirect('insertData');
         }
         return $this->renderModule(['blacklists' => $blacklists, 'anz' => count($blacklists), 'error' => $error, 'settings' => $this->settings, 'first' => $first, 'filename' => $csv_datei]);
     }
